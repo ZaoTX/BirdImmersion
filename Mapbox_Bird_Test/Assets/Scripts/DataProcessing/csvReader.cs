@@ -21,7 +21,7 @@ public class csvReader : MonoBehaviour
         ReadCSVFile();
         
     }
-
+    
     void ReadCSVFile()
     {
         //from Resources folder load data
@@ -35,12 +35,9 @@ public class csvReader : MonoBehaviour
         {
 
             string[] row = data[i].Split(new char[] { ',' });
-            //individual.id =id_name;
+            
             //Debug.Log(row.Length);
             string cur_id = row[0];
-            
-            
-            
             // check if last id is equal this id
             if (last_id!=null&&cur_id != last_id)
             {

@@ -6,6 +6,9 @@ using Mapbox.Unity.Utilities;
 using Mapbox.Unity.Map;
 using Mapbox.Examples;
 
+/**
+*  we append this to a game object and we this will spawn lines automatically
+*/
 public class line_gen : MonoBehaviour
 {
     public Spawn_Bird spawn_bird;
@@ -21,27 +24,82 @@ public class line_gen : MonoBehaviour
     private Color[] colors;
     // Start is called before the first frame update
     //private LineRenderer line;
+    public double OverallTime;
+
+    public string curMin;
+    public string curMax;
+    public bool needUpdate;
+    /*public int minIndex;
+    public int maxIndex;*/
     void Start()
     {
-        
-        createColors();
+        needUpdate = false;
+        indiviudal_num = reader.gp.individualBehaviors.Count;
+        colors = new Color[indiviudal_num];
         drawline();
+        OverallTime=0;
+        GetMinMaxTime();
+
 
     }
-    void createColors() {
-        indiviudal_num = reader.gp.individualBehaviors.Count;
-        colors = new Color [indiviudal_num];
-        
-        for (int i = 0; i < indiviudal_num; i++)
-        {/*
-            
-            colors[i] = color;
-            Debug.Log(color.r);*/
+    void Update() {
+        if (needUpdate) {
+
+            updateLine();
+        }
+        OverallTime+=Time.deltaTime;
+    }
+    //After reading the data we want to understand:
+    //when does the first individual come,
+    //when does the last individual finish
+    void GetMinMaxTime()
+    {
+        IndividualBehavior firstId = reader.gp.individualBehaviors[0];
+        int firstlen = firstId.Individualtracks.Count;
+        string fFirst = firstId.Individualtracks[0].timestamp;
+        string fLast = firstId.Individualtracks[firstlen - 1].timestamp;
+        curMin=fFirst;
+        curMax=fLast;
+        /*minIndex=0;
+        maxIndex=0;*/
+        for (int i = 1; i < indiviudal_num; i++)
+        {
+            IndividualBehavior id = reader.gp.individualBehaviors[i];
+            int len = id.Individualtracks.Count;
+            string localFirst = id.Individualtracks[0].timestamp;
+            string localLast = id.Individualtracks[len-1].timestamp;
+            if (!compareTime(localFirst, curMin)) 
+            { //local is ealier
+                curMin = localFirst;
+                //minIndex = i;
+            }
+            if (!compareTime(curMax, localLast))
+            { //local is later
+                curMax = localLast;
+               //maxIndex = i;
+            }
+
         }
     }
-    void Update() {
-        updateLine();
+    //the form of timstamp is like 2014-08-31 18:00:06.000
+    //we use space to divide the date and the time
+    // false for time2>time1(time1 erlier)
+    bool compareTime(string time1, string time2)
+    {
+        time1 = time1.Replace('-', '/');
+        time2 = time2.Replace('-', '/');
+        System.DateTime t1;
+        System.DateTime.TryParse(time1, out t1);
+        System.DateTime t2;
+        System.DateTime.TryParse(time2, out t2);
+        int result = System.DateTime.Compare(t1, t2);
+        if (result < 0) { //t1 is ealier
+            return false;
+        }//else
+        return true;
     }
+    // Here we need to update the scale and positions of important vertices in our line
+    //**Check when map is updated
     void updateLine() {
         int count = this.transform.childCount;
         for (int i = 0; i < count; i++)
@@ -66,6 +124,7 @@ public class line_gen : MonoBehaviour
             child.GetComponent<LineRenderer>().SetPositions(vP);
         }
     }
+    //Initialize we want to draw different lines for different individuals
     void drawline() {
         for (int i = 0; i < indiviudal_num; i++)
         {
@@ -81,7 +140,8 @@ public class line_gen : MonoBehaviour
             child.AddComponent<birdMovement>();
             child.transform.parent = this.transform;
             LineRenderer lineRenderer = child.AddComponent<LineRenderer>();
-            //Color color = colors[i];
+            //Color color = ;
+            colors[i] = color;
             lineRenderer.widthMultiplier = 30f;
             lineRenderer.material = new Material(Shader.Find("Standard"));
             lineRenderer.material.SetColor("_Color",color);
@@ -92,6 +152,7 @@ public class line_gen : MonoBehaviour
             float[] heights = spawn_bird._HeightArray[i];
             Vector3[] vP = new Vector3[trackCount];
             lineRenderer.positionCount=trackCount;
+            child.GetComponent<birdMovement>().firstTimestamp = id.Individualtracks[0].timestamp;
             for (int j = 0; j < trackCount; j++) {
                 string loc = locations[j];
                 float height = heights[j];

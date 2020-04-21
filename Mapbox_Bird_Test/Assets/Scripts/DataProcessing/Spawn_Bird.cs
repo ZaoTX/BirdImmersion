@@ -4,6 +4,7 @@ using UnityEngine;
 using Mapbox.Utils;
 using Mapbox.Unity.Map;
 using Mapbox.Unity.Utilities;
+using System;
 
 public class Spawn_Bird : MonoBehaviour
 {
@@ -31,6 +32,8 @@ public class Spawn_Bird : MonoBehaviour
         
         createObjs();
     }
+    
+    //here include the model of bird
     void createObjs()
     {
 
@@ -45,7 +48,7 @@ public class Spawn_Bird : MonoBehaviour
             //_3Dlocations = new Vector3[_locationStrings.Length];
             float height = _heightArray[0];
             string locationString = _locationStrings[0];
-            Debug.Log(j+" "+ _LocationStrings.Length);
+            //Debug.Log(j+" "+ _LocationStrings.Length);
             Vector2d location_zero = Conversions.StringToLatLon(locationString);
             var instance = Instantiate(birdModel);
             var curpos = _map.GeoToWorldPosition(location_zero,  true);

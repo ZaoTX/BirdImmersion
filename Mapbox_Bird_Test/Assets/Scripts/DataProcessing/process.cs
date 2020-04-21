@@ -27,14 +27,15 @@ public class process : MonoBehaviour
     private float endTime;
     // initial pos for map
     private string initial_pos;
-    public bool mode;
+    public bool mode;//define a overview of the dataset or a immersive environment
     //restart bool
-    public bool restart = false;
-    public float speed = 0.1f; // it takes 1/speed s to fly between datapoints
+    //public bool restart = false;
+    public float speed; // it takes 1/speed s to fly between datapoints
 
     void Start() {
         //reader = gameObject.GetComponent(typeof(csvReader)) as csvReader;
-        loadData();
+        loadData();                                     
+        spawn_Bird.speed = speed;                                                   
     }
     // Update is called once per frame
     void Update()
@@ -103,8 +104,5 @@ public class process : MonoBehaviour
             
         }
     }
-    //make sure of the Timeseries(I want to sort the timestamp in datapreprcessing so hier we can get the start time and end time of trajectory) 
-    void Timeseries() {
-
-    }
+    
 }
