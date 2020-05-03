@@ -29,6 +29,7 @@ public class line_gen : MonoBehaviour
     public string curMin;
     public string curMax;
     public bool needUpdate;
+    public float overallSpeed;
     /*public int minIndex;
     public int maxIndex;*/
     void Start()
@@ -44,10 +45,12 @@ public class line_gen : MonoBehaviour
     }
     void Update() {
         if (needUpdate) {
-
+            //We check whether is needed to update the line again
             updateLine();
+            needUpdate = false;
         }
-        OverallTime+=Time.deltaTime;
+        overallSpeed = spawn_bird.speed;
+        OverallTime+=Time.deltaTime*overallSpeed;
     }
     //After reading the data we want to understand:
     //when does the first individual come,
@@ -99,7 +102,6 @@ public class line_gen : MonoBehaviour
         return true;
     }
     // Here we need to update the scale and positions of important vertices in our line
-    //**Check when map is updated
     void updateLine() {
         int count = this.transform.childCount;
         for (int i = 0; i < count; i++)

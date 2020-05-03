@@ -112,10 +112,9 @@ public class birdMovement : MonoBehaviour
                     if (count == num - 1)
                     {//the next position is out of range
                         Debug.Log("The " + index+" shoud be finished");
-                        bird.SetActive(false);//animal behavior lecture
-                        //bird.transform.position = new Vector3(positions[num - 1].x, positions[num - 1].y, positions[num - 1].z);
-                        //t = 0f;
-                        //count = 0;
+                        bird.SetActive(false);
+                        //disable the line
+                        this.gameObject.SetActive(false);
                         isok = false;
                         return;
                     }

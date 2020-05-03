@@ -29,7 +29,6 @@ public class Spawn_Bird : MonoBehaviour
     public float speed; // it takes 1/speed s to fly between datapoints,
     void Start()
     {
-        
         createObjs();
     }
     
@@ -61,6 +60,7 @@ public class Spawn_Bird : MonoBehaviour
         // Update is called once per frame
     void Update()
     {
+        // here is used to control the bird model's scale
         int count = spawned_individuals.Count;
         //int count = _LocationStrings.Length;
         //Debug.Log(count);
@@ -70,10 +70,7 @@ public class Spawn_Bird : MonoBehaviour
             float[] _heightArray = _HeightArray[i];
             float height = _heightArray[0];
             var spawnedObject = spawned_individuals[i];
-            //Later on, We don't want to update the position
-            var location = Conversions.StringToLatLon(_locationStrings[0]);
-            var curpos = _map.GeoToWorldPosition(location, true);
-            spawnedObject.transform.localPosition = new Vector3(curpos.x, curpos.y + height, curpos.z);
+            
             spawnedObject.transform.localScale = new Vector3(Bird_SpawnScale, Bird_SpawnScale, Bird_SpawnScale);
             
         }

@@ -15,14 +15,15 @@ public class interactionSettings : MonoBehaviour
     public AbstractMap map;
     public float zoomingskip = 1f;
     public float cameraMove = 10f;
-    private process processor;
+    public process processor;
+    public line_gen lineGen;
     Vector3 PlayerPos;
     int playerHeight = 500;
     private void Start()
     {
         vrPlayer.transform.position = new Vector3(0, 0, 0);
         vrPlayer.transform.eulerAngles = new Vector3(0f, 0.0f, 0.0f);
-        processor = gameObject.GetComponent(typeof(process)) as process;
+        
         change = false;
     }
     void Update()
@@ -60,6 +61,7 @@ public class interactionSettings : MonoBehaviour
             Debug.Log("right pad north pressed");
             map.SetZoom(map.Zoom + zoomingskip);
             map.UpdateMap(map.Zoom);
+            lineGen.needUpdate = true;
         }
     }
     void zoomout()
@@ -69,6 +71,7 @@ public class interactionSettings : MonoBehaviour
             Debug.Log("right pad south pressed");
             map.SetZoom(map.Zoom - zoomingskip);
             map.UpdateMap(map.Zoom);
+            lineGen.needUpdate = true;
         }
     }
     void checkMapUpdate()
@@ -77,6 +80,7 @@ public class interactionSettings : MonoBehaviour
         { //Both controller
             Debug.Log("touchpad center pressed");
             MapBoxupdate();
+
         }
 
     }
@@ -105,6 +109,7 @@ public class interactionSettings : MonoBehaviour
             {
                 GameObject.FindGameObjectWithTag("Player").transform.position = new Vector3(0, playerHeight, 0);
             }
+            lineGen.needUpdate = true;
         }
     }
     void OverviewMove()
