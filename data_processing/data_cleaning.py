@@ -14,10 +14,10 @@ for Oilbirds dataset
 import pandas as pd
 import csv
 
-file_name='Thang Kaar Thuub (3552).csv'
+file_name='Fall migration of white storks in 2014.csv'
 # Your working directory
-base_dir='C:/Users/ZiyaoHe/Documents/BirdImmersive/datasets/'
-
+#base_dir='C:/Users/ZiyaoHe/Documents/BirdImmersive/datasets/'
+base_dir='E:/semester8/bachelor report/test/'
 path=base_dir + file_name
 
 individual_id=[]
@@ -55,7 +55,7 @@ df = pd.DataFrame({
         'height-above-ellipsoid':height
         })
 ##store whole data
-df.to_csv(base_dir+"/Thang Kaar/cleaned_data.csv",sep=',',index=False,header=True)
+df.to_csv(base_dir+"cleaned_data.csv",sep=',',index=False,header=True)
 
 
 

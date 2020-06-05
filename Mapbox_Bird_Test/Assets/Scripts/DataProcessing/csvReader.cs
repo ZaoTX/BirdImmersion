@@ -31,63 +31,71 @@ public class csvReader : MonoBehaviour
         //initialize a list of tracks
         IndividualBehavior individualBehaviors = new IndividualBehavior();
         //for the whole dateset
-        for (int i = 1; i < data.Length; i++)//when there is no header i=0
+        for (int i = 1; i <= data.Length-1; i++)//when there is no header i=0
         {
 
             string[] row = data[i].Split(new char[] { ',' });
-            
+
             //Debug.Log(row.Length);
+            //int a = row.Length;
             string cur_id = row[0];
             // check if last id is equal this id
+            
             if (last_id!=null&&cur_id != last_id)
             {
-                //Debug.Log("works1111");
-                //store the last individualBehavior
-                gp.individualBehaviors.Add(individualBehaviors);
-                //create a new InidividualBehavior to store the data
-                individualBehaviors = new IndividualBehavior();
-                //store to individual typ
-                Individual individual = new Individual();
-                individual.id = cur_id;
-                individual.timestamp = row[1];
-                //Debug.Log(individual.timestamp);
-                individual.lng = row[2];
-                individual.lat = row[3];
-                float.TryParse(row[4], out individual.height);
-                //Debug.Log(individual.height);
-                if (individual.height < 0)
-                {
-                    individual.height = 0;
-                    Debug.LogError("there are height lower equal 0s");
-                }
+                if (row.Length == 5)
+                {//Debug.Log("works1111");
+                 //store the last individualBehavior
+                    gp.individualBehaviors.Add(individualBehaviors);
+                    //create a new InidividualBehavior to store the data
+                    individualBehaviors = new IndividualBehavior();
+                    //store to individual typ
+                    Individual individual = new Individual();
+                    individual.id = cur_id;
+                    individual.timestamp = row[1];
+                    //Debug.Log(individual.timestamp);
+                    individual.lng = row[2];
+                    individual.lat = row[3];
+                    float.TryParse(row[4], out individual.height);
+                    //Debug.Log(individual.height);
+                    if (individual.height < 0)
+                    {
+                        individual.height = 0;
+                        Debug.LogError("there are height lower equal 0s");
+                    }
 
-                individualBehaviors.Individualtracks.Add(individual);
+                    individualBehaviors.Individualtracks.Add(individual);
+                }
+                
                 
             }
             else
             {
-                //Debug.Log("works2222");
-                //that include 2 possiblities: last id= null(initial) or the id doesn't change
-                //We just store the id into individualBehaviors
-                //store to individual typ
-                Individual individual = new Individual();
-                individual.id = cur_id;
-                individual.timestamp = row[1];
-                //Debug.Log(individual.timestamp);
-                individual.lng = row[2];   
-                individual.lat = row[3];
-                float.TryParse(row[4], out individual.height);
-                if (individual.height < 0)
-                {
+                if (row.Length == 5) {
+                    //Debug.Log("works2222");
+                    //that include 2 possiblities: last id= null(initial) or the id doesn't change
+                    //We just store the id into individualBehaviors
+                    //store to individual typ
+                    Individual individual = new Individual();
+                    individual.id = cur_id;
+                    individual.timestamp = row[1];
+                    //Debug.Log(individual.timestamp);
+                    individual.lng = row[2];
+                    individual.lat = row[3];
+                    float.TryParse(row[4], out individual.height);
+                    if (individual.height < 0)
+                    {
 
-                    individual.height = 0;
-                    Debug.LogError("there are height lower equal 0s");
+                        individual.height = 0;
+                        Debug.LogError("there are height lower equal 0s");
+                    }
+                    //get the last individualBehaviors to store data
+
+                    individualBehaviors.Individualtracks.Add(individual);
+                    //Debug.Log(individualBehaviors.Individualtracks.Count + " < " + individual.height);
                 }
-                //get the last individualBehaviors to store data
 
-                individualBehaviors.Individualtracks.Add(individual);
-                //Debug.Log(individualBehaviors.Individualtracks.Count + " < " + individual.height);
-                
+
             }
             //update id
             last_id = cur_id;

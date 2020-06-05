@@ -84,6 +84,8 @@ public class birdMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
+            
         if (canStart)
         {
 
@@ -94,6 +96,27 @@ public class birdMovement : MonoBehaviour
             }
             if (isok)
             {
+                //check for update the scene
+                if (this.transform.parent.GetComponent<line_gen>().canUpdateModel )
+                {
+                    lineRenderer = transform.GetComponent<LineRenderer>();
+                    positions = new Vector3[lineRenderer.positionCount];
+                    lineRenderer.GetPositions(positions);
+
+                    birdpos = positions[count];
+                    bird.transform.position = new Vector3(birdpos.x, birdpos.y, birdpos.z);
+                    nextpos = positions[count + 1];
+                    this.transform.parent.GetComponent<line_gen>().canUpdateModel = false;
+                }
+                //check restart
+                if (this.transform.parent.GetComponent<line_gen>().restart)
+                {
+                    count = 0;
+                    initialize();
+                    this.transform.parent.GetComponent<line_gen>().restart = false;
+                    this.transform.parent.GetComponent<line_gen>().OverallTime = 0;
+                }
+                //check out of range
                 if (count == num )
                 {//this position is out of range
                     //Debug.Log("The " + index + " in first if shoud be finished");
@@ -151,6 +174,8 @@ public class birdMovement : MonoBehaviour
                     bird.transform.LookAt(nextpos);
                     t += Time.deltaTime * multipler;
                 }
+               
+
                 
             }
         }

@@ -30,6 +30,7 @@ public class Spawn_Bird : MonoBehaviour
     void Start()
     {
         createObjs();
+        
     }
     
     //here include the model of bird
@@ -55,6 +56,7 @@ public class Spawn_Bird : MonoBehaviour
             instance.transform.localScale = new Vector3(Bird_SpawnScale, Bird_SpawnScale, Bird_SpawnScale);
             spawned_individuals.Add(instance);
             //_3Dlocations[i] = instance.transform.localPosition;
+            
         }
     }
         // Update is called once per frame
@@ -66,9 +68,9 @@ public class Spawn_Bird : MonoBehaviour
         //Debug.Log(count);
         for (int i = 0; i < count; i++)
         {
-            string[] _locationStrings = _LocationStrings[i];
-            float[] _heightArray = _HeightArray[i];
-            float height = _heightArray[0];
+            //string[] _locationStrings = _LocationStrings[i];
+            //float[] _heightArray = _HeightArray[i];
+            //float height = _heightArray[0];
             var spawnedObject = spawned_individuals[i];
             
             spawnedObject.transform.localScale = new Vector3(Bird_SpawnScale, Bird_SpawnScale, Bird_SpawnScale);

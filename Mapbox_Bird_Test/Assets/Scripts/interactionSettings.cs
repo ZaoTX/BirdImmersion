@@ -4,26 +4,33 @@ using UnityEngine;
 using Valve.VR;
 using Mapbox.Unity.Map;
 using Mapbox.Unity.Utilities;
+using Mapbox.Unity.Map.TileProviders;//For map rangeAroundcenter
 public class interactionSettings : MonoBehaviour
 {
     /* public Camera camera;
      public GameObject vrPlayer;
      bool VRActived;*/
     public GameObject vrPlayer;
-    bool change;
+    public bool change;
     bool stop;
     public AbstractMap map;
     public float zoomingskip = 1f;
     public float cameraMove = 10f;
     public process processor;
     public line_gen lineGen;
+    public Spawn_Bird spawn;
+    public int count;
+    List<GameObject> Model_List;// list of bird models
     Vector3 PlayerPos;
-    int playerHeight = 500;
+    int playerHeight = 300;
+    Vector3 curPlayerPos;
     private void Start()
     {
+        count = 0;
         vrPlayer.transform.position = new Vector3(0, 0, 0);
         vrPlayer.transform.eulerAngles = new Vector3(0f, 0.0f, 0.0f);
-        
+        spawn = map.GetComponent<Spawn_Bird>();
+        Model_List = spawn.spawned_individuals;
         change = false;
     }
     void Update()
@@ -32,26 +39,41 @@ public class interactionSettings : MonoBehaviour
         zoomin();//zoom in
         zoomout();//zoom out
         checkMapUpdate();//center button for map update
-        OverviewMove();//Move the camera in overview mode
+        ExtendMap();//Move the camera in overview mode
     }
     void checkChangeView()
     {
         if (SteamVR_Actions._default.ChangeView.GetStateUp(SteamVR_Input_Sources.RightHand))
         { //Both controller
             Debug.Log("menu pressed");
-            change = !change;
+            //change = !change;
+            count++;
+            if (count >= Model_List.Count)
+            {
+                count = 0;
+            }
         }
-        if (!change)
-        {//vr
-            vrPlayer.transform.position = new Vector3(vrPlayer.transform.position.x, 10, vrPlayer.transform.position.z);
-            vrPlayer.transform.eulerAngles = new Vector3(0.0f, 0.0f, 0.0f);
-            processor.mode = false;
+        if (SteamVR_Actions._default.ChangeView.GetStateUp(SteamVR_Input_Sources.LeftHand))
+        { //Both controller
+            Debug.Log("left menu pressed");
+            processor.mode = !processor.mode;
+            //get current individual's position
+            curPlayerPos = new Vector3(Model_List[count].transform.position.x + 30, Model_List[count].transform.position.y + playerHeight, Model_List[count].transform.position.z + 30);
+
         }
-        else
+        if (processor.mode)
         {
-            vrPlayer.transform.position = new Vector3(vrPlayer.transform.position.x, playerHeight, vrPlayer.transform.position.z);
-            vrPlayer.transform.eulerAngles = new Vector3(90.0f, 0.0f, 0.0f);
-            processor.mode = true;
+            //get the model and let player look at
+            vrPlayer.transform.position = new Vector3(Model_List[count].transform.position.x+30, Model_List[count].transform.position.y+50, Model_List[count].transform.position.z+30);
+            vrPlayer.transform.LookAt(Model_List[count].transform);
+        }
+        else//need improve
+        {
+
+
+            vrPlayer.transform.position = curPlayerPos;
+            //vrPlayer.transform.LookAt(Model_List[count].transform);
+            //processor.mode = true;
         }
     }
     void zoomin()
@@ -101,43 +123,42 @@ public class interactionSettings : MonoBehaviour
         if (OldLatLon != newMapPos)
         {
             map.UpdateMap(newMapPos, map.Zoom);
-            if (processor.mode == false)
+            /*if (processor.mode == false)
             {
                 GameObject.FindGameObjectWithTag("Player").transform.position = new Vector3(0, 10, 0);
             }
             else
             {
                 GameObject.FindGameObjectWithTag("Player").transform.position = new Vector3(0, playerHeight, 0);
-            }
+            }*/
             lineGen.needUpdate = true;
         }
     }
-    void OverviewMove()
+    void ExtendMap()
     {
-        if (processor.mode == true)
-        {
+       
             PlayerPos = GameObject.FindGameObjectWithTag("Player").transform.position;
             if (SteamVR_Actions._default.OverviewRight.GetStateUp(SteamVR_Input_Sources.LeftHand))
             {
                 Debug.Log("left touchpad right pressed");
-                GameObject.FindGameObjectWithTag("Player").transform.position = new Vector3(PlayerPos.x + cameraMove, 200, PlayerPos.z);
+                map.TileProvider.GetComponent<RangeTileProvider>()._rangeTileProviderOptions.east++;
             }
             if (SteamVR_Actions._default.OverviewUp.GetStateUp(SteamVR_Input_Sources.LeftHand))
             {
                 Debug.Log("left touchpad up pressed");
-                GameObject.FindGameObjectWithTag("Player").transform.position = new Vector3(PlayerPos.x, 200, PlayerPos.z + cameraMove);
+                map.TileProvider.GetComponent<RangeTileProvider>()._rangeTileProviderOptions.north++; 
             }
             if (SteamVR_Actions._default.OverviewLeft.GetStateUp(SteamVR_Input_Sources.LeftHand))
             {
                 Debug.Log("left touchpad left pressed");
-                GameObject.FindGameObjectWithTag("Player").transform.position = new Vector3(PlayerPos.x - cameraMove, 200, PlayerPos.z);
+                map.TileProvider.GetComponent<RangeTileProvider>()._rangeTileProviderOptions.west++;
             }
             if (SteamVR_Actions._default.OverviewDown.GetStateUp(SteamVR_Input_Sources.LeftHand))
             {
                 Debug.Log("left touchpad down pressed");
-                GameObject.FindGameObjectWithTag("Player").transform.position = new Vector3(PlayerPos.x, 200, PlayerPos.z - cameraMove);
+                map.TileProvider.GetComponent<RangeTileProvider>()._rangeTileProviderOptions.south++;
             }
-        }
+        
     }
 
 }

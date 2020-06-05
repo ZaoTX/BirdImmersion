@@ -29,12 +29,16 @@ public class line_gen : MonoBehaviour
     public string curMin;
     public string curMax;
     public bool needUpdate;
+    public bool canUpdateModel;
     public float overallSpeed;
+    public bool restart;
     /*public int minIndex;
     public int maxIndex;*/
     void Start()
     {
-        needUpdate = false;
+        needUpdate = true;
+        restart = false;
+        canUpdateModel = true;
         indiviudal_num = reader.gp.individualBehaviors.Count;
         colors = new Color[indiviudal_num];
         drawline();
@@ -44,10 +48,11 @@ public class line_gen : MonoBehaviour
 
     }
     void Update() {
-        if (needUpdate) {
+       if (needUpdate) {
             //We check whether is needed to update the line again
             updateLine();
             needUpdate = false;
+            canUpdateModel = true;
         }
         overallSpeed = spawn_bird.speed;
         OverallTime+=Time.deltaTime*overallSpeed;

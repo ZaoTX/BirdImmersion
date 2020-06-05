@@ -5,7 +5,7 @@ namespace Mapbox.Unity.Map.TileProviders
 {
 	public class RangeTileProvider : AbstractTileProvider
 	{
-		private RangeTileProviderOptions _rangeTileProviderOptions;
+		public RangeTileProviderOptions _rangeTileProviderOptions;
 		private bool _initialized = false;
 
 		public override void OnInitialized()

@@ -48,6 +48,6 @@ public class timelineController : MonoBehaviour
             string textInhalt = tMin.AddSeconds(overallTime).ToString("yyyy-MM-dd HH:mm:ss");
             textIndicator.GetComponent<Text>().text = textInhalt;
         }
-        timeline.GetComponent<Slider>().value = (float)currentAmount/ 100;
+        timeline.GetComponent<Slider>().value = (float)currentAmount;
     }
 }

@@ -12,8 +12,8 @@ import csv
 
 id_name='cleaned_data'# choose this for Example
 # Your working directory(Where you put the data)
-base_dir='C:/Users/ZiyaoHe/Documents/BirdImmersive/white storks/'
-
+#base_dir='C:/Users/ZiyaoHe/Documents/BirdImmersive/white storks/'
+base_dir='E:/semester8/bachelor report/test/'
 filePath=base_dir+id_name+'.csv'
 
 Time_Diff_Fliter = 10# 10 seconds each point
@@ -50,7 +50,7 @@ for i in range(0,len_time-1):
     cur_timestamp=timestamp[i]
     next_timestamp=timestamp[i+1]
     #print(cur_timestamp)
-#    print(next_timestamp)
+#    print(next_timestamp)2
     #split timestamp as string
     # Example: 2007-10-16 05:20:22.998
     cur_timestamp=cur_timestamp.split(' ')

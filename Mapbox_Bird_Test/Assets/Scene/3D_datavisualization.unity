@@ -347,13 +347,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 430614040}
+  - component: {fileID: 430614041}
   m_Layer: 0
   m_Name: Teleport
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &430614040
 Transform:
   m_ObjectHideFlags: 0
@@ -372,6 +373,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &430614041
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 430614039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97c88f8b129ad0049b173347fb5bf6dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  vrplayer: {fileID: 144444781}
 --- !u!1 &449214132
 GameObject:
   m_ObjectHideFlags: 0
@@ -587,7 +601,7 @@ MonoBehaviour:
   _options:
     locationOptions:
       latitudeLongitude: 
-      zoom: 11.4
+      zoom: 12.03
     extentOptions:
       extentType: 1
       defaultExtents:
@@ -596,10 +610,10 @@ MonoBehaviour:
           visibleBuffer: 0
           disposeBuffer: 0
         rangeAroundCenterOptions:
-          west: 1
-          north: 1
-          east: 1
-          south: 1
+          west: 4
+          north: 4
+          east: 4
+          south: 4
         rangeAroundTransformOptions:
           targetTransform: {fileID: 0}
           visibleBuffer: 0
@@ -609,7 +623,7 @@ MonoBehaviour:
       snapMapToZero: 0
     scalingOptions:
       scalingType: 0
-      unityTileSize: 50
+      unityTileSize: 100
     loadingTexture: {fileID: 1953176647}
     tileMaterial: {fileID: 1276750341}
   _initializeOnStart: 1
@@ -637,7 +651,7 @@ MonoBehaviour:
           Id: mapbox.terrain-rgb
           Modified: 
           UserName: 
-      elevationLayerType: 0
+      elevationLayerType: 1
       requiredOptions:
         exaggerationFactor: 1
       colliderOptions:
@@ -792,7 +806,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _map: {fileID: 932783774}
   Bird_SpawnScale: 3000
-  birdModel: {fileID: 1966207801664328849, guid: 1bf99d666a42ed64694b82b00c9c7488,
+  birdModel: {fileID: 295308156182009808, guid: 96021ad72e1cead458bf1ab426d13b00,
     type: 3}
   spawned_individuals: []
   speed: 0
@@ -864,7 +878,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 2014-12-01 12:01:19.005
+  m_Text: This is a timeindicator
 --- !u!222 &985282652
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -996,6 +1010,9 @@ MonoBehaviour:
   curMin: 
   curMax: 
   needUpdate: 0
+  canUpdateModel: 0
+  overallSpeed: 0
+  restart: 0
 --- !u!21 &1276750341
 Material:
   serializedVersion: 6
@@ -1339,7 +1356,7 @@ GameObject:
   - component: {fileID: 1367036297}
   - component: {fileID: 1367036296}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: timelineHolder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1642,11 +1659,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   vrPlayer: {fileID: 144444781}
+  change: 0
   map: {fileID: 932783774}
   zoomingskip: 1
   cameraMove: 10
   processor: {fileID: 1807412917}
   lineGen: {fileID: 1188112308}
+  spawn: {fileID: 0}
+  count: 0
 --- !u!114 &1807412916
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1676,7 +1696,7 @@ MonoBehaviour:
   birdScale: 300
   lineScale: 30
   reader: {fileID: 1807412916}
-  mode: 0
+  mode: 1
   speed: 5
 --- !u!1 &1945137495
 GameObject:
