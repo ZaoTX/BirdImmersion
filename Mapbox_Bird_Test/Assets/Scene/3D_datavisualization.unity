@@ -805,7 +805,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _map: {fileID: 932783774}
-  Bird_SpawnScale: 3000
+  Bird_SpawnScale: 30
   birdModel: {fileID: 295308156182009808, guid: 96021ad72e1cead458bf1ab426d13b00,
     type: 3}
   spawned_individuals: []
@@ -988,7 +988,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1188112308
 MonoBehaviour:
@@ -1439,7 +1439,7 @@ RectTransform:
   - {fileID: 1668703}
   - {fileID: 985282650}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -1693,9 +1693,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawn_Bird: {fileID: 932783778}
   map: {fileID: 932783774}
-  birdScale: 300
-  lineScale: 30
+  line_Gen: {fileID: 1188112308}
+  birdScale: 40
+  lineScale: 4
   reader: {fileID: 1807412916}
+  restart: 0
   mode: 1
   speed: 5
 --- !u!1 &1945137495

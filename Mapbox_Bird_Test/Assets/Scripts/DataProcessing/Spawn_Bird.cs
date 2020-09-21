@@ -19,7 +19,7 @@ public class Spawn_Bird : MonoBehaviour
     //have to be public for resetButton.cs to get the positions
    // public Vector3[] _3Dlocations;
     
-    public float Bird_SpawnScale = 3000f;
+    public float Bird_SpawnScale = 40f;
     //declear the model we use for the bird
     [SerializeField]
     GameObject birdModel;

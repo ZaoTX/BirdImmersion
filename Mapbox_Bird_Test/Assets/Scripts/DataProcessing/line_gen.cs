@@ -22,22 +22,18 @@ public class line_gen : MonoBehaviour
     private int indiviudal_num;
     // array of colors
     private Color[] colors;
-    // Start is called before the first frame update
-    //private LineRenderer line;
     public double OverallTime;
 
     public string curMin;
     public string curMax;
-    public bool needUpdate;
-    public bool canUpdateModel;
+    public bool needUpdate;//true: we need to update the line
+    public bool canUpdateModel;//true: BirdMovement.cs can update the model(position)
     public float overallSpeed;
     public bool restart;
-    /*public int minIndex;
-    public int maxIndex;*/
     void Start()
     {
         needUpdate = true;
-        restart = false;
+        restart = process.restart;
         canUpdateModel = true;
         indiviudal_num = reader.gp.individualBehaviors.Count;
         colors = new Color[indiviudal_num];
@@ -48,7 +44,8 @@ public class line_gen : MonoBehaviour
 
     }
     void Update() {
-       if (needUpdate) {
+        restart = process.restart;
+        if (needUpdate) {
             //We check whether is needed to update the line again
             updateLine();
             needUpdate = false;
@@ -56,10 +53,14 @@ public class line_gen : MonoBehaviour
         }
         overallSpeed = spawn_bird.speed;
         OverallTime+=Time.deltaTime*overallSpeed;
+        process.restart = false;//reset the value
     }
-    //After reading the data we want to understand:
-    //when does the first individual come,
-    //when does the last individual finish
+    /*
+     * After reading the data we want to understand:
+     *  1.when does the first individual come,
+     *  2.when does the last individual finish
+     * so that we can calculate the timeline amount in percentage
+     */
     void GetMinMaxTime()
     {
         IndividualBehavior firstId = reader.gp.individualBehaviors[0];
@@ -89,9 +90,10 @@ public class line_gen : MonoBehaviour
 
         }
     }
-    //the form of timstamp is like 2014-08-31 18:00:06.000
-    //we use space to divide the date and the time
-    // false for time2>time1(time1 erlier)
+    /*
+     * the form of timstamp is like 2014-08-31 18:00:06.000
+     * we use this function to help getting the min max timestamp
+     */
     bool compareTime(string time1, string time2)
     {
         time1 = time1.Replace('-', '/');
@@ -106,7 +108,9 @@ public class line_gen : MonoBehaviour
         }//else
         return true;
     }
-    // Here we need to update the scale and positions of important vertices in our line
+    /*
+     *Here we need to update the scale and positions of important vertices in our line
+     */
     void updateLine() {
         int count = this.transform.childCount;
         for (int i = 0; i < count; i++)
@@ -131,7 +135,9 @@ public class line_gen : MonoBehaviour
             child.GetComponent<LineRenderer>().SetPositions(vP);
         }
     }
-    //Initialize we want to draw different lines for different individuals
+    /*
+     * Initialize, we want to draw different lines for different individuals
+     */
     void drawline() {
         for (int i = 0; i < indiviudal_num; i++)
         {

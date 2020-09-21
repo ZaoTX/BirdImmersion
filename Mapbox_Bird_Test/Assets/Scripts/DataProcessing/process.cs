@@ -9,13 +9,13 @@ public class process : MonoBehaviour
     //public SpawnOnMap MySpawnMap;
     public Spawn_Bird spawn_Bird;
     public AbstractMap map;
+    public line_gen line_Gen;
 
-    public float birdScale = 300f;
-    public float lineScale = 30f;
+    public float birdScale = 40f;
+    public float lineScale = 4f;
     //read data from 
     public csvReader reader;
-    //count how many time the code ist aufgurufen.
-    private int num = 0;
+    
     //initialize 2 list contain the lat lng information
     
     private List<string> locations = new List<string>();//in lat lng
@@ -23,26 +23,31 @@ public class process : MonoBehaviour
     private List<float> heights = new List<float>();
     public float[][] Heights;
 
-    private float startTime;
-    private float endTime;
+    public bool restart=false;//true: restart the animation
     // initial pos for map
     private string initial_pos;
     public bool mode;//define a overview of the dataset or a immersive environment
-    //restart bool
-    //public bool restart = false;
+    
     public float speed; // it takes 1/speed s to fly between datapoints
+    //check if the linescale is changed
+    double lastLineScale;
 
     void Start() {
         //reader = gameObject.GetComponent(typeof(csvReader)) as csvReader;
         loadData();                                     
-        spawn_Bird.speed = speed;                                                   
+        spawn_Bird.speed = speed;
+
+        lastLineScale = lineScale;
     }
     // Update is called once per frame
     void Update()
     {
         spawn_Bird.speed = speed;
+        
         rescale();
+        lastLineScale = lineScale;
     }
+    //Load data and store them in spawn_Bird.cs
     void loadData() {
        
         //the number of individuals
@@ -97,11 +102,15 @@ public class process : MonoBehaviour
 
     }
     void rescale() {
-        //user can rescale the bird and point
+        //user can rescale the bird and the line
         if (spawn_Bird != null)
         {
             spawn_Bird.Bird_SpawnScale = birdScale;
             
+        }
+        
+        if (lineScale!=lastLineScale) {
+            line_Gen.needUpdate = true;
         }
     }
     

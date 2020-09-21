@@ -41,10 +41,11 @@ public class interactionSettings : MonoBehaviour
         checkMapUpdate();//center button for map update
         ExtendMap();//Move the camera in overview mode
     }
+    //Change the view of the player
     void checkChangeView()
     {
         if (SteamVR_Actions._default.ChangeView.GetStateUp(SteamVR_Input_Sources.RightHand))
-        { //Both controller
+        { //Right controller, the player can switch the individual to observe
             Debug.Log("menu pressed");
             //change = !change;
             count++;
@@ -54,7 +55,7 @@ public class interactionSettings : MonoBehaviour
             }
         }
         if (SteamVR_Actions._default.ChangeView.GetStateUp(SteamVR_Input_Sources.LeftHand))
-        { //Both controller
+        { //Left controller, the player will fly with the individual
             Debug.Log("left menu pressed");
             processor.mode = !processor.mode;
             //get current individual's position
@@ -67,7 +68,7 @@ public class interactionSettings : MonoBehaviour
             vrPlayer.transform.position = new Vector3(Model_List[count].transform.position.x+30, Model_List[count].transform.position.y+50, Model_List[count].transform.position.z+30);
             vrPlayer.transform.LookAt(Model_List[count].transform);
         }
-        else//need improve
+        else
         {
 
 

@@ -13,7 +13,7 @@ public class csvReader : MonoBehaviour
     //public string path = "C:\\Users\\ZiyaoHe\\Documents\\BirdImmersive\\white storks\\Blacky\\Blacky.csv";
     // Start is called before the first frame update
     string last_id;
-    string id_name = "fake3";
+    string id_name = "ThangKhaar4";
     void Start()
     {
         last_id = null;
@@ -87,7 +87,7 @@ public class csvReader : MonoBehaviour
                     {
 
                         individual.height = 0;
-                        Debug.LogError("there are height lower equal 0s");
+                        Debug.LogError("there are height lower equal 0s");//warn the user
                     }
                     //get the last individualBehaviors to store data
 
