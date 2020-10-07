@@ -199,54 +199,41 @@ def setupTab3(tab):
 
 def setupTab4(tab):
      # Label for information
-     tab4_TextLabel1 = ttk.Label(tab, text= "You can decide split by year, month,day,seconds etc.")
-     tab4_TextLabel1.place(relx = 0.2, rely = 0.2)
+     tab4_TextLabel1 = ttk.Label(tab, text= "You can decide split by year, month etc.")
+     tab4_TextLabel1.place(relx = 0.2, rely = 0.1)
+     v = tk.StringVar(tab,"1") 
+     checkbox1=ttk.Radiobutton(tab, text="split by timestamp", variable=v,value="1")
+     checkbox1.place(relx = 0.2, rely = 0.2)
+     checkbox2=ttk.Radiobutton(tab, text="split by individual", variable=v,value="2")
+     checkbox2.place(relx = 0.2, rely = 0.5)
+     v2 = tk.StringVar(tab,"1")
      # entry for year
-     Entry2=ttk.Entry(tab
-                     ,width=5
-                           )
-     Entry2.place(relx = 0.2, rely = 0.3)
+     checkbox3=ttk.Radiobutton(tab, text="Year", variable=v2,value="1")
+     checkbox3.place(relx = 0.2, rely = 0.3)
      
-     tab4_TextLabel2 = ttk.Label(tab, text= "Year")
-     tab4_TextLabel2.place(relx = 0.25, rely = 0.3)
      # entry for month
-     Entry3=ttk.Entry(tab
-                     ,width=5
-                           )
-     Entry3.place(relx = 0.3, rely = 0.3)
+     checkbox4=ttk.Radiobutton(tab, text="Month", variable=v2,value="2")
+     checkbox4.place(relx = 0.3, rely = 0.3)
      
-     tab4_TextLabel3 = ttk.Label(tab, text= "Month")
-     tab4_TextLabel3.place(relx = 0.35, rely = 0.3)
      #  entry for day
-     Entry4=ttk.Entry(tab
-                     ,width=5
-                           )
-     Entry4.place(relx = 0.42, rely = 0.3)
+     checkbox5=ttk.Radiobutton(tab, text="Day", variable=v2,value="3")
+     checkbox5.place(relx = 0.4, rely = 0.3)
      
-     tab4_TextLabel4 = ttk.Label(tab, text= "Day")
-     tab4_TextLabel4.place(relx = 0.47, rely = 0.3)
      #  entry for min
-     Entry5=ttk.Entry(tab
-                     ,width=5
-                           )
-     Entry5.place(relx = 0.52, rely = 0.3)
-     
-     tab4_TextLabel1 = ttk.Label(tab, text= "Minute")
-     tab4_TextLabel1.place(relx = 0.57, rely = 0.3)
+     checkbox6=ttk.Radiobutton(tab, text="Hour", variable=v2,value="4")
+     checkbox6.place(relx = 0.5, rely = 0.3)
+     #  entry for min
+     checkbox7=ttk.Radiobutton(tab, text="Minute", variable=v2,value="5")
+     checkbox7.place(relx = 0.6, rely = 0.3)
      # entry for seconds
-     Entry6=ttk.Entry(tab
-                     ,width=5
-                           )
-     Entry6.place(relx = 0.64, rely = 0.3)
-     tab4_TextLabel1 = ttk.Label(tab, text= "Second")
-     tab4_TextLabel1.place(relx = 0.69, rely = 0.3)
+     checkbox7=ttk.Radiobutton(tab, text="Second", variable=v2,value="6")
+     checkbox7.place(relx = 0.7, rely = 0.3)
      
      # Label for information
      tab4_TextLabel1 = ttk.Label(tab, text= "You can decide split by which individual")
      tab4_TextLabel1.place(relx = 0.2, rely = 0.4)
-     choices=["All"]
-     multibox=ttk.Combobox(tab,values=choices
-                           ,width=40
-                           ,font=12
-                           )
-     multibox.place(relx = 0.2, rely = 0.5)
+     #confirm button
+     btn1 = ttk.Button(tab, text ='Confirm', command = lambda:confirm()) 
+     btn1.place(relx = 0.8, rely = 0.9)
+     def confirm():
+           return

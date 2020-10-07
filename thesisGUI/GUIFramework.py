@@ -34,9 +34,9 @@ class MainGUI:
                  setupTab2(self.tab2)
                  
                  #setup tab3:
-                 #setupTab3(self.tab3)
+                 setupTab3(self.tab3)
                  #setup tab4:
-                 #setupTab4(self.tab4)
+                 setupTab4(self.tab4)
                  
                  self.tabNotebook.add(self.tab1, text = "Select Your Dataset")
                  self.tabNotebook.add(self.tab2, text = "Data filtering")
