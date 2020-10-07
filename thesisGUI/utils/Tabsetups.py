@@ -67,13 +67,10 @@ def setupTab1(tab):
            if(filename != ''):
                 
                 strFname.set(filename)
-                #setup csv.DictReader, filepath, workdir 
                 
-                #print("I imported d")
-                #
                 
                 try:
-                      #import launch
+                      #setup csv.DictReader, filepath, workdir 
                       setupData(filename,launch.d)
                       choices=launch.d.headers
                       multibox.config(values=choices)
@@ -129,7 +126,7 @@ def updateTab2(tab,d,mainGui):
              listbox.insert(tk.END, i) 
              listbox.config( bg = bg) 
              count=count+1
-       #setup checkbox
+       #setup checkbox for default setting
       var1=tk.BooleanVar()
       useDefault=ttk.Checkbutton(tab, text="Use Default", variable=var1)
       useDefault.place(relx = 0.8, rely = 0.8)
@@ -139,7 +136,7 @@ def updateTab2(tab,d,mainGui):
       import launch
       def confirm():
             values = [str(listbox.get(idx)) for idx in listbox.curselection()]
-            #print (', '.join(values))
+            #get the header according to the user's choose
             if(var1.get()):
                   #the user use the default headers and the headers they selected
                   launch.processingSetups.useDefaultInfo(launch.processingSetups)
@@ -152,6 +149,8 @@ def updateTab2(tab,d,mainGui):
                   #the user only use the headers they selected
                   launch.processingSetups.choosedHeaders=values
                   #print (', '.join(launch.processingSetups.choosedHeaders))
+            from utils.datafiltering import filtering
+            filtering(launch.processingSetups.choosedHeaders,launch.d)
                   
 #setup tab3: 
 #   tab3 includes: selection of mehtods, launch button , 

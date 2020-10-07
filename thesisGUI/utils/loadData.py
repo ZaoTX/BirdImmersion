@@ -13,7 +13,7 @@ import tkinter as tk
 
 def setupWorkdir(dirPath,d):
       d.workdir=dirPath
-      #print(d.filepath)
+      print(d.workdir)
 def setupData(filePath,d):
       if(filePath.endswith('.csv')):
             #from utils.DataTransferStation import d
