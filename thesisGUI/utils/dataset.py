@@ -4,7 +4,7 @@ Created on Sat Oct  3 16:47:39 2020
 
 @author: heziy
 """
-import csv
+#import csv
 import pandas as pd
 class initialData:
 #      workdir=''
@@ -13,7 +13,7 @@ class initialData:
       def __init__(self,workdir,filepath,headers,individuals):
             self.workdir=workdir
             self.filepath=filepath
-            self.csv_file=csv.DictReader(self.filepath)
+            #self.csv_file=csv.DictReader(self.filepath)
             
             self.headers=headers
             self.individuals=individuals

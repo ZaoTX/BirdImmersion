@@ -9,8 +9,6 @@ from GUIFramework import MainGUI
 from utils.dataset import initialData
 from utils.processingSetups  import processingSetups
 
-
-
 pSetups=processingSetups()
 d=initialData('','',[],[])
 main=MainGUI()

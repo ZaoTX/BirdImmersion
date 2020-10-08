@@ -5,7 +5,7 @@ Created on Sat Oct  3 20:56:23 2020
 @author: heziy
 """
 import pandas as pd
-import os
+
 def filtering(headers,d):
       dataFrame=pd.read_csv(d.filepath)
       #find the columns we want to drop

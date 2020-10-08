@@ -133,24 +133,24 @@ def updateTab2(tab,d,mainGui):
       #confirm button
       btn1 = ttk.Button(tab, text ='Confirm', command = lambda:confirm()) 
       btn1.place(relx = 0.8, rely = 0.9)
-      import launch
+      
       def confirm():
+            import launch
             values = [str(listbox.get(idx)) for idx in listbox.curselection()]
             #get the header according to the user's choose
             if(var1.get()):
                   #the user use the default headers and the headers they selected
-                  launch.processingSetups.useDefaultInfo(launch.processingSetups)
-                  launch.processingSetups.choosedHeaders=launch.processingSetups.choosedHeaders+values
+                  launch.pSetups.useDefaultInfo()
+                  launch.pSetups.choosenHeaders=launch.pSetups.choosenHeaders+values
                   #make value unique
-                  launch.processingSetups.choosedHeaders=list(set(launch.processingSetups.choosedHeaders))
+                  launch.pSetups.choosenHeaders=list(set(launch.pSetups.choosenHeaders))
                   
             
             else:
                   #the user only use the headers they selected
-                  launch.processingSetups.choosedHeaders=values
-                  #print (', '.join(launch.processingSetups.choosedHeaders))
+                  launch.processingSetups.choosenHeaders=values
             from utils.datafiltering import filtering
-            filtering(launch.processingSetups.choosedHeaders,launch.d)
+            filtering(launch.pSetups.choosenHeaders,launch.d)
                   
 #setup tab3: 
 #   tab3 includes: selection of mehtods, launch button , 
@@ -235,5 +235,21 @@ def setupTab4(tab):
      #confirm button
      btn1 = ttk.Button(tab, text ='Confirm', command = lambda:confirm()) 
      btn1.place(relx = 0.8, rely = 0.9)
+     
+     
      def confirm():
-           return
+           #check spilt option
+           if(v.get()=="1"):#split by timestamp
+                 return
+#                 if(v2.get()=="1"):#Year
+#                 elif(v2.get()=="2"):#Month
+#                 elif(v2.get()=="3"): #Day
+#                 elif(v2.get()=="4"): #Hour
+#                 elif(v2.get()=="5"):#Minute
+#                 elif(v2.get()=="6"): #Second
+           else:#split by inidividual
+                 import launch
+                 from utils.spliting import individualSpliting
+                 individualSpliting(launch.d,launch.pSetups)
+                 #return
+           
