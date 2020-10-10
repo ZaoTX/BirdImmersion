@@ -199,39 +199,56 @@ def setupTab3(tab):
 
 def setupTab4(tab):
      # Label for information
-     tab4_TextLabel1 = ttk.Label(tab, text= "You can decide split by year, month etc.")
-     tab4_TextLabel1.place(relx = 0.2, rely = 0.1)
+     tab4_TextLabel1 = ttk.Label(tab, text= "Here you can decide whether to split by individual's Id or year, month etc.")
+     tab4_TextLabel1.place(relx = 0.1, rely = 0.1)
      v = tk.StringVar(tab,"1") 
-     checkbox1=ttk.Radiobutton(tab, text="split by timestamp", variable=v,value="1")
-     checkbox1.place(relx = 0.2, rely = 0.2)
-     checkbox2=ttk.Radiobutton(tab, text="split by individual", variable=v,value="2")
-     checkbox2.place(relx = 0.2, rely = 0.5)
+     checkbox1=ttk.Radiobutton(tab, text="Split by timestamp", variable=v,value="1")
+     checkbox1.place(relx = 0.1, rely = 0.2)
+     checkbox2=ttk.Radiobutton(tab, text="Split by individual", variable=v,value="2")
+     checkbox2.place(relx = 0.1, rely = 0.8)
      v2 = tk.StringVar(tab,"1")
      # entry for year
      checkbox3=ttk.Radiobutton(tab, text="Year", variable=v2,value="1")
-     checkbox3.place(relx = 0.2, rely = 0.3)
+     checkbox3.place(relx = 0.1, rely = 0.3)
      
      # entry for month
      checkbox4=ttk.Radiobutton(tab, text="Month", variable=v2,value="2")
-     checkbox4.place(relx = 0.3, rely = 0.3)
+     checkbox4.place(relx = 0.2, rely = 0.3)
      
      #  entry for day
      checkbox5=ttk.Radiobutton(tab, text="Day", variable=v2,value="3")
-     checkbox5.place(relx = 0.4, rely = 0.3)
+     checkbox5.place(relx = 0.3, rely = 0.3)
      
      #  entry for min
      checkbox6=ttk.Radiobutton(tab, text="Hour", variable=v2,value="4")
-     checkbox6.place(relx = 0.5, rely = 0.3)
+     checkbox6.place(relx = 0.4, rely = 0.3)
      #  entry for min
      checkbox7=ttk.Radiobutton(tab, text="Minute", variable=v2,value="5")
-     checkbox7.place(relx = 0.6, rely = 0.3)
+     checkbox7.place(relx = 0.5, rely = 0.3)
      # entry for seconds
      checkbox7=ttk.Radiobutton(tab, text="Second", variable=v2,value="6")
-     checkbox7.place(relx = 0.7, rely = 0.3)
+     checkbox7.place(relx = 0.6, rely = 0.3)
      
      # Label for information
-     tab4_TextLabel1 = ttk.Label(tab, text= "You can decide split by which individual")
-     tab4_TextLabel1.place(relx = 0.2, rely = 0.4)
+     tab4_TextLabel3 = ttk.Label(tab, text= "If the regular language of timestamp doesn't match, you can write your own:(copy)")
+     tab4_TextLabel3.place(relx = 0.1, rely = 0.4)
+     
+     # Label for information
+     defaultReg=tk.StringVar()
+     defaultReg.set(r"((?P<DD>\d{1,2})/(?P<MM>\d{1,2})/(?P<YY>\d{4}) (?P<h>\d{1,2}):(?P<min>\d{2}):(?P<sec>\d{2}) (?P<TT>[AM|PM]{2}))")
+     entry1=tk.Entry(tab,
+           width=108)
+     entry1.config(textvariable = defaultReg,state='readonly',relief='flat')
+     entry1.place(relx = 0.1, rely = 0.5)
+     tab4_TextLabel5 = ttk.Label(tab, text= "Here you can write your regular language for timestamp")
+     tab4_TextLabel5.place(relx = 0.1, rely = 0.6)
+     textVar=tk.StringVar()
+     entry2=tk.Entry(tab,
+           width=108,
+           textvariable = textVar,
+           relief='flat')
+     entry2.place(relx = 0.1, rely = 0.7)
+     #defaultReg.set("((?P<DD>\d{1,2})/(?P<MM>\d{1,2})/(?P<YY>\d{4}) (?P<h>\d{1,2}):(?P<min>\d{2}):(?P<sec>\d{2}) (?P<TT>[AM|PM]{2}))")
      #confirm button
      btn1 = ttk.Button(tab, text ='Confirm', command = lambda:confirm()) 
      btn1.place(relx = 0.8, rely = 0.9)
@@ -240,13 +257,16 @@ def setupTab4(tab):
      def confirm():
            #check spilt option
            if(v.get()=="1"):#split by timestamp
+                 reg=''
+                 if(entry2.get()!=''):
+                       reg=entry2.get()
+                 else:
+                       reg=r"((?P<DD>\d{1,2})/(?P<MM>\d{1,2})/(?P<YY>\d{4}) (?P<h>\d{1,2}):(?P<min>\d{2}):(?P<sec>\d{2}) (?P<TT>[AM|PM]{2}))"
+                 print(reg)
+                 #split by which time difference
+                 #typ=v2.get()
                  return
-#                 if(v2.get()=="1"):#Year
-#                 elif(v2.get()=="2"):#Month
-#                 elif(v2.get()=="3"): #Day
-#                 elif(v2.get()=="4"): #Hour
-#                 elif(v2.get()=="5"):#Minute
-#                 elif(v2.get()=="6"): #Second
+#                 
            else:#split by inidividual
                  import launch
                  from utils.spliting import individualSpliting
