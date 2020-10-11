@@ -47,14 +47,14 @@ def individualSpliting(d,p):#d is dataset, p is processingsetups
             writer.writerow(row)
 # d is launch.d, p is launch.pSetup, 
 # reg is the Regular language of Time, aim is the split by which time skip
-def splitingTime(d,p,reg,aim):
+def splitingTime(d,p,reg,aim,sec):
       import re
       base_dir = d.workdir
       splitpath = base_dir+'/'+'SplitByTimeStamp'
       if not os.path.exists(splitpath):
              os.makedirs(splitpath)
       #specify the critical headers
-      idHeader=p.idHeaderName
+#      idHeader=p.idHeaderName
 #      latHeader=p.latHeaderName
 #      lngHeader=p.lngHeaderName
 #      heightHeader=p.heightHeaderName
@@ -146,8 +146,99 @@ def splitingTime(d,p,reg,aim):
             lastYear=cur_Year
             lastMonth=cur_Month
             lastDay=cur_Day
-#      elif(aim=="4"): #Hour
-#      elif(aim=="5"):#Minute
-#      elif(aim=="6"): #Second
+       # The goal here is changed, 
+       # we check if the time diff is less than the aim's setup 
+       # and give the user the high temporal resolution period 
+      elif(aim=="4"): #Hour
+            from datetime import datetime
+            threshold=3600#the threshold in second
+            lastTime=''
+            count=1
+            splitpath = splitpath+'/'+'HighResolution_hour'
+            if not os.path.exists(splitpath):
+                  os.makedirs(splitpath)
+            for row in csv_reader:
+                  
+                  cur_time=row[timestampHeader]
+                  if (lastTime=='') :
+                        csvfile_write = open(splitpath+'/'+str(count)+'.csv', 'a', newline='')
+                        writer = csv.DictWriter(csvfile_write,fieldnames=fieldnames)
+                        writer.writeheader()
+                        writer.writerow(row)
+                  else:
+                        lastTimeObj=datetime.strptime(lastTime,'%Y-%m-%d %H:%M:%S.%f')
+                        cur_timeObj=datetime.strptime(cur_time,'%Y-%m-%d %H:%M:%S.%f')
+                        TimeDiff=abs((cur_timeObj-lastTimeObj).total_seconds())
+                        if(TimeDiff<=threshold):
+                              writer.writerow(row)
+                        else:
+                              count=count+1
+                              csvfile_write = open(splitpath+'/'+str(count)+'.csv', 'a', newline='')
+                              writer = csv.DictWriter(csvfile_write,fieldnames=fieldnames)
+                              writer.writeheader()
+                              writer.writerow(row)
+                  lastTime=cur_time
+            print("finished")
+                              
+      elif(aim=="5"):#Minute
+            from datetime import datetime
+            threshold=60#the threshold in second
+            lastTime=''
+            count=1
+            splitpath = splitpath+'/'+'HighResolution_minute'
+            if not os.path.exists(splitpath):
+                  os.makedirs(splitpath)
+            for row in csv_reader:
+                  
+                  cur_time=row[timestampHeader]
+                  if (lastTime=='') :
+                        csvfile_write = open(splitpath+'/'+str(count)+'.csv', 'a', newline='')
+                        writer = csv.DictWriter(csvfile_write,fieldnames=fieldnames)
+                        writer.writeheader()
+                        writer.writerow(row)
+                  else:
+                        lastTimeObj=datetime.strptime(lastTime,'%Y-%m-%d %H:%M:%S.%f')
+                        cur_timeObj=datetime.strptime(cur_time,'%Y-%m-%d %H:%M:%S.%f')
+                        TimeDiff=abs((cur_timeObj-lastTimeObj).total_seconds())
+                        if(TimeDiff<=threshold):
+                              writer.writerow(row)
+                        else:
+                              count=count+1
+                              csvfile_write = open(splitpath+'/'+str(count)+'.csv', 'a', newline='')
+                              writer = csv.DictWriter(csvfile_write,fieldnames=fieldnames)
+                              writer.writeheader()
+                              writer.writerow(row)
+                  lastTime=cur_time
+            print("finished")
+      elif(aim=="6"): #Second
+            from datetime import datetime
+            threshold=int(sec)#the threshold in second
+            lastTime=''
+            count=1
+            splitpath = splitpath+'/'+'HighResolution_second'
+            if not os.path.exists(splitpath):
+                  os.makedirs(splitpath)
+            for row in csv_reader:
+                  
+                  cur_time=row[timestampHeader]
+                  if (lastTime=='') :
+                        csvfile_write = open(splitpath+'/'+str(count)+'.csv', 'a', newline='')
+                        writer = csv.DictWriter(csvfile_write,fieldnames=fieldnames)
+                        writer.writeheader()
+                        writer.writerow(row)
+                  else:
+                        lastTimeObj=datetime.strptime(lastTime,'%Y-%m-%d %H:%M:%S.%f')
+                        cur_timeObj=datetime.strptime(cur_time,'%Y-%m-%d %H:%M:%S.%f')
+                        TimeDiff=abs((cur_timeObj-lastTimeObj).total_seconds())
+                        if(TimeDiff<=threshold):
+                              writer.writerow(row)
+                        else:
+                              count=count+1
+                              csvfile_write = open(splitpath+'/'+str(count)+'.csv', 'a', newline='')
+                              writer = csv.DictWriter(csvfile_write,fieldnames=fieldnames)
+                              writer.writeheader()
+                              writer.writerow(row)
+                  lastTime=cur_time
+            print("finished")
       
       return

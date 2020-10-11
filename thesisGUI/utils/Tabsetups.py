@@ -248,6 +248,12 @@ def setupTab4(tab):
            textvariable = textVar,
            relief='flat')
      entry2.place(relx = 0.1, rely = 0.7)
+     intVar=tk.IntVar()
+     entry3=tk.Entry(tab,
+           width=20,
+           textvariable = intVar,
+           relief='flat')
+     entry3.place(relx = 0.7, rely = 0.3)
      #defaultReg.set("((?P<DD>\d{1,2})/(?P<MM>\d{1,2})/(?P<YY>\d{4}) (?P<h>\d{1,2}):(?P<min>\d{2}):(?P<sec>\d{2}) (?P<TT>[AM|PM]{2}))")
      #confirm button
      btn1 = ttk.Button(tab, text ='Confirm', command = lambda:confirm()) 
@@ -267,8 +273,9 @@ def setupTab4(tab):
                  typ=v2.get()
                  import launch
                  from utils.spliting import splitingTime
-                 splitingTime(launch.d,launch.pSetups,reg,typ)
-                 return
+                 seconds=entry3.get()
+                 splitingTime(launch.d,launch.pSetups,reg,typ,seconds)
+                 
 #                 
            else:#split by inidividual
                  import launch
