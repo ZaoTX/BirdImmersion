@@ -11,12 +11,10 @@ def individualSpliting(d,p):#d is dataset, p is processingsetups
       base_dir = d.workdir
       #specify the critical headers
       idHeader=p.idHeaderName
-      latHeader=p.latHeaderName
-      #print(latHeader)
-      lngHeader=p.lngHeaderName
-      heightHeader=p.heightHeaderName
-      timestampHeader=p.timestampHeaderName
       filePath = base_dir+'/'+'filtered.csv'
+      splitpath = base_dir+'/'+'SplitByID'
+      if not os.path.exists(splitpath):
+               os.makedirs(splitpath)
       csv_file=open(filePath, encoding='utf-8')
       csv_reader = csv.DictReader(csv_file, delimiter=',')
       fieldnames = p.choosenHeaders
@@ -33,7 +31,7 @@ def individualSpliting(d,p):#d is dataset, p is processingsetups
         if last_id!=cur_id:
             
             #csvfile_write.close()
-            newpath = base_dir+'/'+cur_id 
+            newpath = splitpath+'/'+cur_id
             #newpath = newpath.replace(" ","")
             if not os.path.exists(newpath):
                    os.makedirs(newpath)
@@ -42,91 +40,114 @@ def individualSpliting(d,p):#d is dataset, p is processingsetups
                                     ,fieldnames=fieldnames
                                     )
             writer.writeheader()
-            cur_time=row[timestampHeader]
-            cur_lng=row[lngHeader]
             
-#            if(row[lngHeader]==row['location-long']):
-#                  print("equal")
-#                  if(row[lngHeader]==''):
-#                        print("empty")
-#            else:print("not equal")
-                  
-            cur_lat=row[latHeader]
-            cur_height=row[heightHeader]
-            row_dict={idHeader:cur_id,
-                      lngHeader:cur_lng,
-                      latHeader:cur_lat,
-                      heightHeader:cur_height,
-                      timestampHeader:cur_time
-                    }
-            writer.writerow(row_dict)
+            writer.writerow(row)
         else:
             
-            cur_time=row[timestampHeader]
-            cur_lng=row[lngHeader]
-            cur_lat=row[latHeader]
-            cur_height=row[heightHeader]
-            print(type(cur_lng))
-            row_dict={idHeader:cur_id,
-                      lngHeader:cur_lng,
-                      latHeader:cur_lat,
-                      heightHeader:cur_height,
-                      timestampHeader:cur_time
-                     }
-            writer.writerow(row_dict)
+            writer.writerow(row)
 # d is launch.d, p is launch.pSetup, 
 # reg is the Regular language of Time, aim is the split by which time skip
-#def splitingTime(d,p,reg,aim):
-#      import re
-#      base_dir = d.workdir
-#      #specify the critical headers
-#      idHeader=p.idHeaderName
+def splitingTime(d,p,reg,aim):
+      import re
+      base_dir = d.workdir
+      splitpath = base_dir+'/'+'SplitByTimeStamp'
+      if not os.path.exists(splitpath):
+             os.makedirs(splitpath)
+      #specify the critical headers
+      idHeader=p.idHeaderName
 #      latHeader=p.latHeaderName
 #      lngHeader=p.lngHeaderName
 #      heightHeader=p.heightHeaderName
-#      timestampHeader=p.timestampHeaderName
-#      filePath = base_dir+'/'+'filtered.csv'
-#      csv_file=open(filePath, encoding='utf-8')
-#      csv_reader = csv.DictReader(csv_file, delimiter=',')
-#      fieldnames = p.choosenHeaders
-#      lastTime=99999#initialize last time
-#      timeskip=1#initialize time diff
-#      if(v2.get()=="1"):#Year
-#            count=0
-#            for row in csv_reader:
-#                  cur_time=row[timestampHeader]
-#                  mat = re.match(reg,cur_time)
-#                  cur_Year=mat.group('YY')
-#                  if(lastTime==99999):
-#                        lastTime=cur_time
-#                  else:
-#                        if lastTime!=cur_time:#not the same year
-#                              newpath = base_dir+'/'+count 
-#                              #newpath = newpath.replace(" ","")
-#                              if not os.path.exists(newpath):
-#                                     os.makedirs(newpath)
-#                              csvfile_write = open(newpath+'/'+cur_id+'.csv', 'w', newline='')
-#                              writer = csv.DictWriter(csvfile_write,fieldnames=fieldnames)
-#                              writer.writeheader()
-#                              count=count+1
-#                        else:
-#                              
-#                              cur_time=row[timestampHeader]
-#                              cur_lng=row[lngHeader]
-#                              cur_lat=row[latHeader]
-#                              cur_height=row[heightHeader]
-#                              row_dict={idHeader:cur_id,
-#                                        timestampHeader:cur_time,
-#                                        lngHeader:cur_lng,
-#                                        latHeader:cur_lat,
-#                                        heightHeader:cur_height
-#                                      }
-#                              writer.writerow(row_dict)
-#                        lastTime=cur_time
-#           elif(v2.get()=="2"):#Month
-#           elif(v2.get()=="3"): #Day
-#           elif(v2.get()=="4"): #Hour
-#           elif(v2.get()=="5"):#Minute
-#           elif(v2.get()=="6"): #Second
-#      
-#      return
+      timestampHeader=p.timestampHeaderName
+      filePath = base_dir+'/'+'filtered.csv'
+      csv_file=open(filePath, encoding='utf-8')
+      csv_reader = csv.DictReader(csv_file, delimiter=',')
+      fieldnames = p.choosenHeaders
+      
+      
+      if(aim=="1"):#Year
+            lastYear=99999#initialize last time
+            splitpath = splitpath+'/'+'ByYear'
+            if not os.path.exists(splitpath):
+                  os.makedirs(splitpath)
+            for row in csv_reader:
+                  cur_time=row[timestampHeader]
+                  mat = re.match(reg,cur_time)
+                  cur_Year=mat.group('YY')
+                  if lastYear!=cur_Year:#not the same year
+                        newpath = splitpath+'/'+cur_Year
+                        if not os.path.exists(newpath):
+                               os.makedirs(newpath)
+                        csvfile_write = open(newpath+'/'+cur_Year+'.csv', 'a', newline='')# a for append (instead of overwrite)
+                        writer = csv.DictWriter(csvfile_write,fieldnames=fieldnames)
+                        writer.writeheader()
+                        writer.writerow(row)
+                              
+                  else:
+                              
+                        writer.writerow(row)
+                  lastYear=cur_Year
+      elif(aim=="2"):#Month
+            lastYear=99999#initialize last Year
+            lastMonth=99999#initialize last Month
+            splitpath = splitpath+'/'+'ByMonth'
+            if not os.path.exists(splitpath):
+                  os.makedirs(splitpath)
+            for row in csv_reader:
+                  
+                  cur_time=row[timestampHeader]
+                  
+                  mat = re.match(reg,cur_time)
+                  cur_Year=mat.group('YY')
+                  cur_Month=mat.group('MM')
+                  if (lastYear!=cur_Year and lastMonth!=cur_Month):#not the same Month
+                        newpath = splitpath+'/'+cur_Year
+                        #newpath = newpath.replace(" ","")
+                        if not os.path.exists(newpath):
+                               os.makedirs(newpath)
+                        csvfile_write = open(newpath+'/'+cur_Month+'.csv', 'a', newline='')# a for append (instead of overwrite)
+                        writer = csv.DictWriter(csvfile_write,fieldnames=fieldnames)
+                        writer.writeheader()
+                        writer.writerow(row)
+                        
+                  else:
+                        
+                        writer.writerow(row)
+            lastYear=cur_Year
+            lastMonth=cur_Month
+      elif(aim=="3"): #Day
+            lastYear=99999#initialize last Year
+            lastMonth=99999#initialize last Month
+            lastDay=99999#initialize last Day
+            splitpath = splitpath+'/'+'ByDay'
+            if not os.path.exists(splitpath):
+                  os.makedirs(splitpath)
+            for row in csv_reader:
+                  
+                  cur_time=row[timestampHeader]
+                  
+                  mat = re.match(reg,cur_time)
+                  cur_Year=mat.group('YY')
+                  cur_Month=mat.group('MM')
+                  cur_Day=mat.group('DD')
+                  if lastYear!=cur_Year and lastMonth!=cur_Month and lastDay!=cur_Day:#not the same Day
+                        newpath = splitpath+'/'+cur_Year+'-'+cur_Month
+                        #newpath = newpath.replace(" ","")
+                        if not os.path.exists(newpath):
+                               os.makedirs(newpath)
+                        csvfile_write = open(newpath+'/'+cur_Day+'.csv', 'a', newline='')# a for append (instead of overwrite)
+                        writer = csv.DictWriter(csvfile_write,fieldnames=fieldnames)
+                        writer.writeheader()
+                        writer.writerow(row)
+                        
+                  else:
+                        
+                        writer.writerow(row)
+            lastYear=cur_Year
+            lastMonth=cur_Month
+            lastDay=cur_Day
+#      elif(aim=="4"): #Hour
+#      elif(aim=="5"):#Minute
+#      elif(aim=="6"): #Second
+      
+      return

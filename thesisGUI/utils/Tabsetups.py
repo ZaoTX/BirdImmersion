@@ -235,7 +235,7 @@ def setupTab4(tab):
      
      # Label for information
      defaultReg=tk.StringVar()
-     defaultReg.set(r"((?P<DD>\d{1,2})/(?P<MM>\d{1,2})/(?P<YY>\d{4}) (?P<h>\d{1,2}):(?P<min>\d{2}):(?P<sec>\d{2}) (?P<TT>[AM|PM]{2}))")
+     defaultReg.set(r"((?P<YY>\d{4})-(?P<MM>\d{1,2})-(?P<DD>\d{1,2}) (?P<h>\d{1,2}):(?P<min>\d{2}):(?P<sec>\d{2}[.]\d{3}))")
      entry1=tk.Entry(tab,
            width=108)
      entry1.config(textvariable = defaultReg,state='readonly',relief='flat')
@@ -261,10 +261,13 @@ def setupTab4(tab):
                  if(entry2.get()!=''):
                        reg=entry2.get()
                  else:
-                       reg=r"((?P<DD>\d{1,2})/(?P<MM>\d{1,2})/(?P<YY>\d{4}) (?P<h>\d{1,2}):(?P<min>\d{2}):(?P<sec>\d{2}) (?P<TT>[AM|PM]{2}))"
+                       reg=r"((?P<YY>\d{4})-(?P<MM>\d{1,2})-(?P<DD>\d{1,2}) (?P<h>\d{1,2}):(?P<min>\d{2}):(?P<sec>\d{2}[.]\d{3}))"
                  print(reg)
                  #split by which time difference
-                 #typ=v2.get()
+                 typ=v2.get()
+                 import launch
+                 from utils.spliting import splitingTime
+                 splitingTime(launch.d,launch.pSetups,reg,typ)
                  return
 #                 
            else:#split by inidividual
