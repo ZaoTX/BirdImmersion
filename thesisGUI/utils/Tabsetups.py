@@ -190,7 +190,7 @@ def setupTab4(tab):
            from utils.cleanData import interpolation
            import launch
            if(choice=='linear interpolation'):
-                 
+                 tab3_TextLabel3.config(text='Linear interpolation can be helpful dealing the missing value between a small interval of temporal difference')
                  interpolation(launch.d,launch.pSetups)
            elif(choice=='remove the data with missing value'): 
                  pass
