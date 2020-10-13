@@ -157,7 +157,7 @@ def updateTab2(tab,d,mainGui):
 #   their label to explain the function
 # 
 
-def setupTab3(tab):
+def setupTab4(tab):
      # Label for information
      tab3_TextLabel1 = ttk.Label(tab, text= "How to deal with missing value")
      tab3_TextLabel1.place(relx = 0.1, rely = 0.2)
@@ -185,8 +185,15 @@ def setupTab3(tab):
      
      
      def cleandataset():
-#           choice = multibox.get()
-#           print(choice)
+           choice = multibox.get()
+           print(choice)
+           from utils.cleanData import interpolation
+           import launch
+           if(choice=='linear interpolation'):
+                 
+                 interpolation(launch.d,launch.pSetups)
+           elif(choice=='remove the data with missing value'): 
+                 pass
 #           ind=choices.index(choice,0,len(choices))
 #           print(ind)
 #           if(ind==0):#remove value
@@ -195,9 +202,9 @@ def setupTab3(tab):
 #                 return
 #           else:#remove value
 #             return
-           return
+           print('function finished')
 
-def setupTab4(tab):
+def setupTab3(tab):
      # Label for information
      tab4_TextLabel1 = ttk.Label(tab, text= "Here you can decide whether to split by individual's Id or year, month etc.")
      tab4_TextLabel1.place(relx = 0.1, rely = 0.1)

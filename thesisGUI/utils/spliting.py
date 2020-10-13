@@ -11,7 +11,8 @@ def individualSpliting(d,p):#d is dataset, p is processingsetups
       base_dir = d.workdir
       #specify the critical headers
       idHeader=p.idHeaderName
-      filePath = base_dir+'/'+'filtered.csv'
+      filePath = d.filepath
+      #base_dir+'/'+'filtered.csv'
       splitpath = base_dir+'/'+'SplitByID'
       if not os.path.exists(splitpath):
                os.makedirs(splitpath)
@@ -59,7 +60,8 @@ def splitingTime(d,p,reg,aim,sec):
 #      lngHeader=p.lngHeaderName
 #      heightHeader=p.heightHeaderName
       timestampHeader=p.timestampHeaderName
-      filePath = base_dir+'/'+'filtered.csv'
+      filePath = d.filepath
+      #base_dir+'/'+'filtered.csv'
       csv_file=open(filePath, encoding='utf-8')
       csv_reader = csv.DictReader(csv_file, delimiter=',')
       fieldnames = p.choosenHeaders
