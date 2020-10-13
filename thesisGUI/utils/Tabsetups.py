@@ -171,14 +171,14 @@ def setupTab4(tab):
      
      launchBtn= ttk.Button(tab, text="launch", command = lambda: cleandataset())
      launchBtn.place(relx = 0.8, rely = 0.3)
-     # Label for information
-     tab3_TextLabel2 = ttk.Label(tab, text= "How long in second do you want for a timeskip(set up for linear interpolation)")
-     tab3_TextLabel2.place(relx = 0.1, rely = 0.4)
-     #
-     Entry=ttk.Entry(tab
-                     ,width=5
-                           )
-     Entry.place(relx = 0.8, rely = 0.4)
+#     # Label for information
+#     tab3_TextLabel2 = ttk.Label(tab, text= "How long in second do you want for a timeskip(set up for linear interpolation)")
+#     tab3_TextLabel2.place(relx = 0.1, rely = 0.4)
+#     #
+#     Entry=ttk.Entry(tab
+#                     ,width=5
+#                           )
+#     Entry.place(relx = 0.8, rely = 0.4)
      # Label for information
      tab3_TextLabel3 = ttk.Label(tab, text= "Here should be some comments about advantages and disadvantages for each method")
      tab3_TextLabel3.place(relx = 0.1, rely = 0.5)
