@@ -7,7 +7,7 @@ Created on Fri Nov 22 15:04:29 2019
 import os
 import csv
 #  Your working directory
-base_dir='C:/Users/ZiyaoHe/Documents/BirdImmersive/white storks/'
+base_dir='C:/Users/ZiyaoHe/Documents/BirdImmersion/white storks/'
 
 with open(base_dir+'cleaned_data.csv', encoding='utf-8') as csv_file:
 #    reader = csv.reader(csv_file)

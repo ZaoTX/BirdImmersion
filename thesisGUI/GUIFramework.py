@@ -40,8 +40,8 @@ class MainGUI:
                  
                  self.tabNotebook.add(self.tab1, text = "Select Your Dataset")
                  self.tabNotebook.add(self.tab2, text = "Data filtering")
-                 self.tabNotebook.add(self.tab3, text = "Clean Data")
-                 self.tabNotebook.add(self.tab4, text = "Split Dataset")
+                 self.tabNotebook.add(self.tab3, text = "Split Dataset")
+                 self.tabNotebook.add(self.tab4, text = "Clean Data")
                  self.tabNotebook.add(self.tab5, text = "Aggregate/Summarize Data")
                  self.tabNotebook.add(self.tab6, text = "Sample Dataset")
                  self.tabNotebook.add(self.tab7, text = "Report")

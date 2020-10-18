@@ -187,13 +187,16 @@ def setupTab4(tab):
      def cleandataset():
            choice = multibox.get()
            print(choice)
-           from utils.cleanData import interpolation
+           
            import launch
            if(choice=='linear interpolation'):
+                 from utils.cleanData import interpolation
                  tab3_TextLabel3.config(text='Linear interpolation can be helpful dealing the missing value between a small interval of temporal difference')
                  interpolation(launch.d,launch.pSetups)
            elif(choice=='remove the data with missing value'): 
-                 pass
+                 from utils.cleanData import removeMissing
+                 tab3_TextLabel3.config(text='Remove missing value is easy but might lose some information make the trajectory intermittent')
+                 removeMissing(launch.d,launch.pSetups)
 #           ind=choices.index(choice,0,len(choices))
 #           print(ind)
 #           if(ind==0):#remove value
@@ -257,10 +260,12 @@ def setupTab3(tab):
      entry2.place(relx = 0.1, rely = 0.7)
      intVar=tk.IntVar()
      entry3=tk.Entry(tab,
-           width=20,
+           width=2,
            textvariable = intVar,
            relief='flat')
      entry3.place(relx = 0.7, rely = 0.3)
+     tab4_TextLabel6 = ttk.Label(tab, text= "seconds")
+     tab4_TextLabel6.place(relx = 0.73, rely = 0.3)
      #defaultReg.set("((?P<DD>\d{1,2})/(?P<MM>\d{1,2})/(?P<YY>\d{4}) (?P<h>\d{1,2}):(?P<min>\d{2}):(?P<sec>\d{2}) (?P<TT>[AM|PM]{2}))")
      #confirm button
      btn1 = ttk.Button(tab, text ='Confirm', command = lambda:confirm()) 
