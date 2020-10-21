@@ -45,7 +45,6 @@ public class process : MonoBehaviour
         spawn_Bird.speed = speed;
         
         rescale();
-        lastLineScale = lineScale;
     }
     //Load data and store them in spawn_Bird.cs
     void loadData() {
@@ -112,6 +111,8 @@ public class process : MonoBehaviour
         if (lineScale!=lastLineScale) {
             line_Gen.needUpdate = true;
         }
+
+        lastLineScale = lineScale;
     }
     
 }

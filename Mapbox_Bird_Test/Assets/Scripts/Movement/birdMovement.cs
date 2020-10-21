@@ -13,9 +13,9 @@ public class birdMovement : MonoBehaviour
     GameObject bird;
     Vector3[] positions;
     //flying overallSpeed 
-    public float overallSpeed; // it takes 1/overallSpeed s to fly between datapoints,
+    public double overallSpeed; // it takes 1/overallSpeed s to fly between datapoints,
     //the local time
-    public float t=0f;
+    public double t=0;
     //whether the bird is ready to fly
     public  bool isok = false;
     //count where is the bird
@@ -31,8 +31,8 @@ public class birdMovement : MonoBehaviour
     public string firstTimestamp;
     public GameObject DataManager;
     public IndividualBehavior idb;
-    float timeDiffSecFloat;
-    float multipler;
+    double timeDiffSecDou;
+    double multipler;
     Vector3 nextpos;
     // Start is called before the first frame update
     void Start()
@@ -78,18 +78,17 @@ public class birdMovement : MonoBehaviour
         DateTime.TryParse(time2, out t2);
         TimeSpan TimeDiff = t2 - t1;
         double timeDiffSec = TimeDiff.TotalSeconds;
-        timeDiffSecFloat = Convert.ToInt32(timeDiffSec);
-        multipler = overallSpeed / timeDiffSecFloat;
+        //timeDiffSecDou = Convert.ToInt64(timeDiffSec);
+        multipler = overallSpeed / timeDiffSec;
     }
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        
-            
-        if (canStart)
-        {
 
-            overallSpeed = spawn.speed;
+        overallSpeed = spawn.speed;
+        /*if (canStart)
+        {*/
+
             if (bird.transform.position == positions[0] && count < num - 1)
             {
                 isok = true;// it's ready to do animation
@@ -113,8 +112,14 @@ public class birdMovement : MonoBehaviour
                 {
                     count = 0;
                     initialize();
-                    this.transform.parent.GetComponent<line_gen>().restart = false;
+
                     this.transform.parent.GetComponent<line_gen>().OverallTime = 0;
+                    this.transform.parent.GetComponent<line_gen>().restart = false;
+                    //this below is to ensure the restart when the animation is finished
+                    bird.SetActive(true);
+                    //enable the line
+                    this.gameObject.SetActive(true);
+                    isok = true;
                 }
                 //check out of range
                 if (count == num )
@@ -127,8 +132,8 @@ public class birdMovement : MonoBehaviour
                     //count = 0;
                     return;
                 }
-                bird.transform.position = Vector3.Lerp(birdpos, nextpos, t);
-                if (t >= 1)//let the bird fly for the TimeDiff
+                
+                if (t >= Math.Abs(1-0.0012*overallSpeed))
                 {
                     //we switch to next position
                     count++;
@@ -156,29 +161,34 @@ public class birdMovement : MonoBehaviour
                     DateTime.TryParse(time2, out t2);
                     TimeSpan TimeDiff = t2 - t1;
                     double timeDiffSec = TimeDiff.TotalSeconds;
-                    timeDiffSecFloat = Convert.ToInt32(timeDiffSec);
+                    //timeDiffSecDou =double) Convert.ToInt64(timeDiffSec);
 
                     birdpos = nextpos;
                     nextpos = positions[count + 1];
-                    multipler = overallSpeed / timeDiffSecFloat;
+                    multipler = overallSpeed / timeDiffSec;
                     //initialize the time t
                     t = 0f;
 
+                    Debug.Log("The time we need is: " + (1 / multipler));
 
                 }
-                else {
+                if(t<1) {
                     if (count == num - 1) {
                         return;
                     }
                     
                     bird.transform.LookAt(nextpos);
                     t += Time.deltaTime * multipler;
-                }
-               
+                    
 
-                
+                }
+                bird.transform.position = Vector3.Lerp(birdpos, nextpos, (float)t);
+                Debug.Log("However, the real t is: " + (float)t);
+
+
+
             }
-        }
+       /* }
         else
         { //we check whether we can start
             GameObject parent = this.transform.parent.gameObject;//polylineManager
@@ -196,7 +206,7 @@ public class birdMovement : MonoBehaviour
                     canStart = true;
             }
 
-        }
+        }*/
         
     }
 }

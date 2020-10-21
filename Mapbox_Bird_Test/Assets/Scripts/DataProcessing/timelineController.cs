@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System;
 public class timelineController : MonoBehaviour
 {
-    public Transform timeline;
+    public GameObject timeline;
     public GameObject textIndicator;
 
     public GameObject dataManager;
@@ -30,6 +30,7 @@ public class timelineController : MonoBehaviour
         DateTime.TryParse(Max, out tMax);
         TimeSpan TimeDiff = tMax-tMin;
         timeDiffSec = TimeDiff.TotalSeconds;
+        //polylineManager.GetComponent<line_gen>().timeDiffSec = timeDiffSec;
         //float timeDiffSecFloat = Convert.ToInt32(timeDiffSec);
         //check  
         //Debug.Log("Timeline"+timeDiffSecFloat);
@@ -41,13 +42,26 @@ public class timelineController : MonoBehaviour
         string Min = polylineManager.GetComponent<line_gen>().curMin;
         Min = Min.Replace('-', '/');
         DateTime.TryParse(Min, out tMin);
-        
-        if (currentAmount < 100) {
-            currentAmount += speed * Time.deltaTime/ timeDiffSec;
+        if (polylineManager.GetComponent<line_gen>().OverallTime == 0) {
+            //it will be reset to 0 when restart(or initialization)
+            currentAmount = 0;
+            timeline.gameObject.SetActive(true);
+        }
+        if (currentAmount < 100)
+        {
+            //currentAmount += speed * Time.deltaTime/ timeDiffSec;
             overallTime = polylineManager.GetComponent<line_gen>().OverallTime;
+            currentAmount = overallTime / timeDiffSec;
+
             string textInhalt = tMin.AddSeconds(overallTime).ToString("yyyy-MM-dd HH:mm:ss");
             textIndicator.GetComponent<Text>().text = textInhalt;
         }
-        timeline.GetComponent<Slider>().value = (float)currentAmount;
+        if (timeline.transform.GetComponent<Slider>().value == 1) {
+
+            Debug.Log("Timeline reset");
+            timeline.gameObject.SetActive(false);
+            currentAmount = 100;
+        }
+        timeline.transform.GetComponent<Slider>().value = (float)currentAmount;
     }
 }

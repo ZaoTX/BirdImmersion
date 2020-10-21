@@ -28,8 +28,10 @@ public class line_gen : MonoBehaviour
     public string curMax;
     public bool needUpdate;//true: we need to update the line
     public bool canUpdateModel;//true: BirdMovement.cs can update the model(position)
-    public float overallSpeed;
+    public double overallSpeed;
+    public double timeDiffSec=1;
     public bool restart;
+    bool canStartCounting = false;
     void Start()
     {
         needUpdate = true;
@@ -40,6 +42,7 @@ public class line_gen : MonoBehaviour
         drawline();
         OverallTime=0;
         GetMinMaxTime();
+        canStartCounting = true;
 
 
     }
@@ -52,7 +55,10 @@ public class line_gen : MonoBehaviour
             canUpdateModel = true;
         }
         overallSpeed = spawn_bird.speed;
-        OverallTime+=Time.deltaTime*overallSpeed;
+        if (canStartCounting) {
+
+            OverallTime += Time.deltaTime * overallSpeed;
+        }
         process.restart = false;//reset the value
     }
     /*

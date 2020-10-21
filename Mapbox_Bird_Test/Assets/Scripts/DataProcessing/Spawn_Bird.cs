@@ -26,7 +26,7 @@ public class Spawn_Bird : MonoBehaviour
     //a list of bird that have to be spawned
     public List<GameObject> spawned_individuals;
     // Start is called before the first frame update
-    public float speed; // it takes 1/speed s to fly between datapoints,
+    public double speed; // it takes 1/speed s to fly between datapoints,
     void Start()
     {
         createObjs();
