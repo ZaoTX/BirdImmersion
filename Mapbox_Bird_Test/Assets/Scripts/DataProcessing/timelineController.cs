@@ -58,9 +58,15 @@ public class timelineController : MonoBehaviour
         }
         if (timeline.transform.GetComponent<Slider>().value == 1) {
 
-            Debug.Log("Timeline reset");
+            //Debug.Log("Timeline need reset");
             timeline.gameObject.SetActive(false);
-            currentAmount = 100;
+            
+            if (polylineManager.GetComponent<line_gen>().restart == true) {
+                polylineManager.GetComponent<line_gen>().OverallTime = 0;
+                currentAmount = 0;
+                timeline.gameObject.SetActive(true);
+            }
+            
         }
         timeline.transform.GetComponent<Slider>().value = (float)currentAmount;
     }

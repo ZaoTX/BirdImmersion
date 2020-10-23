@@ -82,6 +82,18 @@
       "type": "boolean"
     },
     {
+      "name": "/actions/default/in/Restart",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/default/in/SpeedUp",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/default/in/SpeedDown",
+      "type": "boolean"
+    },
+    {
       "name": "/actions/default/out/Haptic",
       "type": "vibration"
     },

@@ -32,6 +32,11 @@ public class line_gen : MonoBehaviour
     public double timeDiffSec=1;
     public bool restart;
     bool canStartCounting = false;
+    public bool isfinished = false;
+
+    public interactionSettings iS;
+
+    float timer = 0f;
     void Start()
     {
         needUpdate = true;
@@ -53,14 +58,32 @@ public class line_gen : MonoBehaviour
             updateLine();
             needUpdate = false;
             canUpdateModel = true;
+            process.restart = false;//reset the value
         }
         overallSpeed = spawn_bird.speed;
         if (canStartCounting) {
 
             OverallTime += Time.deltaTime * overallSpeed;
         }
-        process.restart = false;//reset the value
+        
+        //check restart when one of the trajectories is already hidden
+        if (isfinished && restart) {
+            //SetActive all the gameobjects
+            foreach (Transform child in this.transform) {
+                child.gameObject.SetActive(true);
+            }
+            process.restart = false;//reset the value
+        }
+         process.restart = false;//reset the value
+        
+        
+
+
     }
+    void disableRestart() {
+        process.restart = false;
+    }
+
     /*
      * After reading the data we want to understand:
      *  1.when does the first individual come,
@@ -119,8 +142,10 @@ public class line_gen : MonoBehaviour
      */
     void updateLine() {
         int count = this.transform.childCount;
+        List<GameObject> Model_List = spawn_bird.spawned_individuals;
         for (int i = 0; i < count; i++)
         {
+            GameObject bird = Model_List[i];
             GameObject child = this.transform.GetChild(i).transform.gameObject;
             IndividualBehavior id = reader.gp.individualBehaviors[i];
             int trackCount = id.Individualtracks.Count;//number of datapoints for each individual
@@ -138,8 +163,10 @@ public class line_gen : MonoBehaviour
                 Vector3 point = new Vector3(localPosition.x, localPosition.y+height, localPosition.z);
                 vP[j] = point;
             }
+            //bird.transform.position = vP[0];
             child.GetComponent<LineRenderer>().SetPositions(vP);
         }
+        
     }
     /*
      * Initialize, we want to draw different lines for different individuals

@@ -4,6 +4,10 @@
    "app_key" : "application.generated.unity.mapbox_test1.exe",
    "bindings" : {
       "/actions/buggy" : {
+         "chords" : [],
+         "haptics" : [],
+         "poses" : [],
+         "skeleton" : [],
          "sources" : [
             {
                "inputs" : {
@@ -140,7 +144,7 @@
             {
                "inputs" : {
                   "click" : {
-                     "output" : "/actions/default/in/interactui"
+                     "output" : "/actions/default/in/restart"
                   }
                },
                "mode" : "button",
@@ -191,7 +195,7 @@
                      "output" : "/actions/default/in/update"
                   },
                   "east" : {
-                     "output" : "/actions/default/in/snapturnright"
+                     "output" : "/actions/default/in/speedup"
                   },
                   "north" : {
                      "output" : "/actions/default/in/zoominglevelup"
@@ -200,7 +204,7 @@
                      "output" : "/actions/default/in/zoomingleveldown"
                   },
                   "west" : {
-                     "output" : "/actions/default/in/snapturnleft"
+                     "output" : "/actions/default/in/speeddown"
                   }
                },
                "mode" : "dpad",
@@ -251,10 +255,23 @@
                },
                "mode" : "button",
                "path" : "/user/hand/right/input/application_menu"
+            },
+            {
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/default/in/changeview"
+                  }
+               },
+               "mode" : "button",
+               "path" : "/user/hand/left/input/application_menu"
             }
          ]
       },
       "/actions/platformer" : {
+         "chords" : [],
+         "haptics" : [],
+         "poses" : [],
+         "skeleton" : [],
          "sources" : [
             {
                "inputs" : {

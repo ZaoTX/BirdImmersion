@@ -22,6 +22,7 @@ public class process : MonoBehaviour
     public string[][] Locations;
     private List<float> heights = new List<float>();
     public float[][] Heights;
+    public List<string> IDs;
 
     public bool restart=false;//true: restart the animation
     // initial pos for map
@@ -54,6 +55,7 @@ public class process : MonoBehaviour
         //Debug.Log(gpLength);
         Heights = new float[gpLength][];
         Locations = new string[gpLength][];
+        
         int count = 0;
         for (int i = 0; i < gpLength; i++) {
             //IndividualBehavior individualBehaviors = reader.gp.individualBehaviors[i];
@@ -67,9 +69,9 @@ public class process : MonoBehaviour
                 Debug.Log("is null"); 
             }
             foreach (Individual individual in reader.gp.individualBehaviors[i].Individualtracks)
-            {   
-                string id_lat = individual.lat;
+            {
                 
+                string id_lat = individual.lat;
                 string id_lng = individual.lng;
                 float id_height = individual.height;
                 if (count == 0)
@@ -92,11 +94,12 @@ public class process : MonoBehaviour
             Locations[i] = loc_array;
             locations = new List<string>();//initialize locations
             heights = new List<float>();//initialize heights
-
+            string name = reader.gp.individualBehaviors[i].Individualtracks[0].id;
+            IDs.Add(name);
         }
         spawn_Bird._LocationStrings = Locations;
         spawn_Bird._HeightArray = Heights;
-
+        spawn_Bird._IDs = IDs.ToArray();
         map.default_pos = initial_pos;
 
     }

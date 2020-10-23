@@ -14,6 +14,7 @@ public class Spawn_Bird : MonoBehaviour
     //Location information
     public string[][] _LocationStrings;
     public float[][] _HeightArray;
+    public string[] _IDs;
 
     //Vector2d[] _locations;
     //have to be public for resetButton.cs to get the positions
@@ -54,6 +55,7 @@ public class Spawn_Bird : MonoBehaviour
             var curpos = _map.GeoToWorldPosition(location_zero,  true);
             instance.transform.localPosition = new Vector3(curpos.x, curpos.y+height, curpos.z);
             instance.transform.localScale = new Vector3(Bird_SpawnScale, Bird_SpawnScale, Bird_SpawnScale);
+            instance.transform.name = _IDs[j];
             spawned_individuals.Add(instance);
             //_3Dlocations[i] = instance.transform.localPosition;
             
