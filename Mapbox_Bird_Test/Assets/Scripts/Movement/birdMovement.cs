@@ -1,6 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mapbox.Utils;
+using Mapbox.Unity.Map;
+using Mapbox.Unity.Utilities;
 using System;
 /*
   This script is designed to automatically attached to 
@@ -11,6 +14,7 @@ public class birdMovement : MonoBehaviour
     public Spawn_Bird spawn;
     LineRenderer lineRenderer;
     GameObject bird;
+    //AbstractMap map;
     Vector3[] positions;
     //flying overallSpeed 
     public double overallSpeed; // it takes 1/overallSpeed s to fly between datapoints,
@@ -32,14 +36,17 @@ public class birdMovement : MonoBehaviour
     public string firstTimestamp;
     public GameObject DataManager;
     public IndividualBehavior idb;
-    double timeDiffSecDou;
     double multipler;
+    public bool canContinute = false;
     Vector3 nextpos;
     List<GameObject> spawned_individuals;
     csvReader reader;
+    Vector3 lastBirdPos;// store the geopos if we need
     // Start is called before the first frame update
     void Start()
     {
+        //find the abstract map
+        //map = GameObject.Find("mapbase").GetComponent<AbstractMap>();
         // find the spawn bird script
         spawn = GameObject.Find("mapbase").GetComponent<Spawn_Bird>();
         
@@ -52,16 +59,14 @@ public class birdMovement : MonoBehaviour
 
     }
     void initialize() {
-        //get the linerenderer from this obj
-        lineRenderer = transform.GetComponent<LineRenderer>();
+        
         //get the name of the object(correspond to the index of spawned_individuals)
         string objectName = transform.name;
         index = int.Parse(objectName);
         //this bird should be animated
         bird = spawned_individuals[index];
-        positions = new Vector3[lineRenderer.positionCount];
-        //birdName=
-        num=lineRenderer.GetPositions(positions);//get an array of positions
+        //get the linerenderer from this obj
+        UpdateLineRenderer();
         birdpos = positions[0];
         nextpos = positions[1];
         bird.transform.position = new Vector3(birdpos.x, birdpos.y, birdpos.z);
@@ -89,52 +94,63 @@ public class birdMovement : MonoBehaviour
         //timeDiffSecDou = Convert.ToInt64(timeDiffSec);
         multipler = overallSpeed / timeDiffSec;
     }
+
     // Update is called once per frame
+    void UpdateLineRenderer()
+    {
+        lineRenderer = transform.GetComponent<LineRenderer>();
+        positions = new Vector3[lineRenderer.positionCount];
+        num = lineRenderer.GetPositions(positions);
+    }
     void FixedUpdate()
     {
-
+        
         overallSpeed = spawn.speed;
+       
+        //check for update the scene
+        if (transform.parent.GetComponent<line_gen>().canUpdateModel)
+        {
+            //remember the double t to calculate the birdposition
+            float tStore =(float) t;
+            canContinute = false;
+            UpdateLineRenderer();
+            //current bird position
+
+            birdpos = Vector3.Lerp(positions[count], positions[count + 1],tStore);
+            //reset Bird position
+            bird.transform.position = new Vector3(birdpos.x,birdpos.y,birdpos.z);
+            
+            nextpos = positions[count + 1];
+            canContinute = true;
+        }
         //check restart
-        if (this.transform.parent.GetComponent<line_gen>().restart)
+        if (transform.parent.GetComponent<line_gen>().restart)
         {
             isok = false;
             count = 0;
             initialize();
             //Debug.Log("Still working");
-            this.transform.parent.GetComponent<line_gen>().OverallTime = 0;
-
+            transform.parent.GetComponent<line_gen>().OverallTime = 0;
             //this below is to ensure the restart when the animation is finished
             bird.SetActive(true);
             //enable the line
-            this.gameObject.SetActive(true);
+            gameObject.SetActive(true);
             isok = true;
-            //this.transform.parent.GetComponent<line_gen>().restart = false;
+            
         }
-        if (this.transform.parent.GetComponent<line_gen>().needUpdate) {
-            positions = new Vector3[lineRenderer.positionCount];
-            //birdName=
-            num = lineRenderer.GetPositions(positions);//get an array of positions
-        }
+        /* if (this.transform.parent.GetComponent<line_gen>().needUpdate) {
+             positions = new Vector3[lineRenderer.positionCount];
+             //birdName=
+             num = lineRenderer.GetPositions(positions);//get an array of positions
+
+         }*/
+        
         if (bird.transform.position == positions[0] && count < num - 1)
         {
             isok = true;// it's ready to do animation
         }
         if (isok)
         {
-            //check for update the scene
-            if (this.transform.parent.GetComponent<line_gen>().canUpdateModel )
-            {
-                lineRenderer = transform.GetComponent<LineRenderer>();
-                positions = new Vector3[lineRenderer.positionCount];
-                lineRenderer.GetPositions(positions);
-
-                birdpos = positions[count];
-                bird.transform.position = new Vector3(birdpos.x, birdpos.y, birdpos.z);
-                nextpos = positions[count + 1];
-                this.transform.parent.GetComponent<line_gen>().canUpdateModel = false;
-            }
-            
-                
             if (t >= Math.Abs(1-0.0012*overallSpeed))
             {
                 //we switch to next position
@@ -144,7 +160,7 @@ public class birdMovement : MonoBehaviour
                     //Debug.Log("The " + index+" shoud be finished");
                     bird.SetActive(false);
                     //disable the line
-                    this.gameObject.SetActive(false);
+                    gameObject.SetActive(false);
                     isok = false;
                     transform.parent.GetComponent<line_gen>().isfinished = true;
                     //return;
@@ -194,32 +210,13 @@ public class birdMovement : MonoBehaviour
                 bird.transform.LookAt(nextpos);
                 t += Time.deltaTime * multipler;
                     
-
             }
             bird.transform.position = Vector3.Lerp(birdpos, nextpos, (float)t);
             //Debug.Log("However, the real t is: " + (float)t);
+            lastBirdPos = bird.transform.position;
 
         }
         
-        /* }
-         else
-         { //we check whether we can start
-             GameObject parent = this.transform.parent.gameObject;//polylineManager
-             double overallTime = parent.GetComponent<line_gen>().OverallTime;
-
-             String Min = parent.GetComponent<line_gen>().curMin;
-             Min=Min.Replace('-', '/');
-             DateTime tMin;
-             DateTime.TryParse(Min, out tMin);
-             firstTimestamp = firstTimestamp.Replace('-', '/');
-             DateTime tLocal;
-             DateTime.TryParse(firstTimestamp, out tLocal);
-
-             if(DateTime.Compare(tMin.AddSeconds(overallTime), tLocal)>0){
-                     canStart = true;
-             }
-
-         }*/
 
     }
 }

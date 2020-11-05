@@ -23,6 +23,7 @@ public class interactionSettings : MonoBehaviour
     public line_gen lineGen;
     public Spawn_Bird spawn;
     public int count=0;
+    public bool needUpdate=false;
     List<GameObject> Model_List;// list of bird models
     Vector3 PlayerPos;
     int playerHeight = 300;
@@ -36,7 +37,7 @@ public class interactionSettings : MonoBehaviour
         vrPlayer.transform.eulerAngles = new Vector3(0f, 0.0f, 0.0f);
         spawn = map.GetComponent<Spawn_Bird>();
         Model_List = spawn.spawned_individuals;
-        Debug.Log(Model_List.Count);
+        //Debug.Log(Model_List.Count);
         string textInhalt = spawn._IDs[count];
         ID.GetComponent<Text>().text = textInhalt;
         change = false;
@@ -51,6 +52,12 @@ public class interactionSettings : MonoBehaviour
         checkRestart();// restart with trigger
         changeSpeed();
         fadeOutText();
+        //testing UpdateMap
+        if (needUpdate) {
+            MapBoxupdate();
+            lineGen.needUpdate = true;
+            needUpdate = false;
+        }
         
     }
     void fadeOutText() {
@@ -162,13 +169,14 @@ public class interactionSettings : MonoBehaviour
         { //Both controller
             //Debug.Log("touchpad center pressed");
             MapBoxupdate();
+            lineGen.needUpdate = true;
             updateText("Map updated you are the center");
         }
 
     }
     void MapBoxupdate()
     {
-        var OldLatLon = Conversions.StringToLatLon(map._options.locationOptions.latitudeLongitude);
+        //var OldLatLon = Conversions.StringToLatLon(map._options.locationOptions.latitudeLongitude);
 
         //Debug.Log(PlayerPos);
         //PlayerPos = new Vector3(PlayerPos.x, 0, PlayerPos.z);
@@ -182,8 +190,6 @@ public class interactionSettings : MonoBehaviour
         //Debug.Log(LatLon.GetType());
         map.UpdateMap(newMapPos, map.Zoom);
         
-        
-        lineGen.needUpdate = true;
         
     }
     void ExtendMap()// mode =true : extend the map, mode = false: change user position

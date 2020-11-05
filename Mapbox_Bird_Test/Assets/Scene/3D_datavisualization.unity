@@ -681,7 +681,7 @@ MonoBehaviour:
   _options:
     locationOptions:
       latitudeLongitude: 
-      zoom: 8.95
+      zoom: 10.41
     extentOptions:
       extentType: 1
       defaultExtents:
@@ -690,10 +690,10 @@ MonoBehaviour:
           visibleBuffer: 0
           disposeBuffer: 0
         rangeAroundCenterOptions:
-          west: 2
-          north: 2
-          east: 2
-          south: 2
+          west: 1
+          north: 1
+          east: 1
+          south: 1
         rangeAroundTransformOptions:
           targetTransform: {fileID: 0}
           visibleBuffer: 0
@@ -1848,6 +1848,7 @@ MonoBehaviour:
   lineGen: {fileID: 1188112308}
   spawn: {fileID: 932783778}
   count: 0
+  needUpdate: 0
 --- !u!114 &1807412916
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1875,8 +1876,8 @@ MonoBehaviour:
   spawn_Bird: {fileID: 932783778}
   map: {fileID: 932783774}
   line_Gen: {fileID: 1188112308}
-  birdScale: 10
-  lineScale: 4
+  birdScale: 220
+  lineScale: 50
   reader: {fileID: 1807412916}
   IDs: []
   restart: 0

@@ -33,7 +33,7 @@ public class line_gen : MonoBehaviour
     public bool restart;
     bool canStartCounting = false;
     public bool isfinished = false;
-
+    bool needCheck = false;
     public interactionSettings iS;
 
     float timer = 0f;
@@ -54,36 +54,68 @@ public class line_gen : MonoBehaviour
     void Update() {
         restart = process.restart;
         if (needUpdate) {
+            /*//befor we update the line we have to remeber the position of bird
+            int count = transform.childCount;
+            //Debug.Log("Updated Line");
+            for (int i = 0; i < count; i++)
+            {
+                GameObject bird = spawn_bird.spawned_individuals[i];
+                Vector3 birdpos = new Vector3(bird.transform.position.x, bird.transform.position.y, bird.transform.position.z);
+                //calculate lat lng
+                var geoBirdPos = _map.WorldToGeoPosition(birdpos);
+            }*/
             //We check whether is needed to update the line again
             updateLine();
-            needUpdate = false;
+            
             canUpdateModel = true;
-            process.restart = false;//reset the value
+            needUpdate = false;
+            needCheck = true;
+
         }
         overallSpeed = spawn_bird.speed;
         if (canStartCounting) {
-
+            // To make sure the time counting synchornized as movement
             OverallTime += Time.deltaTime * overallSpeed;
         }
-        
         //check restart when one of the trajectories is already hidden
         if (isfinished && restart) {
             //SetActive all the gameobjects
-            foreach (Transform child in this.transform) {
+            foreach (Transform child in transform) {
                 child.gameObject.SetActive(true);
             }
             process.restart = false;//reset the value
         }
-         process.restart = false;//reset the value
-        
-        
-
-
+        process.restart = false;//reset the value
+        if (needCheck) {
+            int count = 0;
+            foreach (Transform child in transform) {
+                Debug.Log(child.gameObject.name);
+                if (child.GetComponent<birdMovement>().canContinute == true) {
+                   
+                    count++;
+                }
+               
+            }
+            if (count == indiviudal_num)
+            {
+                canUpdateModel = false;
+                needCheck = false;
+                Debug.Log("Dui");
+                foreach (Transform child in transform)
+                {
+                    child.GetComponent<birdMovement>().canContinute = false;
+                    
+                }
+            }
+            else {
+                count = 0;
+            }
+            
+        }
+        //canUpdateModel = false;
+        //needCheck = false;
     }
-    void disableRestart() {
-        process.restart = false;
-    }
-
+   
     /*
      * After reading the data we want to understand:
      *  1.when does the first individual come,
@@ -141,12 +173,13 @@ public class line_gen : MonoBehaviour
      *Here we need to update the scale and positions of important vertices in our line
      */
     void updateLine() {
-        int count = this.transform.childCount;
-        List<GameObject> Model_List = spawn_bird.spawned_individuals;
+        int count = transform.childCount;
+        //Debug.Log("Updated Line");
         for (int i = 0; i < count; i++)
         {
-            GameObject bird = Model_List[i];
-            GameObject child = this.transform.GetChild(i).transform.gameObject;
+            //GameObject bird = spawn_bird.spawned_individuals[i];
+            
+            GameObject child = transform.GetChild(i).transform.gameObject;
             IndividualBehavior id = reader.gp.individualBehaviors[i];
             int trackCount = id.Individualtracks.Count;//number of datapoints for each individual
             string[] locations = spawn_bird._LocationStrings[i];
@@ -163,10 +196,12 @@ public class line_gen : MonoBehaviour
                 Vector3 point = new Vector3(localPosition.x, localPosition.y+height, localPosition.z);
                 vP[j] = point;
             }
-            //bird.transform.position = vP[0];
+            
+            //bird.transform.position = new Vector3(vP[0].x, vP[0].y, vP[0].z);
             child.GetComponent<LineRenderer>().SetPositions(vP);
         }
         
+
     }
     /*
      * Initialize, we want to draw different lines for different individuals
