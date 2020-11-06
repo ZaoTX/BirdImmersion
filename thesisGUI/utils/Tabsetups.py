@@ -157,56 +157,6 @@ def updateTab2(tab,d,mainGui):
 #   their label to explain the function
 # 
 
-def setupTab4(tab):
-     # Label for information
-     tab3_TextLabel1 = ttk.Label(tab, text= "How to deal with missing value")
-     tab3_TextLabel1.place(relx = 0.1, rely = 0.2)
-     
-     choices=["remove the data with missing value","linear interpolation"]
-     multibox=ttk.Combobox(tab,values=choices
-                           ,width=40
-                           ,font=12
-                           )
-     multibox.place(relx = 0.2, rely = 0.3)
-     
-     launchBtn= ttk.Button(tab, text="launch", command = lambda: cleandataset())
-     launchBtn.place(relx = 0.8, rely = 0.3)
-#     # Label for information
-#     tab3_TextLabel2 = ttk.Label(tab, text= "How long in second do you want for a timeskip(set up for linear interpolation)")
-#     tab3_TextLabel2.place(relx = 0.1, rely = 0.4)
-#     #
-#     Entry=ttk.Entry(tab
-#                     ,width=5
-#                           )
-#     Entry.place(relx = 0.8, rely = 0.4)
-     # Label for information
-     tab3_TextLabel3 = ttk.Label(tab, text= "Here should be some comments about advantages and disadvantages for each method")
-     tab3_TextLabel3.place(relx = 0.1, rely = 0.5)
-     
-     
-     def cleandataset():
-           choice = multibox.get()
-           print(choice)
-           
-           import launch
-           if(choice=='linear interpolation'):
-                 from utils.cleanData import interpolation
-                 tab3_TextLabel3.config(text='Linear interpolation can be helpful dealing the missing value between a small interval of temporal difference')
-                 interpolation(launch.d,launch.pSetups)
-           elif(choice=='remove the data with missing value'): 
-                 from utils.cleanData import removeMissing
-                 tab3_TextLabel3.config(text='Remove missing value is easy but might lose some information make the trajectory intermittent')
-                 removeMissing(launch.d,launch.pSetups)
-#           ind=choices.index(choice,0,len(choices))
-#           print(ind)
-#           if(ind==0):#remove value
-#                 return
-#           elif(ind==1):#linear interpolation
-#                 return
-#           else:#remove value
-#             return
-           print('function finished')
-
 def setupTab3(tab):
      # Label for information
      tab4_TextLabel1 = ttk.Label(tab, text= "Here you can decide whether to split by individual's Id or year, month etc.")
@@ -294,4 +244,123 @@ def setupTab3(tab):
                  from utils.spliting import individualSpliting
                  individualSpliting(launch.d,launch.pSetups)
                  #return
+def setupTab4(tab):
+     # Label for information
+     tab3_TextLabel1 = ttk.Label(tab, text= "How to deal with missing value")
+     tab3_TextLabel1.place(relx = 0.1, rely = 0.2)
+     
+     choices=["remove the data with missing value","linear interpolation"]
+     multibox=ttk.Combobox(tab,values=choices
+                           ,width=40
+                           ,font=12
+                           )
+     multibox.place(relx = 0.2, rely = 0.3)
+     
+     launchBtn= ttk.Button(tab, text="launch", command = lambda: cleandataset())
+     launchBtn.place(relx = 0.8, rely = 0.3)
+#     # Label for information
+#     tab3_TextLabel2 = ttk.Label(tab, text= "How long in second do you want for a timeskip(set up for linear interpolation)")
+#     tab3_TextLabel2.place(relx = 0.1, rely = 0.4)
+#     #
+#     Entry=ttk.Entry(tab
+#                     ,width=5
+#                           )
+#     Entry.place(relx = 0.8, rely = 0.4)
+     # Label for information
+     tab3_TextLabel3 = ttk.Label(tab, text= "Here should be some comments about advantages and disadvantages for each method")
+     tab3_TextLabel3.place(relx = 0.1, rely = 0.5)
+     
+     def TextBoxUpdate(event):
+         choice = multibox.get()
+         if(choice=='linear interpolation'):
+                 
+                 tab3_TextLabel3.config(text='Linear interpolation can be helpful dealing the missing value between a small interval of temporal difference')
+                 
+         elif(choice=='remove the data with missing value'): 
+                 
+                 tab3_TextLabel3.config(text='Remove missing value is easy but might lose some information make the trajectory intermittent')
+                 
+     multibox.bind("<<ComboboxSelected>>", TextBoxUpdate)
+     def cleandataset():
+           choice = multibox.get()
+           print(choice)
            
+           import launch
+           if(choice=='linear interpolation'):
+                 from utils.cleanData import interpolation
+                 interpolation(launch.d,launch.pSetups)
+           elif(choice=='remove the data with missing value'): 
+                 from utils.cleanData import removeMissing
+                 removeMissing(launch.d,launch.pSetups)
+#           ind=choices.index(choice,0,len(choices))
+#           print(ind)
+#           if(ind==0):#remove value
+#                 return
+#           elif(ind==1):#linear interpolation
+#                 return
+#           else:#remove value
+#             return
+           #print('function finished')
+def setupTab5(tab):
+     tab5_TextLabel1 = ttk.Label(tab, text= "Which method do you want to sample the dataset")
+     tab5_TextLabel1.place(relx = 0.1, rely = 0.2)
+     
+     choices=["Douglas Peucker Sampling","Average Sampling"]
+     multibox=ttk.Combobox(tab,values=choices
+                           ,width=40
+                           ,font=12
+                           )
+     multibox.place(relx = 0.2, rely = 0.3)
+     
+     tab5_TextLabel2 = ttk.Label(tab, text= "Here should be some comments about advantages and disadvantages for each method")
+     tab5_TextLabel2.place(relx = 0.1, rely = 0.5)
+     strFname=tk.StringVar()
+     entry=ttk.Entry(tab,textvariable = strFname,
+                 width=5)
+     tab5_TextLabel3 = ttk.Label(tab, text= "default")
+     tab5_TextLabel4 = ttk.Label(tab, text= "default")
+     def TextBoxUpdate(event):
+         choice = multibox.get()
+         if(choice=='Average Sampling'):
+             entry.place_forget()#hid
+             tab5_TextLabel3.place_forget()#hid
+             tab5_TextLabel4.place_forget()#hid
+             tab5_TextLabel2.config(text="+: Easy, works well for high temporal resolution dataset\n"+
+                                          "-: Random, not taking space and time into consideration")
+             entry.place(
+                 relx=0.49,rely=0.4,
+                 height=25
+                 )
+             tab5_TextLabel3.config(text="I want to sample for each")
+             tab5_TextLabel4.config(text="Points")
+             tab5_TextLabel3.place(relx=0.3,rely=0.4)
+             tab5_TextLabel4.place(relx=0.55,rely=0.4)
+         elif(choice == 'Douglas Peucker Sampling'):
+             entry.place_forget()#hid
+             tab5_TextLabel3.place_forget()#hid
+             tab5_TextLabel4.place_forget()#hid
+             tab5_TextLabel2.config(text="+: You can adjust the sampling by defining threshold by yourself.\n"+
+                                          "-: The proper size of threshold is difficult to find out\n     would not work for straight line")
+             entry.place(
+                 relx=0.53,rely=0.4,
+                 height=25
+                 )
+             tab5_TextLabel3.config(text="I want to set up the threshold as")
+             tab5_TextLabel4.config(text="Meter")
+             tab5_TextLabel3.place(relx=0.3,rely=0.4)
+             tab5_TextLabel4.place(relx=0.59,rely=0.4)
+             
+     multibox.bind("<<ComboboxSelected>>", TextBoxUpdate)
+     launchBtn= ttk.Button(tab, text="launch", command = lambda: sampling())
+     launchBtn.place(relx = 0.8, rely = 0.4)
+     def sampling():
+         choice = multibox.get()
+         import launch
+         if(choice=='Average Sampling'):
+             n=int(entry.get())
+             from utils.sampling import averageSampling
+             averageSampling(launch.d,launch.p,n)
+             
+         elif(choice == 'Douglas Peucker Sampling'):
+             pass
+            

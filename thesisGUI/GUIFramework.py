@@ -23,7 +23,7 @@ class MainGUI:
      
      def addTab(self):
            try:
-                 from utils.Tabsetups import setupTab1,setupTab2,setupTab3,setupTab4
+                 from utils.Tabsetups import setupTab1,setupTab2,setupTab3,setupTab4,setupTab5
                  #set up style
                  self.setStyle()
                  
@@ -37,13 +37,15 @@ class MainGUI:
                  setupTab3(self.tab3)
                  #setup tab4:
                  setupTab4(self.tab4)
+                 #setup tab5
+                 setupTab5(self.tab5)
                  
                  self.tabNotebook.add(self.tab1, text = "Select Your Dataset")
                  self.tabNotebook.add(self.tab2, text = "Data filtering")
                  self.tabNotebook.add(self.tab3, text = "Split Dataset")
                  self.tabNotebook.add(self.tab4, text = "Clean Data")
-                 self.tabNotebook.add(self.tab5, text = "Aggregate/Summarize Data")
-                 self.tabNotebook.add(self.tab6, text = "Sample Dataset")
+                 self.tabNotebook.add(self.tab5, text = "Sample Dataset")
+                 self.tabNotebook.add(self.tab6, text = "Aggregate/Summarize Data")
                  self.tabNotebook.add(self.tab7, text = "Report")
                  
                  self.tabNotebook.pack(fill ="both"

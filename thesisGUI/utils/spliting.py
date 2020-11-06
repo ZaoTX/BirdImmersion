@@ -30,7 +30,6 @@ def individualSpliting(d,p):#d is dataset, p is processingsetups
         cur_id=cur_id.replace("/","-")#avoid bad id names
         individual_id.append(cur_id)
         if last_id!=cur_id:
-            
             #csvfile_write.close()
             newpath = splitpath+'/'+cur_id
             #newpath = newpath.replace(" ","")
