@@ -124,7 +124,7 @@ def updateTab2(tab,d,mainGui):
       for i in headerList:
             #print(i)
              listbox.insert(tk.END, i) 
-             listbox.config( bg = bg) 
+             listbox.config(bg = bg) 
              count=count+1
        #setup checkbox for default setting
       var1=tk.BooleanVar()
@@ -305,7 +305,7 @@ def setupTab5(tab):
      tab5_TextLabel1 = ttk.Label(tab, text= "Which method do you want to sample the dataset")
      tab5_TextLabel1.place(relx = 0.1, rely = 0.2)
      
-     choices=["Douglas Peucker Sampling","Average Sampling"]
+     choices=["Douglas Peucker Sampling","Average Sampling","TD_TR","TD_SP","SQUISH"]
      multibox=ttk.Combobox(tab,values=choices
                            ,width=40
                            ,font=12
@@ -325,7 +325,8 @@ def setupTab5(tab):
              entry.place_forget()#hid
              tab5_TextLabel3.place_forget()#hid
              tab5_TextLabel4.place_forget()#hid
-             tab5_TextLabel2.config(text="+: Easy, works well for high temporal resolution dataset\n"+
+             tab5_TextLabel2.config(text="it takes for each n point of the trajectory \n"+
+                                    "+: Easy, works well for high temporal resolution dataset\n"+
                                           "-: Random, not taking space and time into consideration")
              entry.place(
                  relx=0.49,rely=0.4,
@@ -339,8 +340,9 @@ def setupTab5(tab):
              entry.place_forget()#hid
              tab5_TextLabel3.place_forget()#hid
              tab5_TextLabel4.place_forget()#hid
-             tab5_TextLabel2.config(text="+: You can adjust the sampling by defining threshold by yourself.\n"+
-                                          "-: The proper size of threshold is difficult to find out\n     would not work for straight line")
+             tab5_TextLabel2.config(text="Douglas Peucker algorithm \n"+
+                                    "+: You can adjust the sampling by defining threshold of distance by yourself.\n"+
+                                    "-: The proper size of threshold is difficult to find out\n     would not work for straight line")
              entry.place(
                  relx=0.53,rely=0.4,
                  height=25
@@ -349,7 +351,51 @@ def setupTab5(tab):
              tab5_TextLabel4.config(text="Meter")
              tab5_TextLabel3.place(relx=0.3,rely=0.4)
              tab5_TextLabel4.place(relx=0.59,rely=0.4)
-             
+         elif(choice == 'TD_TR'):
+             entry.place_forget()#hid
+             tab5_TextLabel3.place_forget()#hid
+             tab5_TextLabel4.place_forget()#hid
+             tab5_TextLabel2.config(text="Top down_Time Ratio algorithm\n     please make sure of the form of timestamp like YY-MM-DD HH:MM:SS.FF\n"+
+                                    "+:It takes the time into consideration.\n"+
+                                    "-: The proper size of threshold is difficult to find out\n     would not work for straight line")
+             entry.place(
+                 relx=0.53,rely=0.4,
+                 height=25
+                 )
+             tab5_TextLabel3.config(text="I want to set up the threshold as")
+             tab5_TextLabel4.config(text="Meter")
+             tab5_TextLabel3.place(relx=0.3,rely=0.4)
+             tab5_TextLabel4.place(relx=0.59,rely=0.4)
+         elif(choice == 'TD_SP'):
+             entry.place_forget()#hid
+             tab5_TextLabel3.place_forget()#hid
+             tab5_TextLabel4.place_forget()#hid
+             tab5_TextLabel2.config(text="Top down_Speed Based algorithm\n     please make sure of the form of timestamp like YY-MM-DD HH:MM:SS.FF\n"+
+                                    "+:It takes the time into consideration.\n"+
+                                    "-: The proper size of threshold is difficult to find out\n     would not work for straight line")
+             entry.place(
+                 relx=0.53,rely=0.4,
+                 height=25
+                 )
+             tab5_TextLabel3.config(text="I want to set up the threshold as")
+             tab5_TextLabel4.config(text="Meter pro second")
+             tab5_TextLabel3.place(relx=0.3,rely=0.4)
+             tab5_TextLabel4.place(relx=0.59,rely=0.4)
+         elif(choice == 'SQUISH'):
+             entry.place_forget()#hid
+             tab5_TextLabel3.place_forget()#hid
+             tab5_TextLabel4.place_forget()#hid
+             tab5_TextLabel2.config(text="SQUISH algorithm\n     it returns foreach individual an approximated trajectory with user defined size\n"+
+                                    "+: It uses Synchronized Euclidean Distance as metric to ensure the trajectory as approximated as possible\n"+
+                                    "-: It doesn't take the time into consideration")
+             entry.place(
+                 relx=0.53,rely=0.4,
+                 height=25
+                 )
+             tab5_TextLabel3.config(text="I want to set up the buffer size as")
+             tab5_TextLabel4.config(text="")
+             tab5_TextLabel3.place(relx=0.3,rely=0.4)
+             tab5_TextLabel4.place(relx=0.59,rely=0.4)
      multibox.bind("<<ComboboxSelected>>", TextBoxUpdate)
      launchBtn= ttk.Button(tab, text="launch", command = lambda: sampling())
      launchBtn.place(relx = 0.8, rely = 0.4)
@@ -359,8 +405,35 @@ def setupTab5(tab):
          if(choice=='Average Sampling'):
              n=int(entry.get())
              from utils.sampling import averageSampling
-             averageSampling(launch.d,launch.p,n)
+             averageSampling(launch.d,launch.pSetups,n)
              
          elif(choice == 'Douglas Peucker Sampling'):
-             pass
-            
+             epsilon=float(entry.get())
+             from utils.sampling import Douglas
+             Douglas(launch.d,launch.pSetups,epsilon)
+         elif(choice == 'TD_TR'):
+             epsilon=float(entry.get())
+             from utils.sampling import TD_TR
+             TD_TR(launch.d,launch.pSetups,epsilon)
+         elif(choice == 'TD_SP'):
+             epsilon=float(entry.get())
+             from utils.sampling import TD_SP
+             TD_SP(launch.d,launch.pSetups,epsilon)
+         elif(choice == 'SQUISH'):
+             epsilon=float(entry.get())
+             from utils.sampling import SQUISH
+             SQUISH(launch.d,launch.pSetups,epsilon)
+# summarize of sampling:
+# 1. The Compression ratio
+# 2. Average synchronized Euclidean distance
+def setupTab6(tab):
+    tab2_TextLabel1 = ttk.Label(tab, text= "Summary of sampling", font='bold')
+    tab2_TextLabel1.place(relx = 0.5, rely = 0.1)
+    
+def updateTab6(tab,d,mainGui):
+    #clean tab
+      for child in tab.winfo_children():
+           child.destroy()
+      s = ttk.Style()
+      bg = s.lookup('TFrame', 'background')
+      pass
