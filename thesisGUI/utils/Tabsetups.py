@@ -427,8 +427,8 @@ def setupTab5(tab):
 # 1. The Compression ratio
 # 2. Average synchronized Euclidean distance
 def setupTab6(tab):
-    tab2_TextLabel1 = ttk.Label(tab, text= "Summary of sampling", font='bold')
-    tab2_TextLabel1.place(relx = 0.5, rely = 0.1)
+    tab6_TextLabel1 = ttk.Label(tab, text= "Summary of sampling", font='bold')
+    tab6_TextLabel1.place(relx = 0.35, rely = 0.05)
     
 def updateTab6(tab,d,mainGui):
     #clean tab
@@ -436,4 +436,9 @@ def updateTab6(tab,d,mainGui):
            child.destroy()
       s = ttk.Style()
       bg = s.lookup('TFrame', 'background')
+      tab6_TextLabel1 = ttk.Label(tab, text= "Summary of sampling", font='bold')
+      tab6_TextLabel1.place(relx = 0.35, rely = 0.05)
+      #Update the compression ratio
+      tab6_TextLabel2 = ttk.Label(tab, text= "Compression Ratio")
+      tab6_TextLabel2.place(relx = 0.1, rely = 0.15)
       pass

@@ -14,6 +14,6 @@ class initialData:
             self.workdir=workdir
             self.filepath=filepath
             #self.csv_file=csv.DictReader(self.filepath)
-            
             self.headers=headers
             self.individuals=individuals
+            self.compressionRatio=0
