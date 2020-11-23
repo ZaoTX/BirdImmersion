@@ -128,8 +128,14 @@ def updateTab2(tab,d,mainGui):
              count=count+1
        #setup checkbox for default setting
       var1=tk.BooleanVar()
-      useDefault=ttk.Checkbutton(tab, text="Use Default", variable=var1)
-      useDefault.place(relx = 0.8, rely = 0.8)
+      checkBtn=ttk.Checkbutton(tab, text="Use Default", variable=var1)
+      def useDefault(event):
+            import launch
+            #the user use the default headers and the headers they selected
+            launch.pSetups.useDefaultInfo()
+            print("Use default info")
+      checkBtn.bind("<ButtonPress>",useDefault)
+      checkBtn.place(relx = 0.8, rely = 0.8)
       #confirm button
       btn1 = ttk.Button(tab, text ='Confirm', command = lambda:confirm()) 
       btn1.place(relx = 0.8, rely = 0.9)
@@ -145,7 +151,6 @@ def updateTab2(tab,d,mainGui):
                   #make value unique
                   launch.pSetups.choosenHeaders=list(set(launch.pSetups.choosenHeaders))
                   
-            
             else:
                   #the user only use the headers they selected
                   launch.processingSetups.choosenHeaders=values
@@ -195,7 +200,7 @@ def setupTab3(tab):
      
      # Label for information
      defaultReg=tk.StringVar()
-     defaultReg.set(r"((?P<YY>\d{4})-(?P<MM>\d{1,2})-(?P<DD>\d{1,2}) (?P<h>\d{1,2}):(?P<min>\d{2}):(?P<sec>\d{2}[.]\d{3}))")
+     defaultReg.set(r'%Y-%m-%d %H:%M:%S.%f')
      entry1=tk.Entry(tab,
            width=108)
      entry1.config(textvariable = defaultReg,state='readonly',relief='flat')
@@ -229,7 +234,7 @@ def setupTab3(tab):
                  if(entry2.get()!=''):
                        reg=entry2.get()
                  else:
-                       reg=r"((?P<YY>\d{4})-(?P<MM>\d{1,2})-(?P<DD>\d{1,2}) (?P<h>\d{1,2}):(?P<min>\d{2}):(?P<sec>\d{2}[.]\d{3}))"
+                       reg='%Y-%m-%d %H:%M:%S.%f'
                  print(reg)
                  #split by which time difference
                  typ=v2.get()
@@ -280,7 +285,7 @@ def setupTab4(tab):
                  
                  tab3_TextLabel3.config(text='Remove missing value is easy but might lose some information make the trajectory intermittent')
                  
-     multibox.bind("<<ComboboxSelected>>", TextBoxUpdate)
+     multibox.bind("<ButtonPress>", TextBoxUpdate)
      def cleandataset():
            choice = multibox.get()
            print(choice)
@@ -427,16 +432,16 @@ def setupTab5(tab):
 # 1. The Compression ratio
 # 2. Average synchronized Euclidean distance
 def setupTab6(tab):
-    tab6_TextLabel1 = ttk.Label(tab, text= "Summary of sampling", font='bold')
+    tab6_TextLabel1 = ttk.Label(tab, text= "Summary of Sampling", font='bold')
     tab6_TextLabel1.place(relx = 0.35, rely = 0.05)
     
 def updateTab6(tab,d,mainGui):
-    #clean tab
+      #clean tab
       for child in tab.winfo_children():
            child.destroy()
-      s = ttk.Style()
-      bg = s.lookup('TFrame', 'background')
-      tab6_TextLabel1 = ttk.Label(tab, text= "Summary of sampling", font='bold')
+      #s = ttk.Style()
+      #bg = s.lookup('TFrame', 'background')
+      tab6_TextLabel1 = ttk.Label(tab, text= "Summary of Sampling", font='bold')
       tab6_TextLabel1.place(relx = 0.35, rely = 0.05)
       #Update the compression ratio
       tab6_TextLabel2 = ttk.Label(tab, text= "Compression Ratio")

@@ -6,7 +6,7 @@ Created on Sat Oct  3 16:47:39 2020
 """
 #import csv
 import pandas as pd
-class initialData:
+class dataInfo:
 #      workdir=''
 #      filepath=''
 #      csv_file=csv.DictReader()

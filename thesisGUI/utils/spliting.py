@@ -48,7 +48,7 @@ def individualSpliting(d,p):#d is dataset, p is processingsetups
 # d is launch.d, p is launch.pSetup, 
 # reg is the Regular language of Time, aim is the split by which time skip
 def splitingTime(d,p,reg,aim,sec):
-      import re
+      from datetime import datetime
       base_dir = d.workdir
       splitpath = base_dir+'/'+'SplitByTimeStamp'
       if not os.path.exists(splitpath):
@@ -73,8 +73,8 @@ def splitingTime(d,p,reg,aim,sec):
                   os.makedirs(splitpath)
             for row in csv_reader:
                   cur_time=row[timestampHeader]
-                  mat = re.match(reg,cur_time)
-                  cur_Year=mat.group('YY')
+                  cur_timeObj=datetime.strptime(cur_time,reg)
+                  cur_Year=cur_timeObj.year
                   if lastYear!=cur_Year:#not the same year
                         newpath = splitpath+'/'+cur_Year
                         if not os.path.exists(newpath):
@@ -98,9 +98,10 @@ def splitingTime(d,p,reg,aim,sec):
                   
                   cur_time=row[timestampHeader]
                   
-                  mat = re.match(reg,cur_time)
-                  cur_Year=mat.group('YY')
-                  cur_Month=mat.group('MM')
+                  cur_time=row[timestampHeader]
+                  cur_timeObj=datetime.strptime(cur_time,reg)
+                  cur_Year=cur_timeObj.year
+                  cur_Month=cur_timeObj.month
                   if (lastYear!=cur_Year and lastMonth!=cur_Month):#not the same Month
                         newpath = splitpath+'/'+cur_Year
                         #newpath = newpath.replace(" ","")
@@ -127,10 +128,10 @@ def splitingTime(d,p,reg,aim,sec):
                   
                   cur_time=row[timestampHeader]
                   
-                  mat = re.match(reg,cur_time)
-                  cur_Year=mat.group('YY')
-                  cur_Month=mat.group('MM')
-                  cur_Day=mat.group('DD')
+                  cur_timeObj=datetime.strptime(cur_time,reg)
+                  cur_Year=cur_timeObj.year
+                  cur_Month=cur_timeObj.month
+                  cur_Day=cur_timeObj.day
                   if lastYear!=cur_Year and lastMonth!=cur_Month and lastDay!=cur_Day:#not the same Day
                         newpath = splitpath+'/'+cur_Year+'-'+cur_Month
                         #newpath = newpath.replace(" ","")
@@ -151,7 +152,7 @@ def splitingTime(d,p,reg,aim,sec):
        # we check if the time diff is less than the aim's setup 
        # and give the user the high temporal resolution period 
       elif(aim=="4"): #Hour
-            from datetime import datetime
+            
             threshold=3600#the threshold in second
             lastTime=''
             count=1
@@ -167,8 +168,8 @@ def splitingTime(d,p,reg,aim,sec):
                         writer.writeheader()
                         writer.writerow(row)
                   else:
-                        lastTimeObj=datetime.strptime(lastTime,'%Y-%m-%d %H:%M:%S.%f')
-                        cur_timeObj=datetime.strptime(cur_time,'%Y-%m-%d %H:%M:%S.%f')
+                        lastTimeObj=datetime.strptime(lastTime,reg)
+                        cur_timeObj=datetime.strptime(cur_time,reg)
                         TimeDiff=abs((cur_timeObj-lastTimeObj).total_seconds())
                         if(TimeDiff<=threshold):
                               writer.writerow(row)
@@ -182,7 +183,7 @@ def splitingTime(d,p,reg,aim,sec):
             print("finished")
                               
       elif(aim=="5"):#Minute
-            from datetime import datetime
+            
             threshold=60#the threshold in second
             lastTime=''
             count=1
@@ -198,8 +199,8 @@ def splitingTime(d,p,reg,aim,sec):
                         writer.writeheader()
                         writer.writerow(row)
                   else:
-                        lastTimeObj=datetime.strptime(lastTime,'%Y-%m-%d %H:%M:%S.%f')
-                        cur_timeObj=datetime.strptime(cur_time,'%Y-%m-%d %H:%M:%S.%f')
+                        lastTimeObj=datetime.strptime(lastTime,reg)
+                        cur_timeObj=datetime.strptime(cur_time,reg)
                         TimeDiff=abs((cur_timeObj-lastTimeObj).total_seconds())
                         if(TimeDiff<=threshold):
                               writer.writerow(row)
@@ -212,7 +213,7 @@ def splitingTime(d,p,reg,aim,sec):
                   lastTime=cur_time
             print("finished")
       elif(aim=="6"): #Second
-            from datetime import datetime
+            
             threshold=int(sec)#the threshold in second
             lastTime=''
             count=1
@@ -228,8 +229,8 @@ def splitingTime(d,p,reg,aim,sec):
                         writer.writeheader()
                         writer.writerow(row)
                   else:
-                        lastTimeObj=datetime.strptime(lastTime,'%Y-%m-%d %H:%M:%S.%f')
-                        cur_timeObj=datetime.strptime(cur_time,'%Y-%m-%d %H:%M:%S.%f')
+                        lastTimeObj=datetime.strptime(lastTime,reg)
+                        cur_timeObj=datetime.strptime(cur_time,reg)
                         TimeDiff=abs((cur_timeObj-lastTimeObj).total_seconds())
                         if(TimeDiff<=threshold):
                               writer.writerow(row)
