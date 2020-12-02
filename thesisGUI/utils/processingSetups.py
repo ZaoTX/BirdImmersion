@@ -13,6 +13,7 @@ class processingSetups:
             self.lngHeaderName=''
             self.heightHeaderName=''
             self.timestampHeaderName=''
+            self.useDefault=False
       def useDefaultInfo(self):
             self.choosenHeaders=['individual-local-identifier','location-lat','location-long','height-above-ellipsoid','timestamp']
             self.idHeaderName= 'individual-local-identifier'
@@ -20,10 +21,68 @@ class processingSetups:
             self.lngHeaderName='location-long'
             self.heightHeaderName='height-above-ellipsoid'
             self.timestampHeaderName='timestamp'
+            self.useDefault=True
+      def clearInfo(self):
+            self.choosenHeaders=[]
+            self.idHeaderName=''
+            self.latHeaderName=''
+            self.lngHeaderName=''
+            self.heightHeaderName=''
+            self.timestampHeaderName=''
+            self.useDefault=False
       def setBasicInfo(self,idHeaderName,latHeaderName,lngHeaderName,heightHeaderName,timestampHeaderName):
-            self.choosenHeaders=[idHeaderName,latHeaderName,lngHeaderName,heightHeaderName,timestampHeaderName]
             self.idHeaderName= idHeaderName
             self.latHeaderName=latHeaderName
             self.lngHeaderName=lngHeaderName
             self.heightHeaderName=heightHeaderName
             self.timestampHeaderName=timestampHeaderName
+      def storeLastInfo(self):
+          import os,csv
+          loc=os.getcwd()
+          outpath=str(loc+'\\'+'utils\\'+'tmp\\')
+          if not os.path.exists(outpath):
+             os.makedirs(outpath)
+          filePath=outpath+'config.csv'
+          if (os.path.isfile(filePath)):#there is already a config file
+              csv_file=open(filePath,  'a', newline='')
+              row = ['choosenHeaders','idHeaderName','latHeaderName','lngHeaderName','heightHeaderName','timestampHeaderName','useDefault']
+              writer = csv.DictWriter(csv_file
+                                    ,fieldnames=row
+                                    )
+              row2=[self.choosenHeaders,self.idHeaderName,self.latHeaderName,self.lngHeaderName,self.heightHeaderName,self.timestampHeaderName,self.useDefault]
+              dictRow=dict(zip(row , row2))
+              writer.writerow(dictRow)
+          else:
+              csv_file=open(filePath,  'a', newline='')
+              row = ['choosenHeaders','idHeaderName','latHeaderName','lngHeaderName','heightHeaderName','timestampHeaderName','useDefault']
+              writer = csv.DictWriter(csv_file
+                                    ,fieldnames=row
+                                    )
+              writer.writeheader()
+              row2=[self.choosenHeaders,self.idHeaderName,self.latHeaderName,self.lngHeaderName,self.heightHeaderName,self.timestampHeaderName,self.useDefault]
+              dictRow=dict(zip(row , row2))
+              writer.writerow(dictRow)
+      def updateLastInfo(self):
+          import os
+          import pandas as pd
+          loc=os.getcwd()
+          outpath=loc+'\\'+'tmp\\'
+          if not os.path.exists(outpath):
+             os.makedirs(outpath)
+          filePath=outpath+'config.csv'
+          if (os.path.isfile(filePath)):#there is already a config file
+                #
+                df = pd.read_csv(filePath)
+                idHeaderName=df['idHeaderName'][0]
+                latHeaderName=df['latHeaderName'][0]
+                lngHeaderName=df['lngHeaderName'][0]
+                heightHeaderName=df['heightHeaderName'][0]
+                timestampHeaderName=df['timestampHeaderName'][0]
+                self.choosenHeaders=df['choosenHeaders'][0]
+                print(type(self.choosenHeaders))
+                self.setBasicInfo(self,idHeaderName,latHeaderName,lngHeaderName,heightHeaderName,timestampHeaderName)
+                self.useDefault=df['useDefault'][0]
+          else:
+              print('There is no config file.')
+              
+      

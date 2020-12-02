@@ -55,26 +55,29 @@ def Douglas(d,p,epsilon):
     import math
     import pandas as pd
     def d_2points(lat1,lng1,h1,lat2,lng2,h2):
-        R = 6373.0 #radius of earth
+        R = 6371000 #radius of earth
         
         dlng = lng1-lng2
         dlat = lat1 - lat2
         dh= h1-h2 
         a = math.sin(dlat / 2)**2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlng / 2)**2
 
-        c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+        c = 2 *math.asin(math.sqrt(a))
         distance = R * c
         dis =math.sqrt( dh**2+distance**2)
         return dis
     
     def d_pointLine(lat1,lng1,h1,lat2,lng2,h2,lat3,lng3,h3):
-     
-    	a=d_2points(lat1,lng1,h1,lat2,lng2,h2)
-    	b=d_2points(lat3,lng3,h3,lat2,lng2,h2)
-    	c=d_2points(lat1,lng1,h1,lat3,lng3,h3)
-    	s=(a+b+c)/2    
-    	A=math.sqrt(s*(s-a)*(s-b)*(s-c))  #Heron's formula
-    	return 2*A/a;# area of triangle ABC= 0.5*h*|AB| h= 2A/a  
+        try: 
+            a=d_2points(lat1,lng1,h1,lat2,lng2,h2)
+            b=d_2points(lat3,lng3,h3,lat2,lng2,h2)
+            c=d_2points(lat1,lng1,h1,lat3,lng3,h3)
+            s=(a+b+c)/2 
+            A=math.sqrt(s*(s-a)*(s-b)*(s-c))  #Heron's formula
+            
+            return 2*A/a;# area of triangle ABC= 0.5*h*|AB| h= 2A/a  
+        except:
+            return 0
     def douglasAlgo(latList,lngList,heightList,timeList,epsilon):
         dmax = 0
         index = 0
@@ -104,12 +107,13 @@ def Douglas(d,p,epsilon):
         out_timeList=[]
         #out_idList=[]
         if(dmax>epsilon):
-            latList1,lngList1,heightList1,timeList1= douglasAlgo(latList[:index],lngList[:index],heightList[:index],timeList[:index],epsilon)
-            latList2,lngList2,heightList2,timeList2= douglasAlgo(latList[index:],lngList[index:],heightList[index:],timeList[index:],epsilon)
-            out_latList=latList1+latList2
-            out_lngList=lngList1+lngList2
-            out_heightList=heightList1+heightList2
-            out_timeList=timeList1+timeList2
+                latList1,lngList1,heightList1,timeList1= douglasAlgo(latList[:index],lngList[:index],heightList[:index],timeList[:index],epsilon)
+                latList2,lngList2,heightList2,timeList2= douglasAlgo(latList[index:],lngList[index:],heightList[index:],timeList[index:],epsilon)
+                out_latList=latList1+latList2
+                out_lngList=lngList1+lngList2
+                out_heightList=heightList1+heightList2
+                out_timeList=timeList1+timeList2
+            
         else:
             out_latList.append(lat1)
             out_latList.append(lat2)
@@ -135,6 +139,7 @@ def Douglas(d,p,epsilon):
     currentLatList=[]
     currentHeightList=[]
     currentTimeList=[]
+    
     # find header names
     idHeader=p.idHeaderName
     lngHeader = p.lngHeaderName
@@ -147,7 +152,8 @@ def Douglas(d,p,epsilon):
     # then we apply the Douglas algo to this individual
     for row in csv_reader:
         cur_id=row[idHeader]
-        if ((last_id!=cur_id and last_id!='')or last_id!=cur_id and cur_id==''):
+        
+        if ((last_id!=cur_id and last_id!='')):
              # 1.do the douglas for last id 
              # 2.store the data into new csv
              # 3.renew the list
@@ -187,12 +193,30 @@ def Douglas(d,p,epsilon):
             
             
         last_id=cur_id
+    out_latList,out_lngList,out_heightList,out_timeList=douglasAlgo(currentLatList,currentLngList,currentHeightList,currentTimeList,epsilon)
+    idList=[last_id]*len(out_latList)
+    df=pd.DataFrame({
+           p.idHeaderName:idList,
+           p.timestampHeaderName:out_timeList,
+           p.lngHeaderName:out_lngList,
+           p.latHeaderName:out_latList,
+           p.heightHeaderName:out_heightList
+        }
+    #                   ,[p.idHeaderName,
+    #                   p.timestampHeaderName,
+    #                   p.lngHeaderName,
+    #                   p.latHeaderName,
+    #                   p.heightHeaderName
+    #                   ]
+           )
+    df=df.drop_duplicates(keep='first')
+    df.to_csv(outpath+'/'+'douglas_sample_'+str(epsilon)+'meters.csv',index=False,header=True,mode='a')
 #a top-down time-ratio algorithm based on DP
 def TD_TR(d,p,dist_threshold):
     import math
     import pandas as pd
     def d_2points(lat1,lng1,h1,lat2,lng2,h2):
-        R = 6373.0 #radius of earth
+        R =  6371000 #radius of earth
         
         dlng = lng1-lng2
         dlat = lat1 - lat2
@@ -205,13 +229,16 @@ def TD_TR(d,p,dist_threshold):
         return dis
     
     def d_pointLine(lat1,lng1,h1,lat2,lng2,h2,lat3,lng3,h3):
-     
-    	a=d_2points(lat1,lng1,h1,lat2,lng2,h2)
-    	b=d_2points(lat3,lng3,h3,lat2,lng2,h2)
-    	c=d_2points(lat1,lng1,h1,lat3,lng3,h3)
-    	s=(a+b+c)/2    
-    	A=math.sqrt(s*(s-a)*(s-b)*(s-c))  #Heron's formula
-    	return 2*A/a;# area of triangle ABC= 0.5*h*|AB| h= 2A/a
+        try: 
+            a=d_2points(lat1,lng1,h1,lat2,lng2,h2)
+            b=d_2points(lat3,lng3,h3,lat2,lng2,h2)
+            c=d_2points(lat1,lng1,h1,lat3,lng3,h3)
+            s=(a+b+c)/2 
+            A=math.sqrt(s*(s-a)*(s-b)*(s-c))  #Heron's formula
+            
+            return 2*A/a;# area of triangle ABC= 0.5*h*|AB| h= 2A/a  
+        except:
+            return 0
     def TD_TR_Algo(latList,lngList,heightList,timeList,dist_threshold):
             from datetime import datetime
             end = len(latList)
@@ -300,7 +327,7 @@ def TD_TR(d,p,dist_threshold):
     # then we apply the Douglas algo to this individual
     for row in csv_reader:
         cur_id=row[idHeader]
-        if ((last_id!=cur_id and last_id!='')or last_id!=cur_id and cur_id==''):
+        if ((last_id!=cur_id and last_id!='')or (next(csv_reader)=='')):
              # 1.do the TD_TR for last id 
              # 2.store the data into new csv
              # 3.renew the list
@@ -338,12 +365,30 @@ def TD_TR(d,p,dist_threshold):
             currentTimeList.append(row[timeHeader])
             
         last_id=cur_id
+    out_latList,out_lngList,out_heightList,out_timeList=TD_TR_Algo(currentLatList,currentLngList,currentHeightList,currentTimeList,dist_threshold)
+    idList=[last_id]*len(out_latList)
+    df=pd.DataFrame({
+           p.idHeaderName:idList,
+           p.timestampHeaderName:out_timeList,
+           p.lngHeaderName:out_lngList,
+           p.latHeaderName:out_latList,
+           p.heightHeaderName:out_heightList
+        }
+    #                   ,[p.idHeaderName,
+    #                   p.timestampHeaderName,
+    #                   p.lngHeaderName,
+    #                   p.latHeaderName,
+    #                   p.heightHeaderName
+    #                   ]
+           )
+    df=df.drop_duplicates(keep='first')
+    df.to_csv(resultCSV,index=False,header=True,mode='a')
 #a top-down time-ratio algorithm based on DP
-def TD_SP(d,p,dist_threshold):
+def TD_SP(d,p,speed_threshold):
     import math
     import pandas as pd
     def d_2points(lat1,lng1,h1,lat2,lng2,h2):
-        R = 6373.0 #radius of earth
+        R = 6371000 #radius of earth
         
         dlng = lng1-lng2
         dlat = lat1 - lat2
@@ -356,13 +401,16 @@ def TD_SP(d,p,dist_threshold):
         return dis
     
     def d_pointLine(lat1,lng1,h1,lat2,lng2,h2,lat3,lng3,h3):
-     
-    	a=d_2points(lat1,lng1,h1,lat2,lng2,h2)
-    	b=d_2points(lat3,lng3,h3,lat2,lng2,h2)
-    	c=d_2points(lat1,lng1,h1,lat3,lng3,h3)
-    	s=(a+b+c)/2    
-    	A=math.sqrt(s*(s-a)*(s-b)*(s-c))  #Heron's formula
-    	return 2*A/a;# area of triangle ABC= 0.5*h*|AB| h= 2A/a
+        try: 
+            a=d_2points(lat1,lng1,h1,lat2,lng2,h2)
+            b=d_2points(lat3,lng3,h3,lat2,lng2,h2)
+            c=d_2points(lat1,lng1,h1,lat3,lng3,h3)
+            s=(a+b+c)/2 
+            A=math.sqrt(s*(s-a)*(s-b)*(s-c))  #Heron's formula
+            
+            return 2*A/a;# area of triangle ABC= 0.5*h*|AB| h= 2A/a  
+        except:
+            return 0
     def TD_SP_Algo(latList,lngList,heightList,timeList,speed_threshold):
             from datetime import datetime
             end = len(latList)
@@ -407,8 +455,8 @@ def TD_SP(d,p,dist_threshold):
                 out_heightList=[]
                 out_timeList=[]
                 if(max_threshold>speed_threshold):
-                    latList1,lngList1,heightList1,timeList1= TD_SP_Algo(latList[:index],lngList[:index],heightList[:index],timeList[:index],dist_threshold)
-                    latList2,lngList2,heightList2,timeList2= TD_SP_Algo(latList[index:],lngList[index:],heightList[index:],timeList[index:],dist_threshold)
+                    latList1,lngList1,heightList1,timeList1= TD_SP_Algo(latList[:index],lngList[:index],heightList[:index],timeList[:index],speed_threshold)
+                    latList2,lngList2,heightList2,timeList2= TD_SP_Algo(latList[index:],lngList[index:],heightList[index:],timeList[index:],speed_threshold)
                     out_latList=latList1+latList2
                     out_lngList=lngList1+lngList2
                     out_heightList=heightList1+heightList2
@@ -449,7 +497,7 @@ def TD_SP(d,p,dist_threshold):
     currentLatList=[]
     currentHeightList=[]
     currentTimeList=[]
-    resultCSV=outpath+'/'+'TDSP_sample_'+str(dist_threshold)+'MProS.csv'
+    resultCSV=outpath+'/'+'TDSP_sample_'+str(speed_threshold)+'MProS.csv'
     # find header names
     idHeader=p.idHeaderName
     lngHeader = p.lngHeaderName
@@ -461,11 +509,11 @@ def TD_SP(d,p,dist_threshold):
     # then we apply the Douglas algo to this individual
     for row in csv_reader:
         cur_id=row[idHeader]
-        if ((last_id!=cur_id and last_id!='')or last_id!=cur_id and cur_id==''):
+        if ((last_id!=cur_id and last_id!='')or (next(csv_reader)=='')):
              # 1.do the TD_TR for last id 
              # 2.store the data into new csv
              # 3.renew the list
-             out_latList,out_lngList,out_heightList,out_timeList=TD_SP_Algo(currentLatList,currentLngList,currentHeightList,currentTimeList,dist_threshold)
+             out_latList,out_lngList,out_heightList,out_timeList=TD_SP_Algo(currentLatList,currentLngList,currentHeightList,currentTimeList,speed_threshold)
              #Store info
              idList=[last_id]*len(out_latList)
              df=pd.DataFrame({
@@ -500,6 +548,24 @@ def TD_SP(d,p,dist_threshold):
             currentTimeList.append(row[timeHeader])
             
         last_id=cur_id
+    out_latList,out_lngList,out_heightList,out_timeList=TD_SP_Algo(currentLatList,currentLngList,currentHeightList,currentTimeList,speed_threshold)
+    idList=[last_id]*len(out_latList)
+    df=pd.DataFrame({
+           p.idHeaderName:idList,
+           p.timestampHeaderName:out_timeList,
+           p.lngHeaderName:out_lngList,
+           p.latHeaderName:out_latList,
+           p.heightHeaderName:out_heightList
+        }
+    #                   ,[p.idHeaderName,
+    #                   p.timestampHeaderName,
+    #                   p.lngHeaderName,
+    #                   p.latHeaderName,
+    #                   p.heightHeaderName
+    #                   ]
+           )
+    df=df.drop_duplicates(keep='first')
+    df.to_csv(resultCSV,index=False,header=True,mode='a')
 def  SQUISH(d,p,size):
     import pandas as pd
     # synchronized Euclidean distance
@@ -628,7 +694,7 @@ def  SQUISH(d,p,size):
     # then we apply the Douglas algo to this individual
     for row in csv_reader:
         cur_id=row[idHeader]
-        if ((last_id!=cur_id and last_id!='')or last_id!=cur_id and cur_id==''):
+        if ((last_id!=cur_id and last_id!='')or (next(csv_reader)=='')):
              # 1.do the TD_TR for last id 
              # 2.store the data into new csv
              # 3.renew the list
@@ -667,4 +733,21 @@ def  SQUISH(d,p,size):
             currentTimeList.append(row[timeHeader])
             
         last_id=cur_id
-    
+    out_latList,out_lngList,out_heightList,out_timeList= SQUISH_Algo(currentLatList,currentLngList,currentHeightList,currentTimeList,size)
+    idList=[last_id]*len(out_latList)
+    df=pd.DataFrame({
+           p.idHeaderName:idList,
+           p.timestampHeaderName:out_timeList,
+           p.lngHeaderName:out_lngList,
+           p.latHeaderName:out_latList,
+           p.heightHeaderName:out_heightList
+        }
+    #                   ,[p.idHeaderName,
+    #                   p.timestampHeaderName,
+    #                   p.lngHeaderName,
+    #                   p.latHeaderName,
+    #                   p.heightHeaderName
+    #                   ]
+           )
+    df=df.drop_duplicates(keep='first')
+    df.to_csv(resultCSV,index=False,header=True,mode='a')

@@ -35,11 +35,18 @@ def individualSpliting(d,p):#d is dataset, p is processingsetups
             #newpath = newpath.replace(" ","")
             if not os.path.exists(newpath):
                    os.makedirs(newpath)
-            csvfile_write = open(newpath+'/'+cur_id+'.csv', 'a', newline='')
+            resultCSV=newpath+'/'+cur_id+'.csv'
+            
+            if(not os.path.exists(resultCSV)):
+                csvfile_write = open(resultCSV, 'a', newline='')
+                writer = csv.DictWriter(csvfile_write
+                                    ,fieldnames=fieldnames
+                                    )
+                writer.writeheader()
+            csvfile_write = open(resultCSV, 'a', newline='')
             writer = csv.DictWriter(csvfile_write
                                     ,fieldnames=fieldnames
                                     )
-            writer.writeheader()
             
             writer.writerow(row)
         else:
@@ -76,12 +83,18 @@ def splitingTime(d,p,reg,aim,sec):
                   cur_timeObj=datetime.strptime(cur_time,reg)
                   cur_Year=cur_timeObj.year
                   if lastYear!=cur_Year:#not the same year
-                        newpath = splitpath+'/'+cur_Year
+                        newpath = splitpath
                         if not os.path.exists(newpath):
                                os.makedirs(newpath)
-                        csvfile_write = open(newpath+'/'+cur_Year+'.csv', 'a', newline='')# a for append (instead of overwrite)
+                        resultCSV=newpath+'/'+str(cur_Year)+'.csv'
+                        if(not os.path.exists(resultCSV)):
+                            csvfile_write = open(resultCSV, 'a', newline='')
+                            writer = csv.DictWriter(csvfile_write
+                                                ,fieldnames=fieldnames
+                                                )
+                            writer.writeheader()
+                        csvfile_write = open(resultCSV, 'a', newline='')# a for append (instead of overwrite)
                         writer = csv.DictWriter(csvfile_write,fieldnames=fieldnames)
-                        writer.writeheader()
                         writer.writerow(row)
                               
                   else:
@@ -103,13 +116,19 @@ def splitingTime(d,p,reg,aim,sec):
                   cur_Year=cur_timeObj.year
                   cur_Month=cur_timeObj.month
                   if (lastYear!=cur_Year and lastMonth!=cur_Month):#not the same Month
-                        newpath = splitpath+'/'+cur_Year
+                        newpath = splitpath+'/'+str(cur_Year)
                         #newpath = newpath.replace(" ","")
                         if not os.path.exists(newpath):
                                os.makedirs(newpath)
-                        csvfile_write = open(newpath+'/'+cur_Month+'.csv', 'a', newline='')# a for append (instead of overwrite)
+                        resultCSV=newpath+'/'+str(cur_Month)+'.csv'
+                        if(not os.path.exists(resultCSV)):
+                            csvfile_write = open(resultCSV, 'a', newline='')
+                            writer = csv.DictWriter(csvfile_write
+                                                ,fieldnames=fieldnames
+                                                )
+                            writer.writeheader()
+                        csvfile_write = open(resultCSV, 'a', newline='')# a for append (instead of overwrite)
                         writer = csv.DictWriter(csvfile_write,fieldnames=fieldnames)
-                        writer.writeheader()
                         writer.writerow(row)
                         
                   else:
@@ -133,13 +152,19 @@ def splitingTime(d,p,reg,aim,sec):
                   cur_Month=cur_timeObj.month
                   cur_Day=cur_timeObj.day
                   if lastYear!=cur_Year and lastMonth!=cur_Month and lastDay!=cur_Day:#not the same Day
-                        newpath = splitpath+'/'+cur_Year+'-'+cur_Month
+                        newpath = splitpath+'/'+str(cur_Year)+'-'+str(cur_Month)
                         #newpath = newpath.replace(" ","")
                         if not os.path.exists(newpath):
                                os.makedirs(newpath)
-                        csvfile_write = open(newpath+'/'+cur_Day+'.csv', 'a', newline='')# a for append (instead of overwrite)
+                        resultCSV=newpath+'/'+str(cur_Day)+'.csv'
+                        if(not os.path.exists(resultCSV)):
+                            csvfile_write = open(resultCSV, 'a', newline='')
+                            writer = csv.DictWriter(csvfile_write
+                                                ,fieldnames=fieldnames
+                                                )
+                            writer.writeheader()
+                        csvfile_write = open(resultCSV, 'a', newline='')# a for append (instead of overwrite)
                         writer = csv.DictWriter(csvfile_write,fieldnames=fieldnames)
-                        writer.writeheader()
                         writer.writerow(row)
                         
                   else:
@@ -163,9 +188,15 @@ def splitingTime(d,p,reg,aim,sec):
                   
                   cur_time=row[timestampHeader]
                   if (lastTime=='') :
-                        csvfile_write = open(splitpath+'/'+str(count)+'.csv', 'a', newline='')
+                        resultCSV=splitpath+'/'+str(count)+'.csv'
+                        if(not os.path.exists(resultCSV)):
+                            csvfile_write = open(resultCSV, 'a', newline='')
+                            writer = csv.DictWriter(csvfile_write
+                                                ,fieldnames=fieldnames
+                                                )
+                            writer.writeheader()
+                        csvfile_write = open(resultCSV, 'a', newline='')# a for append (instead of overwrite)
                         writer = csv.DictWriter(csvfile_write,fieldnames=fieldnames)
-                        writer.writeheader()
                         writer.writerow(row)
                   else:
                         lastTimeObj=datetime.strptime(lastTime,reg)
@@ -175,9 +206,15 @@ def splitingTime(d,p,reg,aim,sec):
                               writer.writerow(row)
                         else:
                               count=count+1
-                              csvfile_write = open(splitpath+'/'+str(count)+'.csv', 'a', newline='')
+                              resultCSV=splitpath+'/'+str(count)+'.csv'
+                              if(not os.path.exists(resultCSV)):
+                                  csvfile_write = open(resultCSV, 'a', newline='')
+                                  writer = csv.DictWriter(csvfile_write
+                                                ,fieldnames=fieldnames
+                                                )
+                                  writer.writeheader()
+                              csvfile_write = open(resultCSV, 'a', newline='')# a for append (instead of overwrite)
                               writer = csv.DictWriter(csvfile_write,fieldnames=fieldnames)
-                              writer.writeheader()
                               writer.writerow(row)
                   lastTime=cur_time
             print("finished")
@@ -194,9 +231,15 @@ def splitingTime(d,p,reg,aim,sec):
                   
                   cur_time=row[timestampHeader]
                   if (lastTime=='') :
-                        csvfile_write = open(splitpath+'/'+str(count)+'.csv', 'a', newline='')
+                        resultCSV=splitpath+'/'+str(count)+'.csv'
+                        if(not os.path.exists(resultCSV)):
+                            csvfile_write = open(resultCSV, 'a', newline='')
+                            writer = csv.DictWriter(csvfile_write
+                                                ,fieldnames=fieldnames
+                                                )
+                            writer.writeheader()
+                        csvfile_write = open(resultCSV, 'a', newline='')# a for append (instead of overwrite)
                         writer = csv.DictWriter(csvfile_write,fieldnames=fieldnames)
-                        writer.writeheader()
                         writer.writerow(row)
                   else:
                         lastTimeObj=datetime.strptime(lastTime,reg)
@@ -206,9 +249,15 @@ def splitingTime(d,p,reg,aim,sec):
                               writer.writerow(row)
                         else:
                               count=count+1
-                              csvfile_write = open(splitpath+'/'+str(count)+'.csv', 'a', newline='')
+                              resultCSV=splitpath+'/'+str(count)+'.csv'
+                              if(not os.path.exists(resultCSV)):
+                                  csvfile_write = open(resultCSV, 'a', newline='')
+                                  writer = csv.DictWriter(csvfile_write
+                                                ,fieldnames=fieldnames
+                                                )
+                                  writer.writeheader()
+                              csvfile_write = open(resultCSV, 'a', newline='')# a for append (instead of overwrite)
                               writer = csv.DictWriter(csvfile_write,fieldnames=fieldnames)
-                              writer.writeheader()
                               writer.writerow(row)
                   lastTime=cur_time
             print("finished")
@@ -224,9 +273,15 @@ def splitingTime(d,p,reg,aim,sec):
                   
                   cur_time=row[timestampHeader]
                   if (lastTime=='') :
-                        csvfile_write = open(splitpath+'/'+str(count)+'.csv', 'a', newline='')
+                        resultCSV=splitpath+'/'+str(count)+'.csv'
+                        if(not os.path.exists(resultCSV)):
+                            csvfile_write = open(resultCSV, 'a', newline='')
+                            writer = csv.DictWriter(csvfile_write
+                                                ,fieldnames=fieldnames
+                                                )
+                            writer.writeheader()
+                        csvfile_write = open(resultCSV, 'a', newline='')# a for append (instead of overwrite)
                         writer = csv.DictWriter(csvfile_write,fieldnames=fieldnames)
-                        writer.writeheader()
                         writer.writerow(row)
                   else:
                         lastTimeObj=datetime.strptime(lastTime,reg)
@@ -236,9 +291,15 @@ def splitingTime(d,p,reg,aim,sec):
                               writer.writerow(row)
                         else:
                               count=count+1
-                              csvfile_write = open(splitpath+'/'+str(count)+'.csv', 'a', newline='')
+                              resultCSV=splitpath+'/'+str(count)+'.csv'
+                              if(not os.path.exists(resultCSV)):
+                                  csvfile_write = open(resultCSV, 'a', newline='')
+                                  writer = csv.DictWriter(csvfile_write
+                                                ,fieldnames=fieldnames
+                                                )
+                                  writer.writeheader()
+                              csvfile_write = open(resultCSV, 'a', newline='')# a for append (instead of overwrite)
                               writer = csv.DictWriter(csvfile_write,fieldnames=fieldnames)
-                              writer.writeheader()
                               writer.writerow(row)
                   lastTime=cur_time
             print("finished")
