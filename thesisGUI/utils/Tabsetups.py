@@ -104,7 +104,7 @@ def setupTab2(tab):
 def updateTab2(tab,d,mainGui):
       import launch
       #load the info for last time
-      launch.pSetups.updateLastInfo()
+      #launch.pSetups.updateLastInfo()
       
       #clean tab
       for child in tab.winfo_children():
@@ -133,17 +133,19 @@ def updateTab2(tab,d,mainGui):
        #setup checkbox for default setting
       var1=tk.BooleanVar()
       checkBtn=ttk.Checkbutton(tab, text="Use Default", variable=var1)
-      
+      # once we clean the info by deselecting options,
+      # we want to keep the headers user selected
+      def recoverInfo():
+          values= [str(listbox.get(idx)) for idx in listbox.curselection()]
+          launch.pSetups.choosenHeaders=launch.pSetups.choosenHeaders+values
       def useDefault(event):
-           
             import launch
             #the user use the default headers and the headers they selected
             if(not var1.get()):
                 launch.pSetups.useDefaultInfo()
                 print("Use default info")
-            else:
-                launch.pSetups.clearInfo()
-                print("deselected")
+            
+                
       checkBtn.bind("<ButtonPress>",useDefault)
       checkBtn.place(relx = 0.75, rely = 0.8)
       #setup checkbox to restore last configuration
@@ -151,15 +153,12 @@ def updateTab2(tab,d,mainGui):
       checkBtn2=ttk.Checkbutton(tab, text="Restore Last Configuration", variable=var2)
       
       def useLast(event):
-           
             import launch
             #the user use the default headers and the headers they selected
             if(not var2.get()):
                 launch.pSetups.updateLastInfo()
                 print("Use last info")
-            else:
-                launch.pSetups.clearInfo()
-                print("deselected")
+            
       checkBtn2.bind("<ButtonPress>",useLast)
       checkBtn2.place(relx = 0.75, rely = 0.7)
       
@@ -170,12 +169,16 @@ def updateTab2(tab,d,mainGui):
       def confirm():
             import launch
             values = [str(listbox.get(idx)) for idx in listbox.curselection()]
-            
+            #if user use default
+            if(var1.get()):
+                  launch.pSetups.useDefaultInfo()
+            #if user use Last configuration
+            if(var2.get()):
+                  launch.pSetups.updateLastInfo()
             #get the header according to the user's choose
             #if(not var1.get()):
                   #the user only use the headers they selected
-                  #clear information
-            #
+                  #clear information#
             launch.pSetups.choosenHeaders=launch.pSetups.choosenHeaders+values
             #make value unique
             launch.pSetups.choosenHeaders=list(set(launch.pSetups.choosenHeaders))
@@ -185,12 +188,7 @@ def updateTab2(tab,d,mainGui):
             filtering(launch.pSetups.choosenHeaders,launch.d)
             launch.pSetups.storeLastInfo()
             launch.pSetups.clearInfo()
-            #if user use default
-            if(var1.get()):
-                  launch.pSetups.useDefaultInfo()
-            #if user use Last configuration
-            if(var2.get()):
-                  launch.pSetups.updateLastInfo()
+            
                   
 #setup tab3: 
 #   tab3 includes: selection of mehtods, launch button , 
