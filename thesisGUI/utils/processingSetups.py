@@ -43,25 +43,25 @@ class processingSetups:
           if not os.path.exists(outpath):
              os.makedirs(outpath)
           filePath=outpath+'config.csv'
-          if (os.path.isfile(filePath)):#there is already a config file
-              csv_file=open(filePath,  'a', newline='')
-              row = ['choosenHeaders','idHeaderName','latHeaderName','lngHeaderName','heightHeaderName','timestampHeaderName','useDefault']
-              writer = csv.DictWriter(csv_file
-                                    ,fieldnames=row
-                                    )
-              row2=[self.choosenHeaders,self.idHeaderName,self.latHeaderName,self.lngHeaderName,self.heightHeaderName,self.timestampHeaderName,self.useDefault]
-              dictRow=dict(zip(row , row2))
-              writer.writerow(dictRow)
-          else:
-              csv_file=open(filePath,  'a', newline='')
-              row = ['choosenHeaders','idHeaderName','latHeaderName','lngHeaderName','heightHeaderName','timestampHeaderName','useDefault']
-              writer = csv.DictWriter(csv_file
-                                    ,fieldnames=row
-                                    )
-              writer.writeheader()
-              row2=[self.choosenHeaders,self.idHeaderName,self.latHeaderName,self.lngHeaderName,self.heightHeaderName,self.timestampHeaderName,self.useDefault]
-              dictRow=dict(zip(row , row2))
-              writer.writerow(dictRow)
+#          if (os.path.isfile(filePath)):#there is already a config file
+#              csv_file=open(filePath,  'w', newline='')
+#              row = ['choosenHeaders','idHeaderName','latHeaderName','lngHeaderName','heightHeaderName','timestampHeaderName','useDefault']
+#              writer = csv.DictWriter(csv_file
+#                                    ,fieldnames=row
+#                                    )
+#              row2=[self.choosenHeaders,self.idHeaderName,self.latHeaderName,self.lngHeaderName,self.heightHeaderName,self.timestampHeaderName,self.useDefault]
+#              dictRow=dict(zip(row , row2))
+#              writer.writerow(dictRow)
+#          else:
+          csv_file=open(filePath,  'w', newline='')
+          row = ['choosenHeaders','idHeaderName','latHeaderName','lngHeaderName','heightHeaderName','timestampHeaderName','useDefault']
+          writer = csv.DictWriter(csv_file
+                              ,fieldnames=row
+                              )
+          writer.writeheader()
+          row2=[self.choosenHeaders,self.idHeaderName,self.latHeaderName,self.lngHeaderName,self.heightHeaderName,self.timestampHeaderName,self.useDefault]
+          dictRow=dict(zip(row , row2))
+          writer.writerow(dictRow)
       def updateLastInfo(self):
           import os
           import pandas as pd

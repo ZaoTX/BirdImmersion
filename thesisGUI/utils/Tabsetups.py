@@ -145,8 +145,24 @@ def updateTab2(tab,d,mainGui):
                 launch.pSetups.clearInfo()
                 print("deselected")
       checkBtn.bind("<ButtonPress>",useDefault)
+      checkBtn.place(relx = 0.75, rely = 0.8)
+      #setup checkbox to restore last configuration
+      var2=tk.BooleanVar()
+      checkBtn2=ttk.Checkbutton(tab, text="Restore Last Configuration", variable=var2)
       
-      checkBtn.place(relx = 0.8, rely = 0.8)
+      def useLast(event):
+           
+            import launch
+            #the user use the default headers and the headers they selected
+            if(not var2.get()):
+                launch.pSetups.updateLastInfo()
+                print("Use last info")
+            else:
+                launch.pSetups.clearInfo()
+                print("deselected")
+      checkBtn2.bind("<ButtonPress>",useLast)
+      checkBtn2.place(relx = 0.75, rely = 0.7)
+      
       #confirm button
       btn1 = ttk.Button(tab, text ='Confirm', command = lambda:confirm()) 
       btn1.place(relx = 0.8, rely = 0.9)
@@ -156,25 +172,25 @@ def updateTab2(tab,d,mainGui):
             values = [str(listbox.get(idx)) for idx in listbox.curselection()]
             
             #get the header according to the user's choose
-            if(not var1.get()):
+            #if(not var1.get()):
                   #the user only use the headers they selected
                   #clear information
-                  launch.pSetups.clearInfo()
-                  launch.pSetups.choosenHeaders=launch.pSetups.choosenHeaders+values
-                  #make value unique
-                  launch.pSetups.choosenHeaders=list(set(launch.pSetups.choosenHeaders))
-                  print (', '.join(launch.pSetups.choosenHeaders))
-            else:
-                  
-                  #the user use the default headers and the headers they selected
-                  launch.pSetups.clearInfo()
-                  launch.pSetups.useDefaultInfo()
-                  launch.pSetups.choosenHeaders= launch.pSetups.choosenHeaders+values
-                  launch.pSetups.choosenHeaders=list(set(launch.pSetups.choosenHeaders))
-                  print (', '.join(launch.pSetups.choosenHeaders))
+            #
+            launch.pSetups.choosenHeaders=launch.pSetups.choosenHeaders+values
+            #make value unique
+            launch.pSetups.choosenHeaders=list(set(launch.pSetups.choosenHeaders))
+            print (', '.join(launch.pSetups.choosenHeaders))
+
             from utils.datafiltering import filtering
             filtering(launch.pSetups.choosenHeaders,launch.d)
             launch.pSetups.storeLastInfo()
+            launch.pSetups.clearInfo()
+            #if user use default
+            if(var1.get()):
+                  launch.pSetups.useDefaultInfo()
+            #if user use Last configuration
+            if(var2.get()):
+                  launch.pSetups.updateLastInfo()
                   
 #setup tab3: 
 #   tab3 includes: selection of mehtods, launch button , 

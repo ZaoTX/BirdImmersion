@@ -1,3 +1,2 @@
 choosenHeaders,idHeaderName,latHeaderName,lngHeaderName,heightHeaderName,timestampHeaderName,useDefault
-"['gps:satellite-count', 'eobs:speed-accuracy-estimate', 'location-lat', 'height-above-ellipsoid', 'location-long', 'individual-local-identifier', 'data-decoding-software', 'timestamp']",individual-local-identifier,location-lat,location-long,height-above-ellipsoid,timestamp,True
-"['gps:satellite-count', 'location-lat', 'height-above-ellipsoid', 'location-long', 'individual-local-identifier', 'timestamp']",individual-local-identifier,location-lat,location-long,height-above-ellipsoid,timestamp,True
+[],,,,,,False
