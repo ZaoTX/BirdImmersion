@@ -22,16 +22,16 @@ def setupTab1(tab):
      ########### Select directory path ###################
      # Label for information
      tab1_TextLabel = ttk.Label(tab, text= "Please select a directory for preprocessing, the output will be saved in this directory")
-     tab1_TextLabel.place(relx = 0.1, rely = 0.1)
+     tab1_TextLabel.place(relx = 0.1, rely = 0.05)
      
      # Button select dataset
      btn1 = ttk.Button(tab, text ='Select directory', command = lambda:open_dir()) 
-     btn1.place(relx = 0.7, rely = 0.2)
+     btn1.place(relx = 0.7, rely = 0.1)
      # Show the directory path
      strPath = tk.StringVar()
      ttk.Entry(tab,textvariable = strPath,
            width=65).place(
-           relx=0.1,rely=0.2,
+           relx=0.1,rely=0.1,
            height=30
            )
      import launch
@@ -49,15 +49,15 @@ def setupTab1(tab):
          except:pass
      ########### Select csv ###################
      tab1_TextLabel2 = ttk.Label(tab, text= "Please select your dataset(csv)")
-     tab1_TextLabel2.place(relx = 0.1, rely = 0.3)
+     tab1_TextLabel2.place(relx = 0.1, rely = 0.2)
      btn2 = ttk.Button(tab, text ='Select file', command = lambda:open_dataset()) 
-     btn2.place(relx = 0.7, rely = 0.4)
+     btn2.place(relx = 0.7, rely = 0.25)
      
      #select a file
      strFname = tk.StringVar()
      ttk.Entry(tab,textvariable = strFname,
                  width=65).place(
-                 relx=0.1,rely=0.4,
+                 relx=0.1,rely=0.25,
                  height=30
                  )
      def open_dataset():
@@ -72,22 +72,95 @@ def setupTab1(tab):
                 try:
                       #setup csv.DictReader, filepath, workdir 
                       setupData(filename,launch.d)
-                      choices=launch.d.headers
-                      multibox.config(values=choices)
+                      choices1=launch.d.headers
+                      multibox1.config(values=choices1)
+                      choices2=launch.d.headers
+                      multibox2.config(values=choices2)
+                      choices3=launch.d.headers
+                      multibox3.config(values=choices3)
+                      choices4=launch.d.headers
+                      multibox4.config(values=choices4)
+                      choices5=launch.d.headers
+                      multibox5.config(values=choices5)
                       
-                except: print('there is something wrong')
+                except: 
+                    print('there is something wrong')
                 updateTab2(launch.main.tab2,launch.d,launch.main)
 
-      ############ short summary#############
-     tab1_TextLabel3 = ttk.Label(tab, text= "The headers of the csv file are: ")
-     tab1_TextLabel3.place(relx = 0.1, rely = 0.5) 
-     choices=[]
-     multibox=ttk.Combobox(tab,values=choices
+      ############ define the headers for important information #############
+     def getHeader1(event):#id
+         idHeader=multibox1.get()
+         import launch
+         launch.pSetups.idHeaderName=idHeader
+         print(launch.pSetups.idHeaderName)
+     def getHeader2(event):#time
+         timeHeader=multibox2.get()
+         import launch
+         launch.pSetups.timestampHeaderName=timeHeader
+         print(launch.pSetups.timestampHeaderName)
+     def getHeader3(event):#lat
+         latHeader=multibox3.get()
+         import launch
+         launch.pSetups.latHeaderName=latHeader
+         print(launch.pSetups.latHeaderName)
+     def getHeader4(event):#lng
+         lngHeader=multibox4.get()
+         import launch
+         launch.pSetups.lngHeaderName=lngHeader
+         print(launch.pSetups.lngHeaderName)
+     def getHeader5(event):#height
+         heightHeader=multibox5.get()
+         import launch
+         launch.pSetups.heightHeaderName=heightHeader
+         print(launch.pSetups.heightHeaderName)
+     tab1_TextLabel3 = ttk.Label(tab, text= "Please define the critical header names below")
+     tab1_TextLabel3.place(relx = 0.3, rely = 0.35) 
+     
+     tab1_TextLabel4 = ttk.Label(tab, text= "Id: ")
+     tab1_TextLabel4.place(relx = 0.1, rely = 0.4) 
+     choices1=[]
+     multibox1=ttk.Combobox(tab,values=choices1
                            ,width=40
                            ,font=12
                            )
-     
-     multibox.place(relx = 0.4, rely = 0.5)   
+     multibox1.place(relx = 0.4, rely = 0.4)  
+     multibox1.bind("<<ComboboxSelected>>", getHeader1)
+     tab1_TextLabel5 = ttk.Label(tab, text= "Timestamp: ")
+     tab1_TextLabel5.place(relx = 0.1, rely = 0.5) 
+     choices2=[]
+     multibox2=ttk.Combobox(tab,values=choices2
+                           ,width=40
+                           ,font=12
+                           )
+     multibox2.place(relx = 0.4, rely = 0.5)
+     multibox2.bind("<<ComboboxSelected>>", getHeader2)
+     tab1_TextLabel6 = ttk.Label(tab, text= "Latitude: ")
+     tab1_TextLabel6.place(relx = 0.1, rely = 0.6) 
+     choices3=[]
+     multibox3=ttk.Combobox(tab,values=choices3
+                           ,width=40
+                           ,font=12
+                           )
+     multibox3.place(relx = 0.4, rely = 0.6)  
+     multibox3.bind("<<ComboboxSelected>>", getHeader3)
+     tab1_TextLabel7 = ttk.Label(tab, text= "Longitude: ")
+     tab1_TextLabel7.place(relx = 0.1, rely = 0.7) 
+     choices4=[]
+     multibox4=ttk.Combobox(tab,values=choices4
+                           ,width=40
+                           ,font=12
+                           )
+     multibox4.place(relx = 0.4, rely = 0.7)  
+     multibox4.bind("<<ComboboxSelected>>", getHeader4)
+     tab1_TextLabel8 = ttk.Label(tab, text= "Height: ")
+     tab1_TextLabel8.place(relx = 0.1, rely = 0.8) 
+     choices5=[]
+     multibox5=ttk.Combobox(tab,values=choices5
+                           ,width=40
+                           ,font=12
+                           )
+     multibox5.place(relx = 0.4, rely = 0.8)  
+     multibox5.bind("<<ComboboxSelected>>", getHeader5)
 #setup tab2: 
 #   tab2 includes: mutiple selection of headers we want to keep, launch button , 
 #   their label to explain the function
@@ -102,9 +175,6 @@ def setupTab2(tab):
       
       
 def updateTab2(tab,d,mainGui):
-      import launch
-      #load the info for last time
-      #launch.pSetups.updateLastInfo()
       
       #clean tab
       for child in tab.winfo_children():
@@ -133,11 +203,7 @@ def updateTab2(tab,d,mainGui):
        #setup checkbox for default setting
       var1=tk.BooleanVar()
       checkBtn=ttk.Checkbutton(tab, text="Use Default", variable=var1)
-      # once we clean the info by deselecting options,
-      # we want to keep the headers user selected
-      def recoverInfo():
-          values= [str(listbox.get(idx)) for idx in listbox.curselection()]
-          launch.pSetups.choosenHeaders=launch.pSetups.choosenHeaders+values
+      
       def useDefault(event):
             import launch
             #the user use the default headers and the headers they selected
@@ -165,7 +231,8 @@ def updateTab2(tab,d,mainGui):
       #confirm button
       btn1 = ttk.Button(tab, text ='Confirm', command = lambda:confirm()) 
       btn1.place(relx = 0.8, rely = 0.9)
-      
+      #once the update is done jump to new tab
+      mainGui.tabNotebook.select(mainGui.tab7)
       def confirm():
             import launch
             values = [str(listbox.get(idx)) for idx in listbox.curselection()]
@@ -176,9 +243,6 @@ def updateTab2(tab,d,mainGui):
             if(var2.get()):
                   launch.pSetups.updateLastInfo()
             #get the header according to the user's choose
-            #if(not var1.get()):
-                  #the user only use the headers they selected
-                  #clear information#
             launch.pSetups.choosenHeaders=launch.pSetups.choosenHeaders+values
             #make value unique
             launch.pSetups.choosenHeaders=list(set(launch.pSetups.choosenHeaders))
@@ -467,16 +531,44 @@ def setupTab5(tab):
 def setupTab6(tab):
     tab6_TextLabel1 = ttk.Label(tab, text= "Summary of Sampling", font='bold')
     tab6_TextLabel1.place(relx = 0.35, rely = 0.05)
+    tab6_TextLabel2 = ttk.Label(tab, text= "Compression Ratio")
+    tab6_TextLabel2.place(relx = 0.1, rely = 0.15)
     
 def updateTab6(tab,d,mainGui):
-      #clean tab
-      for child in tab.winfo_children():
-           child.destroy()
-      #s = ttk.Style()
-      #bg = s.lookup('TFrame', 'background')
-      tab6_TextLabel1 = ttk.Label(tab, text= "Summary of Sampling", font='bold')
-      tab6_TextLabel1.place(relx = 0.35, rely = 0.05)
+      
+     
       #Update the compression ratio
-      tab6_TextLabel2 = ttk.Label(tab, text= "Compression Ratio")
-      tab6_TextLabel2.place(relx = 0.1, rely = 0.15)
+      
       pass
+def UpdateMultiBox_Tab7(tab,d,mainGui):
+    
+    tab7_TextLabel3 = ttk.Label(tab, text= "The number of datapoints: ")
+    tab7_TextLabel3.place(relx = 0.4, rely = 0.25)
+    tab7_TextLabel4 = ttk.Label(tab, text= "Start Coordinate: ")
+    tab7_TextLabel4.place(relx = 0.4, rely = 0.35)
+    tab7_TextLabel5 = ttk.Label(tab, text= "End Coordinate: ")
+    tab7_TextLabel5.place(relx = 0.4, rely = 0.45)
+    pass
+#give a short report about the dataset 
+#and hint the user which algorithm to use 
+def setupTab7(tab):
+    tab7_TextLabel1 = ttk.Label(tab, text= "Data Report", font='bold')
+    tab7_TextLabel1.place(relx = 0.35, rely = 0.05)
+    tab7_TextLabel2 = ttk.Label(tab, text= "Please select an individual")
+    tab7_TextLabel2.place(relx = 0.1, rely = 0.15)
+    choices=[]
+    multibox=ttk.Combobox(tab,values=choices
+                           ,width=40
+                           ,font=12
+                           )
+     
+    multibox.place(relx = 0.4, rely = 0.15)
+    tab7_TextLabel3 = ttk.Label(tab, text= "The number of datapoints: ")
+    tab7_TextLabel3.place(relx = 0.1, rely = 0.25)
+    tab7_TextLabel4 = ttk.Label(tab, text= "Start Coordinate: ")
+    tab7_TextLabel4.place(relx = 0.1, rely = 0.35)
+    tab7_TextLabel5 = ttk.Label(tab, text= "End Coordinate: ")
+    tab7_TextLabel5.place(relx = 0.1, rely = 0.45)
+    tab7_TextLabel5 = ttk.Label(tab, text= "The number of missing values: ")
+    tab7_TextLabel5.place(relx = 0.1, rely = 0.55)
+    

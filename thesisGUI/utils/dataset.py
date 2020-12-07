@@ -17,3 +17,7 @@ class dataInfo:
             self.headers=headers
             self.individuals=individuals
             self.compressionRatio=0
+            self.timeLists=[]
+            self.heightLists=[]
+            self.latLists=[]
+            self.lngLists=[]
