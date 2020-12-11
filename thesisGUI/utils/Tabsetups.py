@@ -26,7 +26,7 @@ def setupTab1(tab):
      
      # Button select dataset
      btn1 = ttk.Button(tab, text ='Select directory', command = lambda:open_dir()) 
-     btn1.place(relx = 0.7, rely = 0.1)
+     btn1.place(relx = 0.8, rely = 0.1)
      # Show the directory path
      strPath = tk.StringVar()
      ttk.Entry(tab,textvariable = strPath,
@@ -51,7 +51,7 @@ def setupTab1(tab):
      tab1_TextLabel2 = ttk.Label(tab, text= "Please select your dataset(csv)")
      tab1_TextLabel2.place(relx = 0.1, rely = 0.2)
      btn2 = ttk.Button(tab, text ='Select file', command = lambda:open_dataset()) 
-     btn2.place(relx = 0.7, rely = 0.25)
+     btn2.place(relx = 0.8, rely = 0.25)
      
      #select a file
      strFname = tk.StringVar()
@@ -161,6 +161,15 @@ def setupTab1(tab):
                            )
      multibox5.place(relx = 0.4, rely = 0.8)  
      multibox5.bind("<<ComboboxSelected>>", getHeader5)
+     def confirmSelection():
+         from utils.DataReport import getIndividualNum
+         from launch import d,pSetups,main
+         getIndividualNum(d,pSetups)
+         setupTab7(main.tab7)
+         main.tabNotebook.select(main.tab7)
+     #confirm Button
+     btn3 = ttk.Button(tab, text ='Confirm', command = lambda:confirmSelection()) 
+     btn3.place(relx = 0.8, rely = 0.9)
 #setup tab2: 
 #   tab2 includes: mutiple selection of headers we want to keep, launch button , 
 #   their label to explain the function
@@ -232,7 +241,7 @@ def updateTab2(tab,d,mainGui):
       btn1 = ttk.Button(tab, text ='Confirm', command = lambda:confirm()) 
       btn1.place(relx = 0.8, rely = 0.9)
       #once the update is done jump to new tab
-      mainGui.tabNotebook.select(mainGui.tab7)
+      #
       def confirm():
             import launch
             values = [str(listbox.get(idx)) for idx in listbox.curselection()]
@@ -533,14 +542,15 @@ def setupTab6(tab):
     tab6_TextLabel1.place(relx = 0.35, rely = 0.05)
     tab6_TextLabel2 = ttk.Label(tab, text= "Compression Ratio")
     tab6_TextLabel2.place(relx = 0.1, rely = 0.15)
-    
+# Once the sampling is done, Show User the compression ratio, 
+# the average of SED 
 def updateTab6(tab,d,mainGui):
       
      
       #Update the compression ratio
       
       pass
-def UpdateMultiBox_Tab7(tab,d,mainGui):
+def UpdateInfo_Tab7(tab,d,mainGui):
     
     tab7_TextLabel3 = ttk.Label(tab, text= "The number of datapoints: ")
     tab7_TextLabel3.place(relx = 0.4, rely = 0.25)
@@ -549,14 +559,16 @@ def UpdateMultiBox_Tab7(tab,d,mainGui):
     tab7_TextLabel5 = ttk.Label(tab, text= "End Coordinate: ")
     tab7_TextLabel5.place(relx = 0.4, rely = 0.45)
     pass
+    
 #give a short report about the dataset 
 #and hint the user which algorithm to use 
 def setupTab7(tab):
+    import launch
     tab7_TextLabel1 = ttk.Label(tab, text= "Data Report", font='bold')
     tab7_TextLabel1.place(relx = 0.35, rely = 0.05)
     tab7_TextLabel2 = ttk.Label(tab, text= "Please select an individual")
     tab7_TextLabel2.place(relx = 0.1, rely = 0.15)
-    choices=[]
+    choices=launch.d.individuals
     multibox=ttk.Combobox(tab,values=choices
                            ,width=40
                            ,font=12

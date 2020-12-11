@@ -16,7 +16,8 @@ class dataInfo:
             #self.csv_file=csv.DictReader(self.filepath)
             self.headers=headers
             self.individuals=individuals
-            self.compressionRatio=0
+            self.originalNumOfLines=0
+            #list of lists
             self.timeLists=[]
             self.heightLists=[]
             self.latLists=[]
