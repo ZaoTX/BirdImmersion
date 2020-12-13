@@ -681,7 +681,7 @@ MonoBehaviour:
   _options:
     locationOptions:
       latitudeLongitude: 
-      zoom: 10.41
+      zoom: 14.48
     extentOptions:
       extentType: 1
       defaultExtents:
@@ -1876,8 +1876,8 @@ MonoBehaviour:
   spawn_Bird: {fileID: 932783778}
   map: {fileID: 932783774}
   line_Gen: {fileID: 1188112308}
-  birdScale: 220
-  lineScale: 50
+  birdScale: 20
+  lineScale: 5
   reader: {fileID: 1807412916}
   IDs: []
   restart: 0

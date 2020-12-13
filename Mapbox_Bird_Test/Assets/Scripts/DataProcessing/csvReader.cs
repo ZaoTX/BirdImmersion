@@ -13,7 +13,7 @@ public class csvReader : MonoBehaviour
     //public string path = "C:\\Users\\ZiyaoHe\\Documents\\BirdImmersive\\white storks\\Blacky\\Blacky.csv";
     // Start is called before the first frame update
     string last_id;
-    string id_name = "fake3";//ThangKhaar4
+    string id_name = "TDSP_sample_3.0MProS";//ThangKhaar4
     void Start()
     {
         last_id = null;
