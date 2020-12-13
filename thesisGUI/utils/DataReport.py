@@ -65,5 +65,8 @@ def getIndividualNum(d,p):
     d.lngLists=lngLists
 #show information of this individual
 def preAnalysis(idName,d,p):
+    #find individual list
     
+    #get the index of give individual
+    ind=
     pass
