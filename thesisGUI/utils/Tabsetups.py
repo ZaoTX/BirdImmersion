@@ -550,14 +550,9 @@ def updateTab6(tab,d,mainGui):
       #Update the compression ratio
       
       pass
-def UpdateInfo_Tab7(tab,d,mainGui):
+def UpdateInfo_Tab7(tab,iB):
     
-    tab7_TextLabel3 = ttk.Label(tab, text= "The number of datapoints: ")
-    tab7_TextLabel3.place(relx = 0.4, rely = 0.25)
-    tab7_TextLabel4 = ttk.Label(tab, text= "Start Coordinate: ")
-    tab7_TextLabel4.place(relx = 0.4, rely = 0.35)
-    tab7_TextLabel5 = ttk.Label(tab, text= "End Coordinate: ")
-    tab7_TextLabel5.place(relx = 0.4, rely = 0.45)
+    
     pass
     
 #give a short report about the dataset 
@@ -575,12 +570,44 @@ def setupTab7(tab):
                            )
      
     multibox.place(relx = 0.4, rely = 0.15)
+    #############Answer Area###############
+    tab7_TextLabel31 = ttk.Label(tab, text='' )
+    tab7_TextLabel31.place(relx = 0.4, rely = 0.25)
+    tab7_TextLabel41 = ttk.Label(tab, text= '')
+    tab7_TextLabel41.place(relx = 0.4, rely = 0.35)
+    tab7_TextLabel51 = ttk.Label(tab, text= '')
+    tab7_TextLabel51.place(relx = 0.4, rely = 0.45)
+    tab7_TextLabel61 = ttk.Label(tab, text= '')
+    tab7_TextLabel61.place(relx = 0.4, rely = 0.55)
+    tab7_TextLabel71 = ttk.Label(tab, text= '')
+    tab7_TextLabel71.place(relx = 0.4, rely = 0.65)
+    tab7_TextLabel81 = ttk.Label(tab, text= '')
+    tab7_TextLabel81.place(relx = 0.4, rely = 0.75)
+    #show the information of selected ID
+    def showIdInfo(event):
+          idName=multibox.get()
+          from utils.DataReport import preAnalysis
+          preAnalysis(idName,launch.d,launch.iB)
+          #setup texts:
+          tab7_TextLabel31.config(text=launch.iB.numOfDatapoints)
+          tab7_TextLabel41.config(text= launch.iB.missingvalue)
+          tab7_TextLabel51.config(text= launch.iB.startPos)
+          tab7_TextLabel61.config(text= launch.iB.endPos)
+          tab7_TextLabel71.config(text= launch.iB.startTime)
+          tab7_TextLabel81.config(text= launch.iB.endTime)
+    multibox.bind("<<ComboboxSelected>>", showIdInfo)
     tab7_TextLabel3 = ttk.Label(tab, text= "The number of datapoints: ")
     tab7_TextLabel3.place(relx = 0.1, rely = 0.25)
-    tab7_TextLabel4 = ttk.Label(tab, text= "Start Coordinate: ")
+    tab7_TextLabel4 = ttk.Label(tab, text= "The number of missing values: ")
     tab7_TextLabel4.place(relx = 0.1, rely = 0.35)
-    tab7_TextLabel5 = ttk.Label(tab, text= "End Coordinate: ")
+    tab7_TextLabel5 = ttk.Label(tab, text= "Start Coordinate: ")
     tab7_TextLabel5.place(relx = 0.1, rely = 0.45)
-    tab7_TextLabel5 = ttk.Label(tab, text= "The number of missing values: ")
-    tab7_TextLabel5.place(relx = 0.1, rely = 0.55)
+    tab7_TextLabel6 = ttk.Label(tab, text= "End Coordinate: ")
+    tab7_TextLabel6.place(relx = 0.1, rely = 0.55)
+    tab7_TextLabel7 = ttk.Label(tab, text= "Start TimeStamp: ")
+    tab7_TextLabel7.place(relx = 0.1, rely = 0.65)
+    tab7_TextLabel8 = ttk.Label(tab, text= "End TimeStamp: ")
+    tab7_TextLabel8.place(relx = 0.1, rely = 0.75)
+    
+    
     

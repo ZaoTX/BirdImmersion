@@ -64,9 +64,72 @@ def getIndividualNum(d,p):
     d.latLists=latLists
     d.lngLists=lngLists
 #show information of this individual
-def preAnalysis(idName,d,p):
+def preAnalysis(idName,d,iB):
     #find individual list
-    
+    IDList=d.individuals
+    timeLists=d.TimeLists
+    heightLists=d.heightLists
+    latLists=d.latLists
+    lngLists=d.lngLists
     #get the index of give individual
-    ind=
-    pass
+    ind=IDList.index(idName)
+    timeList=timeLists[ind]
+    heightList=heightLists[ind]
+    latList=latLists[ind]
+    lngList=lngLists[ind]
+    #get the whole number of datapoints
+    iB.setDataPoints(len(timeList))
+    #get the number of rows with missing values
+    missingHeight=heightList.count('')
+    missingLat=latList.count('')
+    missingLng=lngList.count('')
+    num_Missing=max(missingHeight,missingLat,missingLng)
+    iB.setMissing(num_Missing)
+    #get start lat lng height
+    #get the first non-empty value of the list
+    Lats=list(filter(lambda a: a != '', latList))
+    Lngs=list(filter(lambda a: a != '', lngList))
+    Heights=list(filter(lambda a: a != '', heightList))
+    s_lat=''
+    s_height=''
+    s_lng=''
+    e_lat=''
+    e_lng=''
+    e_height=''
+    
+    
+    slat_id=0
+    slng_id=0
+    sh_id=0
+    elat_id=0
+    elng_id=0
+    eh_id=0
+    if(len(Lats)!=0):
+          s_lat=Lats[0]
+          e_lat=Lats[-1]
+          slat_id=latList.index(s_lat)
+          elat_id=latList.index(e_lat)
+    if(len(Lngs)!=0):
+          s_lng=Lngs[0]
+          e_lng=Lngs[-1]
+          slng_id=lngList.index(s_lng)
+          elng_id=lngList.index(e_lng)
+    if(len(Heights)!=0):
+          s_height=Heights[0]
+          e_height=Heights[-1]
+          sh_id=heightList.index(s_height)
+          eh_id=heightList.index(e_height)
+    #get max of start id
+    start_id=max(slat_id,slng_id,sh_id)
+    end_id=max(elat_id,elng_id,eh_id)
+    startPos='(lat={0},lng={1},height={2})'.format(s_lat,s_lng,s_height)
+    endPos='(lat={0},lng={1},height={2})'.format(e_lat,e_lng,e_height)
+    #set start and end pos
+    iB.setStartPos(startPos)
+    iB.setEndPos(endPos)
+    #get Start and end timestamp
+    startTime=timeList[start_id]
+    endTime=timeList[end_id]
+    iB.setStartTime(startTime)
+    iB.setEndTime(endTime)
+    
