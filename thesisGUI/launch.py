@@ -10,9 +10,10 @@ from utils.dataset import dataInfo
 from utils.processingSetups  import processingSetups
 from utils.infoBuffer import infoBuffer
 
+
+iB=infoBuffer()
 pSetups=processingSetups()
 d=dataInfo('','',[],[])
-iB=infoBuffer()
 main=MainGUI()
 main.root.mainloop()
 

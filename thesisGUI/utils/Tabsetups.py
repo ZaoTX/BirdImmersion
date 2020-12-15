@@ -85,33 +85,38 @@ def setupTab1(tab):
                       
                 except: 
                     print('there is something wrong')
-                updateTab2(launch.main.tab2,launch.d,launch.main)
+                updateTab2(launch.main.tab2,launch.d)
 
       ############ define the headers for important information #############
      def getHeader1(event):#id
          idHeader=multibox1.get()
          import launch
          launch.pSetups.idHeaderName=idHeader
+         launch.iB.idHeaderName=idHeader
          print(launch.pSetups.idHeaderName)
      def getHeader2(event):#time
          timeHeader=multibox2.get()
          import launch
          launch.pSetups.timestampHeaderName=timeHeader
+         launch.iB.timestampHeaderName=timeHeader
          print(launch.pSetups.timestampHeaderName)
      def getHeader3(event):#lat
          latHeader=multibox3.get()
          import launch
          launch.pSetups.latHeaderName=latHeader
+         launch.iB.latHeaderName=latHeader
          print(launch.pSetups.latHeaderName)
      def getHeader4(event):#lng
          lngHeader=multibox4.get()
          import launch
          launch.pSetups.lngHeaderName=lngHeader
+         launch.iB.lngHeaderName=lngHeader
          print(launch.pSetups.lngHeaderName)
      def getHeader5(event):#height
          heightHeader=multibox5.get()
          import launch
          launch.pSetups.heightHeaderName=heightHeader
+         launch.iB.heightHeaderName=heightHeader
          print(launch.pSetups.heightHeaderName)
      tab1_TextLabel3 = ttk.Label(tab, text= "Please define the critical header names below")
      tab1_TextLabel3.place(relx = 0.3, rely = 0.35) 
@@ -183,7 +188,7 @@ def setupTab2(tab):
       tab2_TextLabel1.place(relx = 0.1, rely = 0.1)
       
       
-def updateTab2(tab,d,mainGui):
+def updateTab2(tab,d):
       
       #clean tab
       for child in tab.winfo_children():
@@ -219,8 +224,8 @@ def updateTab2(tab,d,mainGui):
             if(not var1.get()):
                 launch.pSetups.useDefaultInfo()
                 print("Use default info")
-            
-                
+            else:
+                launch.pSetups.cleanDefaultInfo()
       checkBtn.bind("<ButtonPress>",useDefault)
       checkBtn.place(relx = 0.75, rely = 0.8)
       #setup checkbox to restore last configuration
@@ -233,7 +238,8 @@ def updateTab2(tab,d,mainGui):
             if(not var2.get()):
                 launch.pSetups.updateLastInfo()
                 print("Use last info")
-            
+            else:
+                launch.pSetups.cleanLasttInfo()
       checkBtn2.bind("<ButtonPress>",useLast)
       checkBtn2.place(relx = 0.75, rely = 0.7)
       
@@ -244,23 +250,19 @@ def updateTab2(tab,d,mainGui):
       #
       def confirm():
             import launch
+            iB=launch.iB
             values = [str(listbox.get(idx)) for idx in listbox.curselection()]
-            #if user use default
-            if(var1.get()):
-                  launch.pSetups.useDefaultInfo()
-            #if user use Last configuration
-            if(var2.get()):
-                  launch.pSetups.updateLastInfo()
-            #get the header according to the user's choose
+
             launch.pSetups.choosenHeaders=launch.pSetups.choosenHeaders+values
             #make value unique
             launch.pSetups.choosenHeaders=list(set(launch.pSetups.choosenHeaders))
+            launch.pSetups.setBasicInfo(iB.idHeaderName,iB.latHeaderName,iB.lngHeaderName,iB.heightHeaderName,iB.timestampHeaderName)
             print (', '.join(launch.pSetups.choosenHeaders))
 
             from utils.datafiltering import filtering
             filtering(launch.pSetups.choosenHeaders,launch.d)
             launch.pSetups.storeLastInfo()
-            launch.pSetups.clearInfo()
+            
             
                   
 #setup tab3: 
@@ -516,24 +518,24 @@ def setupTab5(tab):
          if(choice=='Average Sampling'):
              n=int(entry.get())
              from utils.sampling import averageSampling
-             averageSampling(launch.d,launch.pSetups,n)
-             
+             averageSampling(launch.d,launch.pSetups,n,launch.iB)
          elif(choice == 'Douglas Peucker Sampling'):
              epsilon=float(entry.get())
              from utils.sampling import Douglas
-             Douglas(launch.d,launch.pSetups,epsilon)
+             Douglas(launch.d,launch.pSetups,epsilon,launch.iB)
          elif(choice == 'TD_TR'):
              epsilon=float(entry.get())
              from utils.sampling import TD_TR
-             TD_TR(launch.d,launch.pSetups,epsilon)
+             TD_TR(launch.d,launch.pSetups,epsilon,launch.iB)
          elif(choice == 'TD_SP'):
              epsilon=float(entry.get())
              from utils.sampling import TD_SP
-             TD_SP(launch.d,launch.pSetups,epsilon)
+             TD_SP(launch.d,launch.pSetups,epsilon,launch.iB)
          elif(choice == 'SQUISH'):
              epsilon=float(entry.get())
              from utils.sampling import SQUISH
-             SQUISH(launch.d,launch.pSetups,epsilon)
+             SQUISH(launch.d,launch.pSetups,epsilon,launch.iB)
+         updateTab6(launch.main.tab6,launch.d,launch.iB)
 # summarize of sampling:
 # 1. The Compression ratio
 # 2. Average synchronized Euclidean distance
@@ -542,18 +544,23 @@ def setupTab6(tab):
     tab6_TextLabel1.place(relx = 0.35, rely = 0.05)
     tab6_TextLabel2 = ttk.Label(tab, text= "Compression Ratio")
     tab6_TextLabel2.place(relx = 0.1, rely = 0.15)
+    
 # Once the sampling is done, Show User the compression ratio, 
 # the average of SED 
-def updateTab6(tab,d,mainGui):
+def updateTab6(tab,d,iB):
       
-     
-      #Update the compression ratio
-      
-      pass
-def UpdateInfo_Tab7(tab,iB):
+    #clean tab
+    for child in tab.winfo_children():
+       child.destroy()
+    tab6_TextLabel1 = ttk.Label(tab, text= "Summary of Sampling", font='bold')
+    tab6_TextLabel1.place(relx = 0.35, rely = 0.05)
+    tab6_TextLabel2 = ttk.Label(tab, text= "Compression Ratio")
+    tab6_TextLabel2.place(relx = 0.1, rely = 0.15)
+    compressionratio=str(iB.compressionratio)+'%'
+    tab6_TextLabel21 = ttk.Label(tab, text= compressionratio)
+    tab6_TextLabel21.place(relx = 0.4, rely = 0.15)
     
-    
-    pass
+
     
 #give a short report about the dataset 
 #and hint the user which algorithm to use 

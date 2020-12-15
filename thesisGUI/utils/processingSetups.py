@@ -15,14 +15,23 @@ class processingSetups:
             self.timestampHeaderName=''
             self.useDefault=False
       def useDefaultInfo(self):
-            self.choosenHeaders=['individual-local-identifier','location-lat','location-long','height-above-ellipsoid','timestamp']
+            self.choosenHeaders=list(set(self.choosenHeaders+['individual-local-identifier','location-lat','location-long','height-above-ellipsoid','timestamp']))
             self.idHeaderName= 'individual-local-identifier'
             self.latHeaderName='location-lat'
             self.lngHeaderName='location-long'
             self.heightHeaderName='height-above-ellipsoid'
             self.timestampHeaderName='timestamp'
             self.useDefault=True
-      def clearInfo(self):
+      def cleanDefaultInfo(self):
+            for ele in ['individual-local-identifier','location-lat','location-long','height-above-ellipsoid','timestamp']:
+                self.choosenHeaders.remove(ele)
+            self.idHeaderName=self.idHeaderName
+            self.latHeaderName=self.latHeaderName
+            self.lngHeaderName=self.lngHeaderName
+            self.heightHeaderName=self.heightHeaderName
+            self.timestampHeaderName=self.timestampHeaderName
+            self.useDefault=False
+      def cleanLasttInfo(self):
             self.choosenHeaders=[]
             self.idHeaderName=''
             self.latHeaderName=''
@@ -52,6 +61,8 @@ class processingSetups:
           row2=[self.choosenHeaders,self.idHeaderName,self.latHeaderName,self.lngHeaderName,self.heightHeaderName,self.timestampHeaderName,self.useDefault]
           dictRow=dict(zip(row , row2))
           writer.writerow(dictRow)
+      
+          
       def updateLastInfo(self):
           import os
           import pandas as pd

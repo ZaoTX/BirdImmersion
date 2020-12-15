@@ -6,11 +6,12 @@ Created on Fri Nov  6 20:25:52 2020
 """
 import os
 import csv
+
 '''
  from the first row of the same individual, 
  it takes for each n line and store into new csv
 '''
-def averageSampling(d,p,n):
+def averageSampling(d,p,n,iB):
       
     #d:launch.d, p: launch.pSetups, n: sample for each n points
     base_dir = d.workdir
@@ -43,6 +44,8 @@ def averageSampling(d,p,n):
                 writer.writerow(row)
             
         last_id=cur_id
+    #record compression ratio
+    iB.compressionratio=(1-(iB.numOfDatapoints % n)/iB.numOfDatapoints)*100
 '''
 Douglas peucker sampling:
   1.Find the first point A and last point B of the whole trajectory 
@@ -51,7 +54,7 @@ Douglas peucker sampling:
     Else Do the same thing to line AC and BC
   O(n^2)
 '''
-def Douglas(d,p,epsilon):
+def Douglas(d,p,epsilon,iB):
     import math
     import pandas as pd
     def d_2points(lat1,lng1,h1,lat2,lng2,h2):
@@ -211,8 +214,10 @@ def Douglas(d,p,epsilon):
            )
     df=df.drop_duplicates(keep='first')
     df.to_csv(outpath+'/'+'douglas_sample_'+str(epsilon)+'meters.csv',index=False,header=True,mode='a')
+    #record compression ratio
+    iB.compressionratio=(1-len(df)/iB.numOfDatapoints)*100
 #a top-down time-ratio algorithm based on DP
-def TD_TR(d,p,dist_threshold):
+def TD_TR(d,p,dist_threshold,iB):
     import math
     import pandas as pd
     def d_2points(lat1,lng1,h1,lat2,lng2,h2):
@@ -383,8 +388,11 @@ def TD_TR(d,p,dist_threshold):
            )
     df=df.drop_duplicates(keep='first')
     df.to_csv(resultCSV,index=False,header=True,mode='a')
+    
+    #record compression ratio
+    iB.compressionratio=(1-len(df)/iB.numOfDatapoints)*100
 #a top-down time-ratio algorithm based on DP
-def TD_SP(d,p,speed_threshold):
+def TD_SP(d,p,speed_threshold,iB):
     import math
     import pandas as pd
     def d_2points(lat1,lng1,h1,lat2,lng2,h2):
@@ -566,7 +574,9 @@ def TD_SP(d,p,speed_threshold):
            )
     df=df.drop_duplicates(keep='first')
     df.to_csv(resultCSV,index=False,header=True,mode='a')
-def  SQUISH(d,p,size):
+    #record compression ratio
+    iB.compressionratio=(1-len(df)/iB.numOfDatapoints)*100
+def  SQUISH(d,p,size,iB):
     import pandas as pd
     # synchronized Euclidean distance
     # used to estimate the importance of one point in the trajectory
@@ -751,3 +761,9 @@ def  SQUISH(d,p,size):
            )
     df=df.drop_duplicates(keep='first')
     df.to_csv(resultCSV,index=False,header=True,mode='a')
+    #record compression ratio
+    if(size>=iB.numOfDatapoints):
+        iB.compressionratio=0
+    else:
+        iB.compressionratio=(1-size/iB.numOfDatapoints)*100
+    
