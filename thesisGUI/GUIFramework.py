@@ -43,9 +43,10 @@ class MainGUI:
                  setupTab6(self.tab6)
                  #setup tab7
                  #Tab7 will setup once the user select their datafile and the headers
+                 # See utils.Tabsetups updateTab6
                  #setupTab7(self.tab7)
                  
-                 self.tabNotebook.add(self.tab1, text = "Select Your Dataset")
+                 self.tabNotebook.add(self.tab1, text = "Select Dataset")
                  self.tabNotebook.add(self.tab2, text = "Data Filtering")
                  self.tabNotebook.add(self.tab3, text = "Split Dataset")
                  self.tabNotebook.add(self.tab4, text = "Clean Data")

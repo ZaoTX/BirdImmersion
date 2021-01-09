@@ -58,7 +58,15 @@ public class interactionSettings : MonoBehaviour
             lineGen.needUpdate = true;
             needUpdate = false;
         }
-        
+        if (change !=false) {
+            count++;
+
+            if (count >= Model_List.Count)
+            {
+                count = 0;
+            }
+            change = false;
+        }
     }
     void fadeOutText() {
         Color tmpcolor = Color.black;

@@ -13,7 +13,7 @@ public class csvReader : MonoBehaviour
     //public string path = "C:\\Users\\ZiyaoHe\\Documents\\BirdImmersive\\white storks\\Blacky\\Blacky.csv";
     // Start is called before the first frame update
     string last_id;
-    string id_name = "TDSP_sample_3.0MProS";//ThangKhaar4
+    string id_name = "TDTR_sample_5.0meters";//ThangKhaar4
     void Start()
     {
         last_id = null;
@@ -44,7 +44,7 @@ public class csvReader : MonoBehaviour
             if (last_id!=null&&cur_id != last_id)
             {
                 if (row.Length == 5)
-                {//Debug.Log("works1111");
+                {
                  //store the last individualBehavior
                     gp.individualBehaviors.Add(individualBehaviors);
                     //create a new InidividualBehavior to store the data
@@ -58,6 +58,7 @@ public class csvReader : MonoBehaviour
                     individual.lat = row[3];
                     float.TryParse(row[4], out individual.height);
                     //Debug.Log(individual.height);
+                    //individual.height = individual.height - 1000;
                     if (individual.height < 0)
                     {
                         individual.height = 0;
@@ -72,7 +73,6 @@ public class csvReader : MonoBehaviour
             else
             {
                 if (row.Length == 5) {
-                    //Debug.Log("works2222");
                     //that include 2 possiblities: last id= null(initial) or the id doesn't change
                     //We just store the id into individualBehaviors
                     //store to individual typ
@@ -83,6 +83,7 @@ public class csvReader : MonoBehaviour
                     individual.lng = row[2];
                     individual.lat = row[3];
                     float.TryParse(row[4], out individual.height);
+                    //individual.height = individual.height - 1000;
                     if (individual.height < 0)
                     {
 

@@ -92,30 +92,40 @@ def setupTab1(tab):
          idHeader=multibox1.get()
          import launch
          launch.pSetups.idHeaderName=idHeader
+         if idHeader not in launch.pSetups.choosenHeaders:
+             launch.pSetups.choosenHeaders.append(idHeader)
          launch.iB.idHeaderName=idHeader
          print(launch.pSetups.idHeaderName)
      def getHeader2(event):#time
          timeHeader=multibox2.get()
          import launch
          launch.pSetups.timestampHeaderName=timeHeader
+         if timeHeader not in launch.pSetups.choosenHeaders:
+             launch.pSetups.choosenHeaders.append(timeHeader)
          launch.iB.timestampHeaderName=timeHeader
          print(launch.pSetups.timestampHeaderName)
      def getHeader3(event):#lat
          latHeader=multibox3.get()
          import launch
          launch.pSetups.latHeaderName=latHeader
+         if latHeader not in launch.pSetups.choosenHeaders:
+             launch.pSetups.choosenHeaders.append(latHeader)
          launch.iB.latHeaderName=latHeader
          print(launch.pSetups.latHeaderName)
      def getHeader4(event):#lng
          lngHeader=multibox4.get()
          import launch
          launch.pSetups.lngHeaderName=lngHeader
+         if lngHeader not in launch.pSetups.choosenHeaders:
+             launch.pSetups.choosenHeaders.append(lngHeader)
          launch.iB.lngHeaderName=lngHeader
          print(launch.pSetups.lngHeaderName)
      def getHeader5(event):#height
          heightHeader=multibox5.get()
          import launch
          launch.pSetups.heightHeaderName=heightHeader
+         if heightHeader not in launch.pSetups.choosenHeaders:
+             launch.pSetups.choosenHeaders.append(heightHeader)
          launch.iB.heightHeaderName=heightHeader
          print(launch.pSetups.heightHeaderName)
      tab1_TextLabel3 = ttk.Label(tab, text= "Please define the critical header names below")
@@ -173,7 +183,7 @@ def setupTab1(tab):
          setupTab7(main.tab7)
          main.tabNotebook.select(main.tab7)
      #confirm Button
-     btn3 = ttk.Button(tab, text ='Confirm', command = lambda:confirmSelection()) 
+     btn3 = ttk.Button(tab, text ='Preanalysis', command = lambda:confirmSelection()) 
      btn3.place(relx = 0.8, rely = 0.9)
 #setup tab2: 
 #   tab2 includes: mutiple selection of headers we want to keep, launch button , 
@@ -217,15 +227,37 @@ def updateTab2(tab,d):
        #setup checkbox for default setting
       var1=tk.BooleanVar()
       checkBtn=ttk.Checkbutton(tab, text="Use Default", variable=var1)
-      
+      def selectValues(chosen):
+          for c in chosen:
+              #get list index 
+              ind=listbox.get(0, tk.END).index(c)
+              listbox.select_set(ind)
+      def deselectValues(chosen):
+          #get current selections 
+          curSelections=listbox.curselection()
+          #clear all selections
+          listbox.selection_clear(0,tk.END)
+          curSelectionsL=list(curSelections)
+          #select the rest
+          for c in chosen:
+              #get list index 
+              ind=listbox.get(0, tk.END).index(c)
+              curSelectionsL.remove(ind)
+          for s in curSelectionsL:
+              #get list index 
+              listbox.select_set(s)
       def useDefault(event):
             import launch
             #the user use the default headers and the headers they selected
             if(not var1.get()):
                 launch.pSetups.useDefaultInfo()
+                selectValues(launch.pSetups.choosenHeaders)
                 print("Use default info")
             else:
+                
+                deselectValues(launch.pSetups.choosenHeaders)
                 launch.pSetups.cleanDefaultInfo()
+                print("Deselect default info")
       checkBtn.bind("<ButtonPress>",useDefault)
       checkBtn.place(relx = 0.75, rely = 0.8)
       #setup checkbox to restore last configuration
@@ -237,9 +269,13 @@ def updateTab2(tab,d):
             #the user use the default headers and the headers they selected
             if(not var2.get()):
                 launch.pSetups.updateLastInfo()
+                selectValues(launch.pSetups.choosenHeaders)
                 print("Use last info")
             else:
+                deselectValues(launch.pSetups.choosenHeaders)
+                
                 launch.pSetups.cleanLasttInfo()
+                print("Deselect last info")
       checkBtn2.bind("<ButtonPress>",useLast)
       checkBtn2.place(relx = 0.75, rely = 0.7)
       
@@ -303,7 +339,7 @@ def setupTab3(tab):
      checkbox7.place(relx = 0.6, rely = 0.3)
      
      # Label for information
-     tab4_TextLabel3 = ttk.Label(tab, text= "If the regular language of timestamp doesn't match, you can write your own:(copy)")
+     tab4_TextLabel3 = ttk.Label(tab, text= "If the regular language of timestamp doesn't match, you can write your own:")
      tab4_TextLabel3.place(relx = 0.1, rely = 0.4)
      
      # Label for information

@@ -1,2 +1,2 @@
 choosenHeaders,idHeaderName,latHeaderName,lngHeaderName,heightHeaderName,timestampHeaderName,useDefault
-"['eobs:battery-voltage', 'height-above-ellipsoid', 'eobs:acceleration-sampling-frequency-per-axis', 'location-lat', 'individual-local-identifier', 'location-long', 'timestamp']",individual-local-identifier,location-lat,location-long,height-above-ellipsoid,eobs:start-timestamp,False
+"['timestamp', 'location-long', 'height-above-ellipsoid', 'location-lat', 'individual-local-identifier']",,,,,,True
