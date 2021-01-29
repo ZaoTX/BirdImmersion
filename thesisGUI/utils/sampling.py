@@ -59,15 +59,19 @@ def Douglas(d,p,epsilon,iB):
     import pandas as pd
     def d_2points(lat1,lng1,h1,lat2,lng2,h2):
         R = 6371000 #radius of earth
-        
+        lng1=math.radians(lng1)
+        lng2=math.radians(lng2)
+        lat1=math.radians(lat1)
+        lat2=math.radians(lat2)
         dlng = lng1-lng2
         dlat = lat1 - lat2
+        
         dh= h1-h2 
         a = math.sin(dlat / 2)**2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlng / 2)**2
 
-        c = 2 *math.asin(math.sqrt(a))
-        distance = R * c
-        dis =math.sqrt( dh**2+distance**2)
+        c = math.asin(math.sqrt(a))
+        dis_horizontal = 2 *R * c
+        dis =math.sqrt( dh**2+dis_horizontal**2)
         return dis
     
     def d_pointLine(lat1,lng1,h1,lat2,lng2,h2,lat3,lng3,h3):
@@ -142,7 +146,7 @@ def Douglas(d,p,epsilon,iB):
     currentLatList=[]
     currentHeightList=[]
     currentTimeList=[]
-    
+    resultCSV=outpath+'/'+'douglas_sample_'+str(epsilon)+'meters.csv'
     # find header names
     idHeader=p.idHeaderName
     lngHeader = p.lngHeaderName
@@ -176,8 +180,13 @@ def Douglas(d,p,epsilon,iB):
 #                   p.heightHeaderName
 #                   ]
                    )
-             df=df.drop_duplicates(keep='first')
-             df.to_csv(outpath+'/'+'douglas_sample_'+str(epsilon)+'meters.csv',index=False,header=True,mode='a')
+             if(not os.path.exists(resultCSV)):
+                 df=df.drop_duplicates(keep='first')
+                 df.to_csv(resultCSV,index=False,header=True,mode='a')
+             else:
+                
+                df=df.drop_duplicates(keep='first')
+                df.to_csv(resultCSV,index=False,header=False,mode='a')
              #renew List
              currentLngList=[]
              currentLatList=[]
@@ -212,25 +221,35 @@ def Douglas(d,p,epsilon,iB):
     #                   p.heightHeaderName
     #                   ]
            )
-    df=df.drop_duplicates(keep='first')
-    df.to_csv(outpath+'/'+'douglas_sample_'+str(epsilon)+'meters.csv',index=False,header=True,mode='a')
-    #record compression ratio
-    iB.compressionratio=(1-len(df)/iB.numOfDatapoints)*100
+    if(not os.path.exists(resultCSV)):
+             df=df.drop_duplicates(keep='first')
+             df.to_csv(resultCSV,index=False,header=True,mode='a')
+    else:
+                
+            df=df.drop_duplicates(keep='first')
+            df.to_csv(resultCSV,index=False,header=False,mode='a')
+    iB.fileLoc=resultCSV
+    
 #a top-down time-ratio algorithm based on DP
+# the idea is to use Synchornized Euclidean Distance to compare with distance threshold
 def TD_TR(d,p,dist_threshold,iB):
     import math
     import pandas as pd
     def d_2points(lat1,lng1,h1,lat2,lng2,h2):
-        R =  6371000 #radius of earth
-        
+        R = 6371000 #radius of earth
+        lng1=math.radians(lng1)
+        lng2=math.radians(lng2)
+        lat1=math.radians(lat1)
+        lat2=math.radians(lat2)
         dlng = lng1-lng2
         dlat = lat1 - lat2
+        
         dh= h1-h2 
         a = math.sin(dlat / 2)**2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlng / 2)**2
 
-        c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
-        distance = R * c
-        dis =math.sqrt( dh**2+distance**2)
+        c = math.asin(math.sqrt(a))
+        dis_horizontal = 2 *R * c
+        dis =math.sqrt( dh**2+dis_horizontal**2)
         return dis
     
     def d_pointLine(lat1,lng1,h1,lat2,lng2,h2,lat3,lng3,h3):
@@ -332,7 +351,7 @@ def TD_TR(d,p,dist_threshold,iB):
     # then we apply the Douglas algo to this individual
     for row in csv_reader:
         cur_id=row[idHeader]
-        if ((last_id!=cur_id and last_id!='')or (next(csv_reader)=='')):
+        if ((last_id!=cur_id and last_id!='')):
              # 1.do the TD_TR for last id 
              # 2.store the data into new csv
              # 3.renew the list
@@ -386,26 +405,34 @@ def TD_TR(d,p,dist_threshold,iB):
     #                   p.heightHeaderName
     #                   ]
            )
-    df=df.drop_duplicates(keep='first')
-    df.to_csv(resultCSV,index=False,header=True,mode='a')
-    
-    #record compression ratio
-    iB.compressionratio=(1-len(df)/iB.numOfDatapoints)*100
-#a top-down time-ratio algorithm based on DP
+    if(not os.path.exists(resultCSV)):
+             df=df.drop_duplicates(keep='first')
+             df.to_csv(resultCSV,index=False,header=True,mode='a')
+    else:
+                
+            df=df.drop_duplicates(keep='first')
+            df.to_csv(resultCSV,index=False,header=False,mode='a')
+    iB.fileLoc=resultCSV
+   
+#a top-down speed-ratio algorithm based on DP
 def TD_SP(d,p,speed_threshold,iB):
     import math
     import pandas as pd
     def d_2points(lat1,lng1,h1,lat2,lng2,h2):
         R = 6371000 #radius of earth
-        
+        lng1=math.radians(lng1)
+        lng2=math.radians(lng2)
+        lat1=math.radians(lat1)
+        lat2=math.radians(lat2)
         dlng = lng1-lng2
         dlat = lat1 - lat2
+        
         dh= h1-h2 
         a = math.sin(dlat / 2)**2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlng / 2)**2
 
-        c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
-        distance = R * c
-        dis =math.sqrt( dh**2+distance**2)
+        c = math.asin(math.sqrt(a))
+        dis_horizontal = 2 *R * c
+        dis =math.sqrt( dh**2+dis_horizontal**2)
         return dis
     
     def d_pointLine(lat1,lng1,h1,lat2,lng2,h2,lat3,lng3,h3):
@@ -517,7 +544,7 @@ def TD_SP(d,p,speed_threshold,iB):
     # then we apply the Douglas algo to this individual
     for row in csv_reader:
         cur_id=row[idHeader]
-        if ((last_id!=cur_id and last_id!='')or (next(csv_reader)=='')):
+        if ((last_id!=cur_id and last_id!='')):
              # 1.do the TD_TR for last id 
              # 2.store the data into new csv
              # 3.renew the list
@@ -572,43 +599,146 @@ def TD_SP(d,p,speed_threshold,iB):
     #                   p.heightHeaderName
     #                   ]
            )
-    df=df.drop_duplicates(keep='first')
-    df.to_csv(resultCSV,index=False,header=True,mode='a')
-    #record compression ratio
-    iB.compressionratio=(1-len(df)/iB.numOfDatapoints)*100
+    if(not os.path.exists(resultCSV)):
+             df=df.drop_duplicates(keep='first')
+             df.to_csv(resultCSV,index=False,header=True,mode='a')
+    else:
+                
+            df=df.drop_duplicates(keep='first')
+            df.to_csv(resultCSV,index=False,header=False,mode='a')
+    iB.fileLoc=resultCSV
+    
 def  SQUISH(d,p,size,iB):
     import pandas as pd
+    def d_2points(lat1,lng1,h1,lat2,lng2,h2):
+        import math
+        R = 6371000 #radius of earth
+        lng1=math.radians(lng1)
+        lng2=math.radians(lng2)
+        lat1=math.radians(lat1)
+        lat2=math.radians(lat2)
+        dlng = lng1-lng2
+        dlat = lat1 - lat2
+        
+        dh= h1-h2 
+        a = math.sin(dlat / 2)**2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlng / 2)**2
+
+        c = math.asin(math.sqrt(a))
+        dis_horizontal = 2 *R * c
+        dis =math.sqrt( dh**2+dis_horizontal**2)
+        return dis
     # synchronized Euclidean distance
     # used to estimate the importance of one point in the trajectory
-    def sed(lat,lng,height,LatList,LngList,HeightList):
-        import math
-        length=len(LatList)
-        value=0
-        for i in range(0,length):
-            lati=LatList[i]
-            lngi=LngList[i]
-            hi=HeightList[i]
-            value = value+math.sqrt((lat-lati)**2+(lng-lngi)**2+(height-hi)**2)
-        return value
+    # In order to make sure the speed of calculation, 
+    # we assume the latitude longitude are evenly distributed
+    
     #To implement this we need a size for the buffer, and the list of positions
     def SQUISH_Algo(latList,lngList,heightList,timeList,size):
-        nevercalculated=True
-        def updateSED(index,out_latList,out_lngList,out_heightList):
-            lat=float(latList[index])
-            lng=float(lngList[index])
-            height=float(heightList[index])
-            #time=timeList[j]
-            #calculate SED
-            sed_i=sed(lat,lng,height,out_latList,out_lngList,out_heightList)
-            return sed_i
+        # update the whole SED list
+        def updateSED(LatList,LngList,HeightList,timeList):
+            import decimal
+            import math
+            from datetime import datetime
+            length=len(LatList)
+            value=0
+            first_lat = LatList[0]
+            first_lng = LngList[0]
+            first_height = HeightList[0]
+            first_timestamp = timeList[0]
+            
+            last_lat = LatList[-1]
+            last_lng = LngList[-1]
+            last_height = HeightList[-1]
+            last_timestamp = timeList[-1]
+            
+            lastTimeObj=datetime.strptime(last_timestamp,'%Y-%m-%d %H:%M:%S.%f')
+            firstTimeObj=datetime.strptime(first_timestamp,'%Y-%m-%d %H:%M:%S.%f')
+            timeDiff=decimal.Decimal(abs((lastTimeObj-firstTimeObj).total_seconds()))
+            sedList=[]
+            for i in range(0,length):
+                #get current location
+                time =timeList[i]
+                lat = LatList[i]
+                lng = LngList[i]
+                height = HeightList[i]
+                cur_timeObj=datetime.strptime(time,'%Y-%m-%d %H:%M:%S.%f')
+                curtimeDiff=decimal.Decimal(abs((firstTimeObj-cur_timeObj).total_seconds()))
+                # interpolate lat,lng,height
+                lati=first_lat+ (last_lat-first_lat)*float(curtimeDiff*(1/timeDiff))
+                lngi=first_lng+ (last_lng-first_lng)*float(curtimeDiff*(1/timeDiff))
+                hi=first_height+ (last_height-first_height)*float(curtimeDiff*(1/timeDiff))
+                #calculate sed value
+                value = math.sqrt((lat-lati)**2+(lng-lngi)**2+(height-hi)**2)
+                sedList.append(value)
+            return sedList
+        #calculate the SED of (lat,lng,height)
+        def calculateSED(lat,lng,height,time,LatList,LngList,HeightList,timeList):
+            import math
+            from datetime import datetime
+            import decimal
+            first_lat = LatList[0]
+            first_lng = LngList[0]
+            first_height = HeightList[0]
+            first_timestamp = timeList[0]
+            print(first_timestamp)
+            last_lat = LatList[-1]
+            last_lng = LngList[-1]
+            last_height = HeightList[-1]
+            last_timestamp = timeList[-1]
+            print(last_timestamp)
+            lastTimeObj=datetime.strptime(last_timestamp,'%Y-%m-%d %H:%M:%S.%f')
+            firstTimeObj=datetime.strptime(first_timestamp,'%Y-%m-%d %H:%M:%S.%f')
+            timeDiff=decimal.Decimal(abs((firstTimeObj-lastTimeObj).total_seconds()))
+            print(timeDiff)
+            cur_timeObj=datetime.strptime(time,'%Y-%m-%d %H:%M:%S.%f')
+            curtimeDiff=decimal.Decimal(abs((firstTimeObj-cur_timeObj).total_seconds()))
+            # interpolate lat,lng,height
+            lati=first_lat+ (last_lat-first_lat)*float(curtimeDiff*(1/timeDiff))
+            lngi=first_lng+ (last_lng-first_lng)*float(curtimeDiff*(1/timeDiff))
+            hi=first_height+ (last_height-first_height)*float(curtimeDiff*(1/timeDiff))
+            #calculate sed value
+            value = math.sqrt((lat-lati)**2+(lng-lngi)**2+(height-hi)**2)
+            return value
+        # get the SED of given index
+        def getSED(ind,LatList,LngList,HeightList,timeList):
+            import math
+            from datetime import datetime
+            import decimal
+            first_lat = LatList[0]
+            first_lng = LngList[0]
+            first_height = HeightList[0]
+            first_timestamp = timeList[0]
+            
+            last_lat = LatList[-1]
+            last_lng = LngList[-1]
+            last_height = HeightList[-1]
+            last_timestamp = timeList[-1]
+            
+            lat = LatList[ind]
+            lng = LngList[ind]
+            height = HeightList[ind]
+            time = timeList[ind]
+            
+            lastTimeObj=datetime.strptime(last_timestamp,'%Y-%m-%d %H:%M:%S.%f')
+            firstTimeObj=datetime.strptime(first_timestamp,'%Y-%m-%d %H:%M:%S.%f')
+            timeDiff=decimal.Decimal(abs((firstTimeObj-lastTimeObj).total_seconds()))
+            
+            cur_timeObj=datetime.strptime(time,'%Y-%m-%d %H:%M:%S.%f')
+            curtimeDiff=decimal.Decimal(abs((firstTimeObj-cur_timeObj).total_seconds()))
+            # interpolate lat,lng,height
+            lati=first_lat+ (last_lat-first_lat)*float(curtimeDiff*(1/timeDiff))
+            lngi=first_lng+ (last_lng-first_lng)*float(curtimeDiff*(1/timeDiff))
+            hi=first_height+ (last_height-first_height)*float(curtimeDiff*(1/timeDiff))
+            #calculate sed value
+            value = math.sqrt((lat-lati)**2+(lng-lngi)**2+(height-hi)**2)
+            return value
+        
         out_latList=[]
         out_lngList=[]
         out_heightList=[]
         out_timeList=[]
         length=len(latList)
         #initialize a min of sed value
-        minSED=0
-        index=0
         sedList=[]
         for i in range(0,length):
             cur_lat=float(latList[i])
@@ -624,59 +754,40 @@ def  SQUISH(d,p,size,iB):
                 out_timeList.append(cur_time)
             else:
                 
+                
+                sedList= updateSED(out_latList,out_lngList,out_heightList,out_timeList)
                 #find the smallest sed
-                if nevercalculated:
-                    nevercalculated=False
-                    for j in range(0,int(size)):
-                        #get the j-th element in buffer
-                        lat=float(latList[j])
-                        lng=float(lngList[j])
-                        height=float(heightList[j])
-                        #time=timeList[j]
-                        #calculate SED
-                        cur_SED=sed(lat,lng,height,out_latList,out_lngList,out_heightList)
-                        sedList.append(cur_SED)
-                        if(j==0):
-                            minSED=cur_SED
-                            index=j
-                        elif(cur_SED<minSED):
-                            minSED=cur_SED
-                            index=j
-                else:
-                    for j in range(0,min(int(size),len(sedList))):
-                        cur_SED=sedList[j]
-                        if(j==0):
-                            minSED=cur_SED
-                            index=j
-                        elif(cur_SED<minSED):
-                            minSED=cur_SED
-                            index=j
+                min_sed= min(sedList)
+                ind = sedList.index(min_sed)
+                
                 #remove the smallest sed index
-                del out_latList[index]
-                del out_lngList[index]
-                del out_heightList[index]
-                del out_timeList[index]
-                del sedList[index]
+                del out_latList[ind]
+                del out_lngList[ind]
+                del out_heightList[ind]
+                del out_timeList[ind]
+                del sedList[ind]
                 #add new point to our list
                 out_latList.append(cur_lat)
                 out_lngList.append(cur_lng)
                 out_heightList.append(cur_height)
                 out_timeList.append(cur_time)
                 #get the current sed of new point
-                cur_SED=sed(cur_lat,cur_lng,cur_height,out_latList,out_lngList,out_heightList)
+                cur_SED=calculateSED(cur_lat,cur_lng,cur_height,cur_time,out_latList,out_lngList,out_heightList,out_timeList)
                 sedList.append(cur_SED)
-                #update the sed of its neighbor the current i th and i-1 th point
-                if(index==0):
-                    sed_i=updateSED(index,out_latList,out_lngList,out_heightList)
-                    sedList[index]=sed_i
-                elif(index==int(size)-1):
-                    sed_i1=updateSED(index-1,out_latList,out_lngList,out_heightList)
-                    sedList[index]=sed_i
+                #update the sed of its neighbor the current i th point
+                if(ind==0):
+                    sed=getSED(ind,out_latList,out_lngList,out_heightList,out_timeList)
+                    sedList[ind]=sed
+                elif(ind==int(size)-1):
+                    #update second last element
+                    sed_i1=updateSED(ind-1,out_latList,out_lngList,out_heightList,out_timeList)
+                    sedList[ind-1]=sed_i1
                 else:
-                    sed_i=updateSED(index,out_latList,out_lngList,out_heightList)
-                    sed_i1=updateSED(index-1,out_latList,out_lngList,out_heightList)
-                    sedList[index]=sed_i
-                    sedList[index-1]=sed_i1
+                    #update 2 neighbors
+                    sed_i1=updateSED(ind-1,out_latList,out_lngList,out_heightList,out_timeList)
+                    sedList[ind-1]=sed_i1
+                    sed_i2=updateSED(ind,out_latList,out_lngList,out_heightList,out_timeList)
+                    sedList[ind]=sed_i2
         return out_latList,out_lngList,out_heightList,out_timeList
     base_dir = d.workdir
     filePath = d.filepath
@@ -704,7 +815,7 @@ def  SQUISH(d,p,size,iB):
     # then we apply the Douglas algo to this individual
     for row in csv_reader:
         cur_id=row[idHeader]
-        if ((last_id!=cur_id and last_id!='')or (next(csv_reader)=='')):
+        if ((last_id!=cur_id and last_id!='')):
              # 1.do the TD_TR for last id 
              # 2.store the data into new csv
              # 3.renew the list
@@ -759,11 +870,13 @@ def  SQUISH(d,p,size,iB):
     #                   p.heightHeaderName
     #                   ]
            )
-    df=df.drop_duplicates(keep='first')
-    df.to_csv(resultCSV,index=False,header=True,mode='a')
-    #record compression ratio
-    if(size>=iB.numOfDatapoints):
-        iB.compressionratio=0
+    if(not os.path.exists(resultCSV)):
+             df=df.drop_duplicates(keep='first')
+             df.to_csv(resultCSV,index=False,header=True,mode='a')
     else:
-        iB.compressionratio=(1-size/iB.numOfDatapoints)*100
+                
+            df=df.drop_duplicates(keep='first')
+            df.to_csv(resultCSV,index=False,header=False,mode='a')
+    iB.fileLoc=resultCSV
+    
     

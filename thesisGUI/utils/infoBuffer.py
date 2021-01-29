@@ -15,7 +15,16 @@ class infoBuffer:
             self.endPos=''
             self.numOfDatapoints=0
             # metrics of trajectory sampling
+            self.fileLoc=''
             self.compressionratio=0
+            self.runtime=0
+            self.averageSED=0
+            # these are only used to store information after the sampling
+            self.individuals=[]
+            self.timeLists=[]
+            self.heightLists=[]
+            self.latLists=[]
+            self.lngLists=[]
             # preprocessing settings
             self.idHeaderName=''
             self.latHeaderName=''

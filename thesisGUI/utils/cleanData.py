@@ -21,7 +21,7 @@ def interpolation(d,p):
                os.makedirs(outpath)
       #csv_file=open(filePath, encoding='utf-8')
       df = pd.read_csv(filePath)#get dataframe
-      df=df.interpolate(method ='linear', limit_direction ='forward',limit_area='inside')
+      df=df.interpolate(method ='cubic', limit_direction ='both',limit_area='inside')
       df.to_csv(outpath+'/'+'linearInterporlation.csv',index=False)
 
 # pandas dropna(): https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.dropna.html

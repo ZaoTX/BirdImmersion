@@ -132,4 +132,92 @@ def preAnalysis(idName,d,iB):
     endTime=timeList[end_id]
     iB.setStartTime(startTime)
     iB.setEndTime(endTime)
+def PostAnalysis(idName,d,iB):
+    #get information of sampled results
+    getPostInfo(iB)
+    #find orignial individual list
+    IDList=d.individuals
+    timeLists=d.TimeLists
+#    heightLists=d.heightLists
+#    latLists=d.latLists
+#    lngLists=d.lngLists
+    #find sampled dataset
+    post_timeLists=iB.timeLists
+    post_heightLists=iB.heightLists
+    post_latLists=iB.latLists
+    post_lngLists=iB.lngLists
+    #get the index of give individual
+    ind=IDList.index(idName)
+    #orignial data
+    ind=IDList.index(idName)
+    timeList=timeLists[ind]
+#    heightList=heightLists[ind]
+#    latList=latLists[ind]
+#    lngList=lngLists[ind]
+    #result of this individual
+    post_timeList=post_timeLists[ind]
+    post_heightList=post_heightLists[ind]
+    post_latList=post_latLists[ind]
+    post_lngList=post_lngLists[ind]
+    #calculate compression ratio
+    wholeNumber=len(timeList)
+    #record compression ratio
+    iB.compressionratio=(1-len(post_timeList)/wholeNumber)*100
+    pass
+#store the Lists in infoBuffer
+def getPostInfo(iB):
+    import csv
+    timeLists=[]
+    heightLists=[]
+    latLists=[]
+    lngLists=[]
+    IDList=[]
+    filePath = iB.fileLoc
+    #base_dir+'/'+'filtered.csv'
+    csv_file=open(filePath, encoding='utf-8')
+    csv_reader = csv.DictReader(csv_file, delimiter=',')
+    #create initial list for each individual
+    cur_id=''
+    last_id=''
+    curTimeList=[]
+    curLatList=[]
+    curLngList=[]
+    curHeightList=[]
+    # find header names
+    idHeader=iB.idHeaderName
+    lngHeader = iB.lngHeaderName
+    latHeader = iB.latHeaderName
+    heightHeader = iB.heightHeaderName
+    timeHeader = iB.timestampHeaderName
+    for row in csv_reader:
+        cur_id=row[idHeader]
+        if ((last_id!=cur_id and last_id!='')):
+            #collect information
+            IDList.append(last_id)
+            timeLists.append(curTimeList)
+            heightLists.append(curHeightList)
+            latLists.append(curLatList)
+            lngLists.append(curLngList)
+            curTimeList=[]
+            curLatList=[]
+            curLngList=[]
+            curHeightList=[]
+        else:
+            curTimeList.append(row[timeHeader])
+            curLatList.append(row[latHeader])
+            curLngList.append(row[lngHeader])
+            curHeightList.append(row[heightHeader])
+        last_id=cur_id
+    #store the information of the last individual
+    IDList.append(last_id)
+    timeLists.append(curTimeList)
+    heightLists.append(curHeightList)
+    latLists.append(curLatList)
+    lngLists.append(curLngList)
+    #store Information in infobuffer
+    iB.individuals=IDList
+    iB.timeLists=timeLists
+    iB.heightLists=heightLists
+    iB.latLists=latLists
+    iB.lngLists=lngLists
     

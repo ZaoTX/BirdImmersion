@@ -9,7 +9,7 @@ import tkinter as tk
 from tkinter import ttk
 import tkinter.filedialog  as fd
 from utils.loadData import setupData,setupWorkdir
-
+import timeit
 
 
 
@@ -551,35 +551,57 @@ def setupTab5(tab):
      def sampling():
          choice = multibox.get()
          import launch
+         #calculate run Time
          if(choice=='Average Sampling'):
              n=int(entry.get())
              from utils.sampling import averageSampling
+             start = timeit.default_timer()
              averageSampling(launch.d,launch.pSetups,n,launch.iB)
+             stop = timeit.default_timer()
+             launch.iB.runtime=stop-start
          elif(choice == 'Douglas Peucker Sampling'):
              epsilon=float(entry.get())
              from utils.sampling import Douglas
+             start = timeit.default_timer()
              Douglas(launch.d,launch.pSetups,epsilon,launch.iB)
+             stop = timeit.default_timer()
+             launch.iB.runtime=stop-start
          elif(choice == 'TD_TR'):
              epsilon=float(entry.get())
              from utils.sampling import TD_TR
+             start = timeit.default_timer()
              TD_TR(launch.d,launch.pSetups,epsilon,launch.iB)
+             stop = timeit.default_timer()
+             launch.iB.runtime=stop-start
          elif(choice == 'TD_SP'):
              epsilon=float(entry.get())
              from utils.sampling import TD_SP
+             start = timeit.default_timer()
              TD_SP(launch.d,launch.pSetups,epsilon,launch.iB)
+             stop = timeit.default_timer()
+             launch.iB.runtime=stop-start
          elif(choice == 'SQUISH'):
              epsilon=float(entry.get())
              from utils.sampling import SQUISH
+             start = timeit.default_timer()
              SQUISH(launch.d,launch.pSetups,epsilon,launch.iB)
+             stop = timeit.default_timer()
+             launch.iB.runtime=stop-start
+     launchBtn2= ttk.Button(tab, text="PostAnalysis", command = lambda: launchAnalysis())
+     launchBtn2.place(relx = 0.8, rely = 0.8)
+     def launchAnalysis():
+         from utils.DataReport import getPostInfo
+         import launch
+         getPostInfo(launch.iB)
+         
          updateTab6(launch.main.tab6,launch.d,launch.iB)
+         launch.main.tabNotebook.select(launch.main.tab6)
 # summarize of sampling:
 # 1. The Compression ratio
 # 2. Average synchronized Euclidean distance
 def setupTab6(tab):
     tab6_TextLabel1 = ttk.Label(tab, text= "Summary of Sampling", font='bold')
     tab6_TextLabel1.place(relx = 0.35, rely = 0.05)
-    tab6_TextLabel2 = ttk.Label(tab, text= "Compression Ratio")
-    tab6_TextLabel2.place(relx = 0.1, rely = 0.15)
     
 # Once the sampling is done, Show User the compression ratio, 
 # the average of SED 
@@ -590,12 +612,53 @@ def updateTab6(tab,d,iB):
        child.destroy()
     tab6_TextLabel1 = ttk.Label(tab, text= "Summary of Sampling", font='bold')
     tab6_TextLabel1.place(relx = 0.35, rely = 0.05)
-    tab6_TextLabel2 = ttk.Label(tab, text= "Compression Ratio")
-    tab6_TextLabel2.place(relx = 0.1, rely = 0.15)
-    compressionratio=str(iB.compressionratio)+'%'
-    tab6_TextLabel21 = ttk.Label(tab, text= compressionratio)
-    tab6_TextLabel21.place(relx = 0.4, rely = 0.15)
+    import launch
+    choices=launch.d.individuals
+    #show the information of selected ID
+    def showIdInfo(event):
+          idName=multibox.get()
+          from utils.DataReport import PostAnalysis
+          PostAnalysis(idName,launch.d,launch.iB)
+          #setup texts:
+          compressionratio=str(iB.compressionratio)+'%'
+          tab6_TextLabel21.config(text= compressionratio)
+          #tab6_TextLabel21.place(relx = 0.4, rely = 0.35)
+          
+          runtime=str(iB.runtime)
+          tab6_TextLabel31.config(text= runtime)
+          #tab6_TextLabel31.place(relx = 0.4, rely = 0.15)
+          
+          averageSED=str(iB.averageSED)
+          tab6_TextLabel41.config(text= averageSED)
+          #tab6_TextLabel41.place(relx = 0.4, rely = 0.45)
+    tab6_TextLabel3 = ttk.Label(tab, text= "Whole Run Time")
+    tab6_TextLabel3.place(relx = 0.1, rely = 0.15)
+          
+    multibox=ttk.Combobox(tab,values=choices
+                           ,width=40
+                           ,font=12
+                           )
+     
+    multibox.place(relx = 0.4, rely = 0.25)
+    multibox.bind("<<ComboboxSelected>>", showIdInfo)
     
+    tab6_TextLabel2 = ttk.Label(tab, text= "Compression Ratio")
+    tab6_TextLabel2.place(relx = 0.1, rely = 0.35)
+    
+    
+   
+    
+    
+    tab6_TextLabel4 = ttk.Label(tab, text= "Average SED(Similarity)")
+    tab6_TextLabel4.place(relx = 0.1, rely = 0.45)
+    
+    #initialize text
+    tab6_TextLabel21 = ttk.Label(tab, text= '')
+    tab6_TextLabel21.place(relx = 0.4, rely = 0.35)
+    tab6_TextLabel31 = ttk.Label(tab, text= '')
+    tab6_TextLabel31.place(relx = 0.4, rely = 0.15)
+    tab6_TextLabel41 = ttk.Label(tab, text= '')
+    tab6_TextLabel41.place(relx = 0.4, rely = 0.45)
 
     
 #give a short report about the dataset 
