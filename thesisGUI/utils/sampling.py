@@ -192,16 +192,31 @@ def Douglas(d,p,epsilon,iB):
              currentLatList=[]
              currentHeightList=[]
              currentTimeList=[]
-             currentLngList.append(row[lngHeader])
-             currentLatList.append(row[latHeader])
-             currentHeightList.append(row[heightHeader])
-             currentTimeList.append(row[timeHeader])
+             if(heightHeader=='------'):
+                currentHeightList.append(0)
+                # the add the information into list
+                currentLngList.append(row[lngHeader])
+                currentLatList.append(row[latHeader])
+                currentTimeList.append(row[timeHeader])
+             else:   
+                currentHeightList.append(row[heightHeader])
+                # the add the information into list
+                currentLngList.append(row[lngHeader])
+                currentLatList.append(row[latHeader])
+                currentTimeList.append(row[timeHeader])
         else:
-            # the add the information into list
-            currentLngList.append(row[lngHeader])
-            currentLatList.append(row[latHeader])
-            currentHeightList.append(row[heightHeader])
-            currentTimeList.append(row[timeHeader])
+            if(heightHeader=='------'):
+                currentHeightList.append(0)
+                # the add the information into list
+                currentLngList.append(row[lngHeader])
+                currentLatList.append(row[latHeader])
+                currentTimeList.append(row[timeHeader])
+            else:   
+                currentHeightList.append(row[heightHeader])
+                # the add the information into list
+                currentLngList.append(row[lngHeader])
+                currentLatList.append(row[latHeader])
+                currentTimeList.append(row[timeHeader])
             
             
         last_id=cur_id
@@ -377,16 +392,31 @@ def TD_TR(d,p,dist_threshold,iB):
              currentLatList=[]
              currentHeightList=[]
              currentTimeList=[]
-             currentLngList.append(row[lngHeader])
-             currentLatList.append(row[latHeader])
-             currentHeightList.append(row[heightHeader])
-             currentTimeList.append(row[timeHeader])
+             if(heightHeader=='------'):
+                currentHeightList.append(0)
+                # the add the information into list
+                currentLngList.append(row[lngHeader])
+                currentLatList.append(row[latHeader])
+                currentTimeList.append(row[timeHeader])
+             else:   
+                currentHeightList.append(row[heightHeader])
+                # the add the information into list
+                currentLngList.append(row[lngHeader])
+                currentLatList.append(row[latHeader])
+                currentTimeList.append(row[timeHeader])
         else:
-            # the add the information into list
-            currentLngList.append(row[lngHeader])
-            currentLatList.append(row[latHeader])
-            currentHeightList.append(row[heightHeader])
-            currentTimeList.append(row[timeHeader])
+            if(heightHeader=='------'):
+                currentHeightList.append(0)
+                # the add the information into list
+                currentLngList.append(row[lngHeader])
+                currentLatList.append(row[latHeader])
+                currentTimeList.append(row[timeHeader])
+            else:   
+                currentHeightList.append(row[heightHeader])
+                # the add the information into list
+                currentLngList.append(row[lngHeader])
+                currentLatList.append(row[latHeader])
+                currentTimeList.append(row[timeHeader])
             
         last_id=cur_id
     out_latList,out_lngList,out_heightList,out_timeList=TD_TR_Algo(currentLatList,currentLngList,currentHeightList,currentTimeList,dist_threshold)
@@ -571,16 +601,31 @@ def TD_SP(d,p,speed_threshold,iB):
              currentLatList=[]
              currentHeightList=[]
              currentTimeList=[]
-             currentLngList.append(row[lngHeader])
-             currentLatList.append(row[latHeader])
-             currentHeightList.append(row[heightHeader])
-             currentTimeList.append(row[timeHeader])
+             if(heightHeader=='------'):
+                currentHeightList.append(0)
+                # the add the information into list
+                currentLngList.append(row[lngHeader])
+                currentLatList.append(row[latHeader])
+                currentTimeList.append(row[timeHeader])
+             else:   
+                currentHeightList.append(row[heightHeader])
+                # the add the information into list
+                currentLngList.append(row[lngHeader])
+                currentLatList.append(row[latHeader])
+                currentTimeList.append(row[timeHeader])
         else:
-            # the add the information into list
-            currentLngList.append(row[lngHeader])
-            currentLatList.append(row[latHeader])
-            currentHeightList.append(row[heightHeader])
-            currentTimeList.append(row[timeHeader])
+            if(heightHeader=='------'):
+                currentHeightList.append(0)
+                # the add the information into list
+                currentLngList.append(row[lngHeader])
+                currentLatList.append(row[latHeader])
+                currentTimeList.append(row[timeHeader])
+            else:   
+                currentHeightList.append(row[heightHeader])
+                # the add the information into list
+                currentLngList.append(row[lngHeader])
+                currentLatList.append(row[latHeader])
+                currentTimeList.append(row[timeHeader])
             
         last_id=cur_id
     out_latList,out_lngList,out_heightList,out_timeList=TD_SP_Algo(currentLatList,currentLngList,currentHeightList,currentTimeList,speed_threshold)
@@ -842,16 +887,31 @@ def  SQUISH(d,p,size,iB):
              currentLatList=[]
              currentHeightList=[]
              currentTimeList=[]
-             currentLngList.append(row[lngHeader])
-             currentLatList.append(row[latHeader])
-             currentHeightList.append(row[heightHeader])
-             currentTimeList.append(row[timeHeader])
+             if(heightHeader=='------'):
+                currentHeightList.append(0)
+                # the add the information into list
+                currentLngList.append(row[lngHeader])
+                currentLatList.append(row[latHeader])
+                currentTimeList.append(row[timeHeader])
+             else:   
+                currentHeightList.append(row[heightHeader])
+                # the add the information into list
+                currentLngList.append(row[lngHeader])
+                currentLatList.append(row[latHeader])
+                currentTimeList.append(row[timeHeader])
         else:
-            # the add the information into list
-            currentLngList.append(row[lngHeader])
-            currentLatList.append(row[latHeader])
-            currentHeightList.append(row[heightHeader])
-            currentTimeList.append(row[timeHeader])
+            if(heightHeader=='------'):
+                currentHeightList.append(0)
+                # the add the information into list
+                currentLngList.append(row[lngHeader])
+                currentLatList.append(row[latHeader])
+                currentTimeList.append(row[timeHeader])
+            else:   
+                currentHeightList.append(row[heightHeader])
+                # the add the information into list
+                currentLngList.append(row[lngHeader])
+                currentLatList.append(row[latHeader])
+                currentTimeList.append(row[timeHeader])
             
         last_id=cur_id
     out_latList,out_lngList,out_heightList,out_timeList= SQUISH_Algo(currentLatList,currentLngList,currentHeightList,currentTimeList,size)

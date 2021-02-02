@@ -46,10 +46,19 @@ def getIndividualNum(d,p):
             curLngList=[]
             curHeightList=[]
         else:
-            curTimeList.append(row[timeHeader])
-            curLatList.append(row[latHeader])
-            curLngList.append(row[lngHeader])
-            curHeightList.append(row[heightHeader])
+            if(heightHeader=='------'):
+                curHeightList.append(0)
+                # the add the information into list
+                curLngList.append(row[lngHeader])
+                curLatList.append(row[latHeader])
+                curTimeList.append(row[timeHeader])
+            else:   
+                curHeightList.append(row[heightHeader])
+                # the add the information into list
+                curLngList.append(row[lngHeader])
+                curLatList.append(row[latHeader])
+                curTimeList.append(row[timeHeader])
+            
         last_id=cur_id
     #store the information of the last individual
     IDList.append(last_id)
