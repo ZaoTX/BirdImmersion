@@ -1,2 +1,2 @@
 choosenHeaders,idHeaderName,latHeaderName,lngHeaderName,heightHeaderName,timestampHeaderName,useDefault
-"['location-long', 'height-above-ellipsoid', 'timestamp', 'individual-local-identifier', 'location-lat']",,,,,,True
+"['eobs:used-time-to-get-fix', 'timestamp', 'heading', 'data-decoding-software', 'visible', 'location-long', 'individual-local-identifier', 'eobs:battery-voltage', 'height-above-ellipsoid', 'eobs:key-bin-checksum', 'location-lat']",individual-local-identifier,location-lat,location-long,height-above-ellipsoid,timestamp,False

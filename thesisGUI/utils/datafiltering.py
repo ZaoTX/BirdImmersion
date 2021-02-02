@@ -13,10 +13,11 @@ def filtering(headers,d):
       droplist = np.setdiff1d(d.headers,headers)
       workdir=d.workdir
       path=workdir+'/filtered.csv'
-      
       for col in droplist:
             #print(col)
             dataFrame.drop(columns=[col], axis = 1, inplace = True)
+      # detele repetition
+      dataFrame=dataFrame.drop_duplicates(keep='first')
       dataFrame.to_csv(path, index = False, header=True)
       print(path)
             

@@ -20,10 +20,12 @@ class MainGUI:
      tab5 = ttk.Frame(tabNotebook)
      tab6 = ttk.Frame(tabNotebook)
      tab7 = ttk.Frame(tabNotebook)
+     tab8 = ttk.Frame(tabNotebook)
+     tab9 = ttk.Frame(tabNotebook)
      
      def addTab(self):
            try:
-                 from utils.Tabsetups import setupTab1,setupTab2,setupTab3,setupTab4,setupTab5,setupTab6
+                 from utils.Tabsetups import setupTab1,setupTab2,setupTab3,setupTab4,setupTab5,setupTab6,updateTab9
                  #set up style
                  self.setStyle()
                  
@@ -43,16 +45,19 @@ class MainGUI:
                  setupTab6(self.tab6)
                  #setup tab7
                  #Tab7 will setup once the user select their datafile and the headers
-                 # See utils.Tabsetups updateTab6
-                 #setupTab7(self.tab7)
+                 # See utils.Tabsetups updateTab7
+                 #Tab8 as well, updated once the preanalysis is triggled
+                 #updateTab9(self.tab9)
                  
                  self.tabNotebook.add(self.tab1, text = "Select Dataset")
                  self.tabNotebook.add(self.tab2, text = "Data Filtering")
                  self.tabNotebook.add(self.tab3, text = "Split Dataset")
                  self.tabNotebook.add(self.tab4, text = "Clean Data")
                  self.tabNotebook.add(self.tab5, text = "Sample Dataset")
-                 self.tabNotebook.add(self.tab6, text = "Summarize Data")
-                 self.tabNotebook.add(self.tab7, text = "Report")
+                 self.tabNotebook.add(self.tab6, text = "Summary")
+                 self.tabNotebook.add(self.tab7, text = "Data Report")
+                 self.tabNotebook.add(self.tab8, text = "Distribution")
+                 self.tabNotebook.add(self.tab9, text = "Timeline")
                  
                  self.tabNotebook.pack(fill ="both"
                                        ,expand=1

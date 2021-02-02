@@ -80,7 +80,7 @@ def setupTab1(tab):
                       multibox3.config(values=choices3)
                       choices4=launch.d.headers
                       multibox4.config(values=choices4)
-                      choices5=launch.d.headers
+                      choices5=launch.d.headers+['------']
                       multibox5.config(values=choices5)
                       
                 except: 
@@ -182,6 +182,7 @@ def setupTab1(tab):
          getIndividualNum(d,pSetups)
          setupTab7(main.tab7)
          main.tabNotebook.select(main.tab7)
+         #updateTab8(main.tab8)
      #confirm Button
      btn3 = ttk.Button(tab, text ='Preanalysis', command = lambda:confirmSelection()) 
      btn3.place(relx = 0.8, rely = 0.9)
@@ -664,6 +665,9 @@ def updateTab6(tab,d,iB):
 #give a short report about the dataset 
 #and hint the user which algorithm to use 
 def setupTab7(tab):
+     #clean tab
+    for child in tab.winfo_children():
+       child.destroy()
     import launch
     tab7_TextLabel1 = ttk.Label(tab, text= "Data Report", font='bold')
     tab7_TextLabel1.place(relx = 0.35, rely = 0.05)
@@ -714,6 +718,79 @@ def setupTab7(tab):
     tab7_TextLabel7.place(relx = 0.1, rely = 0.65)
     tab7_TextLabel8 = ttk.Label(tab, text= "End TimeStamp: ")
     tab7_TextLabel8.place(relx = 0.1, rely = 0.75)
+    def showDistibution():
+        
+        updateTab8(launch.main.tab8)
+        launch.main.tabNotebook.select(launch.main.tab8)
+    def showTimelineOverlap():
+        pass
+    #show Distribution
+    btn1 = ttk.Button(tab, text ='Show Distibution', command = lambda:showDistibution()) 
+    btn1.place(relx = 0.8, rely = 0.85)
+# A very general plot of distribution of the individuals using lat, lng
+# Using Matplotlib package
+def updateTab8(tab):
+    #clean tab
+    for child in tab.winfo_children():
+       child.destroy()
+    #import numpy as np
+    from matplotlib.backends.backend_tkagg import (
+    FigureCanvasTkAgg, NavigationToolbar2Tk)
+    #from matplotlib.backend_bases import key_press_handler
+    from matplotlib.figure import Figure
+    import launch
+    from utils.Distribution import plotHorizontal
+    #import matplotlib.patches as mpatch
     
+    fig = Figure(figsize=(5, 4))
     
+    main_plot=fig.add_subplot(111)
+    main_plot.set_title('Horizontal Distribution of Individuals')
+    main_plot.set_xlabel('longitude')
+    main_plot.set_ylabel('latitude')
     
+    plotHorizontal(main_plot,launch.iB,launch.d)
+
+    canvas = FigureCanvasTkAgg(fig, master=tab)  # A tk.DrawingArea.
+    canvas.draw()
+    #setup position
+    canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
+def updateTab9(tab):   
+    #clean tab
+    for child in tab.winfo_children():
+       child.destroy()
+    #import numpy as np
+    from matplotlib.backends.backend_tkagg import (
+    FigureCanvasTkAgg, NavigationToolbar2Tk)
+    #from matplotlib.backend_bases import key_press_handler
+    from matplotlib.figure import Figure
+    import launch
+    import matplotlib.dates as mdates
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    from datetime import datetime
+    fig = Figure(figsize=(5, 4))
+    dates = ['2019-02-26', '2019-02-26', '2018-11-10', '2018-11-10',
+             '2018-09-18', '2018-08-10', '2018-03-17', '2018-03-16',
+             '2018-03-06', '2018-01-18', '2017-12-10', '2017-10-07',
+             '2017-05-10', '2017-05-02', '2017-01-17', '2016-09-09',
+             '2016-07-03', '2016-01-10', '2015-10-29', '2015-02-16',
+             '2014-10-26', '2014-10-18', '2014-08-26']
+
+    # Convert date strings (e.g. 2014-10-18) to datetime
+    X = pd.to_datetime(dates)
+    main_plot=fig.add_subplot(111)
+    main_plot.set_title('Timeline Distribution of Individuals')
+    main_plot.set_xlabel('Timeline')
+    main_plot.set_ylabel('Individual')
+    main_plot.scatter(X, [1]*len(X),
+           marker='s', s=100)
+    fig.autofmt_xdate()
+   # main_plot.autofmt_xdate()
+#    main_plot.get_xaxis().set_major_locator(mdates.WeekdayLocator(interval=3))
+#    main_plot.get_xaxis().set_major_formatter(mdates.DateFormatter("%Y-%b-%d %H:%M"))
+
+    canvas = FigureCanvasTkAgg(fig, master=tab)  # A tk.DrawingArea.
+    canvas.draw()
+    #setup position
+    canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
