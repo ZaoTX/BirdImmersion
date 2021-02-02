@@ -723,10 +723,15 @@ def setupTab7(tab):
         updateTab8(launch.main.tab8)
         launch.main.tabNotebook.select(launch.main.tab8)
     def showTimelineOverlap():
-        pass
+        updateTab9(launch.main.tab9)
+        launch.main.tabNotebook.select(launch.main.tab9)
+        
     #show Distribution
     btn1 = ttk.Button(tab, text ='Show Distibution', command = lambda:showDistibution()) 
     btn1.place(relx = 0.8, rely = 0.85)
+    #show Timeline
+    btn2 = ttk.Button(tab, text ='Show Timeline', command = lambda:showTimelineOverlap()) 
+    btn2.place(relx = 0.6, rely = 0.85)
 # A very general plot of distribution of the individuals using lat, lng
 # Using Matplotlib package
 def updateTab8(tab):
@@ -765,30 +770,17 @@ def updateTab9(tab):
     #from matplotlib.backend_bases import key_press_handler
     from matplotlib.figure import Figure
     import launch
-    import matplotlib.dates as mdates
-    import pandas as pd
-    import matplotlib.pyplot as plt
-    from datetime import datetime
+#    import matplotlib.dates as mdates
+#    import pandas as pd
+#    import matplotlib.pyplot as plt
+#    from datetime import datetime
+    from utils.Distribution import plotTimeline
     fig = Figure(figsize=(5, 4))
-    dates = ['2019-02-26', '2019-02-26', '2018-11-10', '2018-11-10',
-             '2018-09-18', '2018-08-10', '2018-03-17', '2018-03-16',
-             '2018-03-06', '2018-01-18', '2017-12-10', '2017-10-07',
-             '2017-05-10', '2017-05-02', '2017-01-17', '2016-09-09',
-             '2016-07-03', '2016-01-10', '2015-10-29', '2015-02-16',
-             '2014-10-26', '2014-10-18', '2014-08-26']
 
-    # Convert date strings (e.g. 2014-10-18) to datetime
-    X = pd.to_datetime(dates)
     main_plot=fig.add_subplot(111)
     main_plot.set_title('Timeline Distribution of Individuals')
     main_plot.set_xlabel('Timeline')
-    main_plot.set_ylabel('Individual')
-    main_plot.scatter(X, [1]*len(X),
-           marker='s', s=100)
-    fig.autofmt_xdate()
-   # main_plot.autofmt_xdate()
-#    main_plot.get_xaxis().set_major_locator(mdates.WeekdayLocator(interval=3))
-#    main_plot.get_xaxis().set_major_formatter(mdates.DateFormatter("%Y-%b-%d %H:%M"))
+    plotTimeline(fig,main_plot,launch.iB,launch.d)
 
     canvas = FigureCanvasTkAgg(fig, master=tab)  # A tk.DrawingArea.
     canvas.draw()

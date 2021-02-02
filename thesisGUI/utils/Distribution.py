@@ -95,18 +95,33 @@ def plotHorizontal(main,iB,d):
  Assumption: for each individual it starts from first timestamp and end at the last timestamp 
 '''
 def plotTimeline(fig,main,iB,d):
+    import matplotlib.dates as md
+    import pandas as pd
+    # See https://github.com/facebook/prophet/issues/999
+    #register_matplotlib_converters()
+    #warnings.warn(msg, FutureWarning)
+    pd.plotting.register_matplotlib_converters()
     # find individual list
     IDList=d.individuals
     timeLists=d.TimeLists
     # number of individuals
     num=len(IDList)
     
-    minTimestamps=[]
-    maxTimestamps=[]
+#    minTimestamps=[]
+#    maxTimestamps=[]
     # for each individual
     # we find a pair of min max value for timestamp
     for i in range(0,num):
         timeList=timeLists[i]
-        minTimestamps.append(timeList[0])
-        maxTimestamps.append(timeList[-1])
-    main.get_xaxis().set_major_locator
+        timeList=pd.to_datetime(timeList)
+        idName=IDList[i]
+#        minTimestamps.append(timeList[0])
+#        maxTimestamps.append(timeList[-1])
+        main.scatter(timeList, [i]*len(timeList),
+           marker='s', label=idName)
+    #main.get_xaxis().set_major_locator()
+    xfmt = md.DateFormatter('%Y-%m-%d %H:%M:%S')
+    main.xaxis.set_major_formatter(xfmt)
+    fig.autofmt_xdate()
+    main.get_xaxis().set_major_locator(md.WeekdayLocator(interval=3))
+    main.legend(loc='best')
