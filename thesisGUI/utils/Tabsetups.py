@@ -621,11 +621,11 @@ def updateTab6(tab,d,iB):
           from utils.DataReport import PostAnalysis
           PostAnalysis(idName,launch.d,launch.iB)
           #setup texts:
-          compressionratio=str(iB.compressionratio)+'%'
+          compressionratio=str(round(iB.compressionratio,3))+'%'
           tab6_TextLabel21.config(text= compressionratio)
           #tab6_TextLabel21.place(relx = 0.4, rely = 0.35)
           
-          runtime=str(iB.runtime)
+          runtime=str(round(iB.runtime,3))
           tab6_TextLabel31.config(text= runtime)
           #tab6_TextLabel31.place(relx = 0.4, rely = 0.15)
           

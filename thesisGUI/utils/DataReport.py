@@ -188,11 +188,40 @@ def PostAnalysis(idName,d,iB):
     post_heightList=post_heightLists[ind]
     post_latList=post_latLists[ind]
     post_lngList=post_lngLists[ind]
-    #calculate compression ratio
+    # calculate compression ratio
     wholeNumber=len(timeList)
-    #record compression ratio
+    # record compression ratio
     iB.compressionratio=(1-len(post_timeList)/wholeNumber)*100
-    pass
+    # for each individual calculate their average SED
+    #calculate the SED of (lat,lng,height)
+    def calculateSED(lat,lng,height,time,LatList,LngList,HeightList,timeList):
+            import math
+            from datetime import datetime
+            import decimal
+            first_lat = LatList[0]
+            first_lng = LngList[0]
+            first_height = HeightList[0]
+            first_timestamp = timeList[0]
+            print(first_timestamp)
+            last_lat = LatList[-1]
+            last_lng = LngList[-1]
+            last_height = HeightList[-1]
+            last_timestamp = timeList[-1]
+            print(last_timestamp)
+            lastTimeObj=datetime.strptime(last_timestamp,'%Y-%m-%d %H:%M:%S.%f')
+            firstTimeObj=datetime.strptime(first_timestamp,'%Y-%m-%d %H:%M:%S.%f')
+            timeDiff=decimal.Decimal(abs((firstTimeObj-lastTimeObj).total_seconds()))
+            print(timeDiff)
+            cur_timeObj=datetime.strptime(time,'%Y-%m-%d %H:%M:%S.%f')
+            curtimeDiff=decimal.Decimal(abs((firstTimeObj-cur_timeObj).total_seconds()))
+            # interpolate lat,lng,height
+            lati=first_lat+ (last_lat-first_lat)*float(curtimeDiff*(1/timeDiff))
+            lngi=first_lng+ (last_lng-first_lng)*float(curtimeDiff*(1/timeDiff))
+            hi=first_height+ (last_height-first_height)*float(curtimeDiff*(1/timeDiff))
+            #calculate sed value
+            value = math.sqrt((lat-lati)**2+(lng-lngi)**2+(height-hi)**2)
+            return value
+    
 #store the Lists in infoBuffer
 def getPostInfo(iB):
     import csv
