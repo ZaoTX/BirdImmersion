@@ -399,7 +399,7 @@ def setupTab4(tab):
      tab3_TextLabel1 = ttk.Label(tab, text= "How to deal with missing value")
      tab3_TextLabel1.place(relx = 0.1, rely = 0.2)
      
-     choices=["remove the data with missing value","linear interpolation"]
+     choices=["remove the data with missing value","interpolation"]
      multibox=ttk.Combobox(tab,values=choices
                            ,width=40
                            ,font=12
@@ -422,21 +422,21 @@ def setupTab4(tab):
      
      def TextBoxUpdate(event):
          choice = multibox.get()
-         if(choice=='linear interpolation'):
+         if(choice=='interpolation'):
                  
-                 tab3_TextLabel3.config(text='Linear interpolation can be helpful dealing the missing value between a small interval of temporal difference')
+                 tab3_TextLabel3.config(text='(cubic) interpolation can be helpful dealing the missing value between a small interval of temporal difference')
                  
          elif(choice=='remove the data with missing value'): 
                  
                  tab3_TextLabel3.config(text='Remove missing value is easy but might lose some information make the trajectory intermittent')
                  
-     multibox.bind("<ButtonPress>", TextBoxUpdate)
+     multibox.bind("<<ComboboxSelected>>", TextBoxUpdate)
      def cleandataset():
            choice = multibox.get()
            print(choice)
            
            import launch
-           if(choice=='linear interpolation'):
+           if(choice=='interpolation'):
                  from utils.cleanData import interpolation
                  interpolation(launch.d,launch.pSetups)
            elif(choice=='remove the data with missing value'): 

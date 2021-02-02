@@ -34,13 +34,24 @@ def getIndividualNum(d,p):
     timeHeader = p.timestampHeaderName
     for row in csv_reader:
         cur_id=row[idHeader]
-        if ((last_id!=cur_id and last_id!='')):
+        if ((last_id!=cur_id and last_id!='') and (last_id not in IDList)):
             #collect information
             IDList.append(last_id)
             timeLists.append(curTimeList)
             heightLists.append(curHeightList)
             latLists.append(curLatList)
             lngLists.append(curLngList)
+            curTimeList=[]
+            curLatList=[]
+            curLngList=[]
+            curHeightList=[]
+        elif(last_id in IDList):
+            #find the index of this ID and add the list to them
+            ind=IDList.index(last_id)
+            timeLists[ind]=timeLists[ind]+curTimeList
+            heightLists[ind]=heightLists[ind]+curHeightList
+            latLists[ind]=latLists[ind]+curLatList
+            lngLists[ind]=lngLists[ind]+curLngList
             curTimeList=[]
             curLatList=[]
             curLngList=[]
@@ -60,12 +71,21 @@ def getIndividualNum(d,p):
                 curTimeList.append(row[timeHeader])
             
         last_id=cur_id
-    #store the information of the last individual
-    IDList.append(last_id)
-    timeLists.append(curTimeList)
-    heightLists.append(curHeightList)
-    latLists.append(curLatList)
-    lngLists.append(curLngList)
+    if(last_id not in IDList):
+        #store the information of the last individual
+        IDList.append(last_id)
+        timeLists.append(curTimeList)
+        heightLists.append(curHeightList)
+        latLists.append(curLatList)
+        lngLists.append(curLngList)
+    else:
+        #find the index of this ID and add the list to them
+        ind=IDList.index(last_id)
+        timeLists[ind]=timeLists[ind]+curTimeList
+        heightLists[ind]=heightLists[ind]+curHeightList
+        latLists[ind]=latLists[ind]+curLatList
+        lngLists[ind]=lngLists[ind]+curLngList
+        
     #after this process is done we can store them in d(Datasets)
     d.individuals=IDList
     d.TimeLists=timeLists

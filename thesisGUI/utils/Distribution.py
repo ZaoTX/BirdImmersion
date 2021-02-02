@@ -107,21 +107,34 @@ def plotTimeline(fig,main,iB,d):
     # number of individuals
     num=len(IDList)
     
-#    minTimestamps=[]
-#    maxTimestamps=[]
+    minTimestamps=[]
+    maxTimestamps=[]
     # for each individual
     # we find a pair of min max value for timestamp
     for i in range(0,num):
         timeList=timeLists[i]
         timeList=pd.to_datetime(timeList)
         idName=IDList[i]
-#        minTimestamps.append(timeList[0])
-#        maxTimestamps.append(timeList[-1])
+        minTimestamps.append(timeList[0])
+        maxTimestamps.append(timeList[-1])
         main.scatter(timeList, [i]*len(timeList),
            marker='s', label=idName)
+    maxTimestamp=max(maxTimestamps)
+    minTimestamp=min(minTimestamps)
+    diff = maxTimestamp-minTimestamp
+    xlim_max=maxTimestamp+0.1*diff
+    xlim_min=minTimestamp-0.1*diff
+    main.axis(xmin=xlim_min,xmax=xlim_max)
     #main.get_xaxis().set_major_locator()
     xfmt = md.DateFormatter('%Y-%m-%d %H:%M:%S')
     main.xaxis.set_major_formatter(xfmt)
     fig.autofmt_xdate()
-    main.get_xaxis().set_major_locator(md.WeekdayLocator(interval=3))
+    if(7>float(diff.days)>1):
+        main.get_xaxis().set_major_locator(md.DayLocator(interval=1))
+    elif(30>float(diff.days)>=7):
+        main.get_xaxis().set_major_locator(md.WeekdayLocator(interval=1))
+    elif(float(diff.days)>=30):
+        main.get_xaxis().set_major_locator(md.MonthLocator(interval=1))
+    else:
+        main.get_xaxis().set_major_locator(md.HourLocator(interval=1))
     main.legend(loc='best')

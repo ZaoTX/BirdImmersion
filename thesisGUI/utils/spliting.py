@@ -18,7 +18,7 @@ def individualSpliting(d,p):#d is dataset, p is processingsetups
                os.makedirs(splitpath)
       csv_file=open(filePath, encoding='utf-8')
       csv_reader = csv.DictReader(csv_file, delimiter=',')
-      fieldnames = p.choosenHeaders
+      fieldnames = csv_reader.fieldnames
       
       individual_id=[]
       for row in csv_reader:
@@ -70,7 +70,7 @@ def splitingTime(d,p,reg,aim,sec):
       #base_dir+'/'+'filtered.csv'
       csv_file=open(filePath, encoding='utf-8')
       csv_reader = csv.DictReader(csv_file, delimiter=',')
-      fieldnames = p.choosenHeaders
+      fieldnames = csv_reader.fieldnames
       
       
       if(aim=="1"):#Year
