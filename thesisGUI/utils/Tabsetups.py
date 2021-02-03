@@ -626,7 +626,7 @@ def updateTab6(tab,d,iB):
           #tab6_TextLabel21.place(relx = 0.4, rely = 0.35)
           
           runtime=str(round(iB.runtime,3))
-          tab6_TextLabel31.config(text= runtime)
+          tab6_TextLabel31.config(text= runtime + 'seconds')
           #tab6_TextLabel31.place(relx = 0.4, rely = 0.15)
           
           averageSED=str(iB.averageSED)

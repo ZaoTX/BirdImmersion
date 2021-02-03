@@ -180,15 +180,12 @@ def PostAnalysis(idName,d,iB):
     #orignial data
     ind=IDList.index(idName)
     timeList=timeLists[ind]
-#    heightList=heightLists[ind]
-#    latList=latLists[ind]
-#    lngList=lngLists[ind]
-    #result of this individual
+
     post_timeList=post_timeLists[ind]
     post_heightList=post_heightLists[ind]
     post_latList=post_latLists[ind]
     post_lngList=post_lngLists[ind]
-    # calculate compression ratio
+    # number of datapoints
     wholeNumber=len(timeList)
     # record compression ratio
     iB.compressionratio=(1-len(post_timeList)/wholeNumber)*100
@@ -198,14 +195,14 @@ def PostAnalysis(idName,d,iB):
             import math
             from datetime import datetime
             import decimal
-            first_lat = LatList[0]
-            first_lng = LngList[0]
-            first_height = HeightList[0]
+            first_lat = float(LatList[0])
+            first_lng = float(LngList[0])
+            first_height = float(HeightList[0])
             first_timestamp = timeList[0]
             print(first_timestamp)
-            last_lat = LatList[-1]
-            last_lng = LngList[-1]
-            last_height = HeightList[-1]
+            last_lat = float(LatList[-1])
+            last_lng = float(LngList[-1])
+            last_height = float(HeightList[-1])
             last_timestamp = timeList[-1]
             print(last_timestamp)
             lastTimeObj=datetime.strptime(last_timestamp,'%Y-%m-%d %H:%M:%S.%f')
@@ -221,7 +218,16 @@ def PostAnalysis(idName,d,iB):
             #calculate sed value
             value = math.sqrt((lat-lati)**2+(lng-lngi)**2+(height-hi)**2)
             return value
-    
+    SEDs=[]
+    for i in range(0,len(post_timeList)):
+        lati = float(post_latList[i])
+        lngi = float(post_lngList[i])
+        heighti = float(post_heightList[i])
+        timei = post_timeList[i]
+        sed=calculateSED(lati,lngi,heighti,timei,post_latList,post_lngList,post_heightList,post_timeList)
+        SEDs.append(sed)
+    averageSED= sum(SEDs)/len(SEDs)
+    iB.averageSED=averageSED
 #store the Lists in infoBuffer
 def getPostInfo(iB):
     import csv
