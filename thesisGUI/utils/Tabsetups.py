@@ -614,7 +614,7 @@ def updateTab6(tab,d,iB):
     tab6_TextLabel1 = ttk.Label(tab, text= "Summary of Sampling", font='bold')
     tab6_TextLabel1.place(relx = 0.35, rely = 0.05)
     import launch
-    choices=launch.d.individuals
+    choices=launch.iB.individuals
     #show the information of selected ID
     def showIdInfo(event):
           idName=multibox.get()

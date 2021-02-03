@@ -34,7 +34,7 @@ def getIndividualNum(d,p):
     timeHeader = p.timestampHeaderName
     for row in csv_reader:
         cur_id=row[idHeader]
-        if ((last_id!=cur_id and last_id!='') and (last_id not in IDList)):
+        if (last_id!=cur_id and last_id!='' and (last_id not in IDList)):
             #collect information
             IDList.append(last_id)
             timeLists.append(curTimeList)
@@ -45,7 +45,7 @@ def getIndividualNum(d,p):
             curLatList=[]
             curLngList=[]
             curHeightList=[]
-        elif(last_id in IDList):
+        elif(last_id!=cur_id  and last_id!='' and (last_id in IDList)):
             #find the index of this ID and add the list to them
             ind=IDList.index(last_id)
             timeLists[ind]=timeLists[ind]+curTimeList
@@ -88,7 +88,7 @@ def getIndividualNum(d,p):
         
     #after this process is done we can store them in d(Datasets)
     d.individuals=IDList
-    d.TimeLists=timeLists
+    d.timeLists=timeLists
     d.heightLists=heightLists
     d.latLists=latLists
     d.lngLists=lngLists
@@ -96,7 +96,7 @@ def getIndividualNum(d,p):
 def preAnalysis(idName,d,iB):
     #find individual list
     IDList=d.individuals
-    timeLists=d.TimeLists
+    timeLists=d.timeLists
     heightLists=d.heightLists
     latLists=d.latLists
     lngLists=d.lngLists
@@ -166,25 +166,27 @@ def PostAnalysis(idName,d,iB):
     getPostInfo(iB)
     #find orignial individual list
     IDList=d.individuals
-    timeLists=d.TimeLists
+    timeLists = d.timeLists
+    
 #    heightLists=d.heightLists
 #    latLists=d.latLists
 #    lngLists=d.lngLists
     #find sampled dataset
     post_timeLists=iB.timeLists
+    
     post_heightLists=iB.heightLists
     post_latLists=iB.latLists
     post_lngLists=iB.lngLists
     #get the index of give individual
     ind=IDList.index(idName)
     #orignial data
-    ind=IDList.index(idName)
     timeList=timeLists[ind]
-
-    post_timeList=post_timeLists[ind]
-    post_heightList=post_heightLists[ind]
-    post_latList=post_latLists[ind]
-    post_lngList=post_lngLists[ind]
+    
+    ind2=iB.individuals.index(idName)
+    post_timeList=post_timeLists[ind2]
+    post_heightList=post_heightLists[ind2]
+    post_latList=post_latLists[ind2]
+    post_lngList=post_lngLists[ind2]
     # number of datapoints
     wholeNumber=len(timeList)
     # record compression ratio
