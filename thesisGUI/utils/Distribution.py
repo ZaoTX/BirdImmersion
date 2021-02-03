@@ -103,7 +103,7 @@ def plotTimeline(fig,main,iB,d):
     pd.plotting.register_matplotlib_converters()
     # find individual list
     IDList=d.individuals
-    timeLists=d.TimeLists
+    timeLists=d.timeLists
     # number of individuals
     num=len(IDList)
     

@@ -269,17 +269,33 @@ def getPostInfo(iB):
             curLngList=[]
             curHeightList=[]
         else:
-            curTimeList.append(row[timeHeader])
-            curLatList.append(row[latHeader])
-            curLngList.append(row[lngHeader])
-            curHeightList.append(row[heightHeader])
+            if(heightHeader=='------'):
+                curHeightList.append(0)
+                # the add the information into list
+                curLngList.append(row[lngHeader])
+                curLatList.append(row[latHeader])
+                curTimeList.append(row[timeHeader])
+            else:   
+                curHeightList.append(row[heightHeader])
+                # the add the information into list
+                curLngList.append(row[lngHeader])
+                curLatList.append(row[latHeader])
+                curTimeList.append(row[timeHeader])
         last_id=cur_id
-    #store the information of the last individual
-    IDList.append(last_id)
-    timeLists.append(curTimeList)
-    heightLists.append(curHeightList)
-    latLists.append(curLatList)
-    lngLists.append(curLngList)
+    if(last_id not in IDList):
+        #store the information of the last individual
+        IDList.append(last_id)
+        timeLists.append(curTimeList)
+        heightLists.append(curHeightList)
+        latLists.append(curLatList)
+        lngLists.append(curLngList)
+    else:
+        #find the index of this ID and add the list to them
+        ind=IDList.index(last_id)
+        timeLists[ind]=timeLists[ind]+curTimeList
+        heightLists[ind]=heightLists[ind]+curHeightList
+        latLists[ind]=latLists[ind]+curLatList
+        lngLists[ind]=lngLists[ind]+curLngList
     #store Information in infobuffer
     iB.individuals=IDList
     iB.timeLists=timeLists

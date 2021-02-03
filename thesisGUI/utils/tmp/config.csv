@@ -1,2 +1,2 @@
 choosenHeaders,idHeaderName,latHeaderName,lngHeaderName,heightHeaderName,timestampHeaderName,useDefault
-"['location-long', 'timestamp', 'individual-local-identifier', 'height-above-ellipsoid', 'location-lat']",,,,,,True
+"['location-lat', 'location-long', 'individual-local-identifier', 'height-above-ellipsoid', 'timestamp']",individual-local-identifier,location-lat,location-long,height-above-ellipsoid,timestamp,True
