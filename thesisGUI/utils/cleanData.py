@@ -9,7 +9,7 @@ import os
 import pandas as pd
 #interpolation of missing value in location information, better performance in high resolution dataset
 # pandas interpolate() https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.interpolate.html
-def interpolation(d,p):
+def interpolation(d,p,meth):
       base_dir = d.workdir
       #specify the critical headers
 #      latHeader=p.latHeaderName
@@ -21,8 +21,8 @@ def interpolation(d,p):
                os.makedirs(outpath)
       #csv_file=open(filePath, encoding='utf-8')
       df = pd.read_csv(filePath)#get dataframe
-      df=df.interpolate(method ='cubic', limit_direction ='both',limit_area='inside')
-      df.to_csv(outpath+'/'+'linearInterporlation.csv',index=False)
+      df=df.interpolate(method =meth, limit_direction ='both',limit_area='inside')
+      df.to_csv(outpath+'/'+meth+'_interporlation.csv',index=False)
 
 # pandas dropna(): https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.dropna.html
 def removeMissing(d,p):

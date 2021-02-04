@@ -399,7 +399,7 @@ def setupTab4(tab):
      tab3_TextLabel1 = ttk.Label(tab, text= "How to deal with missing value")
      tab3_TextLabel1.place(relx = 0.1, rely = 0.2)
      
-     choices=["remove the data with missing value","interpolation"]
+     choices=["remove the data with missing value","cubic interpolation","linear interpolation","quadratic interpolation"]
      multibox=ttk.Combobox(tab,values=choices
                            ,width=40
                            ,font=12
@@ -417,7 +417,7 @@ def setupTab4(tab):
 #                           )
 #     Entry.place(relx = 0.8, rely = 0.4)
      # Label for information
-     tab3_TextLabel3 = ttk.Label(tab, text= "Here should be some comments about advantages and disadvantages for each method")
+     tab3_TextLabel3 = ttk.Label(tab, text= "")
      tab3_TextLabel3.place(relx = 0.1, rely = 0.5)
      
      def TextBoxUpdate(event):
@@ -436,9 +436,15 @@ def setupTab4(tab):
            print(choice)
            
            import launch
-           if(choice=='interpolation'):
+           if(choice=='cubic interpolation'):
                  from utils.cleanData import interpolation
-                 interpolation(launch.d,launch.pSetups)
+                 interpolation(launch.d,launch.pSetups, 'cubic')
+           elif(choice=='linear interpolation'):
+                 from utils.cleanData import interpolation
+                 interpolation(launch.d,launch.pSetups, 'linear')
+           elif(choice=='quadratic interpolation'):
+                 from utils.cleanData import interpolation
+                 interpolation(launch.d,launch.pSetups, 'quadratic')
            elif(choice=='remove the data with missing value'): 
                  from utils.cleanData import removeMissing
                  removeMissing(launch.d,launch.pSetups)
