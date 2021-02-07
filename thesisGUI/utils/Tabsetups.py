@@ -378,6 +378,7 @@ def setupTab3(tab):
                  reg=''
                  if(entry2.get()!=''):
                        reg=entry2.get()
+                       
                  else:
                        reg='%Y-%m-%d %H:%M:%S.%f'
                  print(reg)
@@ -387,6 +388,7 @@ def setupTab3(tab):
                  from utils.spliting import splitingTime
                  seconds=entry3.get()
                  splitingTime(launch.d,launch.pSetups,reg,typ,seconds)
+                 launch.iB.timestampReg=reg
                  
 #                 
            else:#split by inidividual

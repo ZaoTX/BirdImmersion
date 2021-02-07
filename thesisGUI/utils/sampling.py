@@ -288,8 +288,8 @@ def TD_TR(d,p,dist_threshold,iB):
                 index=0
                 last_time=timeList[-1]
                 first_time=timeList[0]
-                lastTimeObj=datetime.strptime(last_time,'%Y-%m-%d %H:%M:%S.%f')
-                firstTimeObj=datetime.strptime(first_time,'%Y-%m-%d %H:%M:%S.%f')
+                lastTimeObj=datetime.strptime(last_time,iB.timestampReg)
+                firstTimeObj=datetime.strptime(first_time,iB.timestampReg)
                 delta_e=abs((firstTimeObj-lastTimeObj).total_seconds())
                 #find the first and the last point
                 lat1=float(latList[0])
@@ -303,7 +303,7 @@ def TD_TR(d,p,dist_threshold,iB):
                 
                 for i in range(1,end-2):
                     cur_time=timeList[i]
-                    cur_timeObj=datetime.strptime(cur_time,'%Y-%m-%d %H:%M:%S.%f')
+                    cur_timeObj=datetime.strptime(cur_time,iB.timestampReg)
                     delta_i=abs((firstTimeObj-cur_timeObj).total_seconds())
                     #get time ratio
                     ratio=delta_i/delta_e
@@ -495,13 +495,13 @@ def TD_SP(d,p,speed_threshold,iB):
                     lng3=float(lngList[i+1])
                     height3=float(heightList[i+1])
                     cur_time=timeList[i]
-                    cur_timeObj=datetime.strptime(cur_time,'%Y-%m-%d %H:%M:%S.%f')
+                    cur_timeObj=datetime.strptime(cur_time,iB.timestampReg)
                     last_time=timeList[i-1]
-                    last_timeObj=datetime.strptime(last_time,'%Y-%m-%d %H:%M:%S.%f')
+                    last_timeObj=datetime.strptime(last_time,iB.timestampReg)
                     #time diff between last timestamp to current timestamp
                     delta_t1=abs((last_timeObj-cur_timeObj).total_seconds())
                     next_time=timeList[i+1]
-                    next_timeObj=datetime.strptime(next_time,'%Y-%m-%d %H:%M:%S.%f')
+                    next_timeObj=datetime.strptime(next_time,iB.timestampReg)
                     #time diff between next timestamp to current timestamp
                     delta_t2=abs((next_timeObj-cur_timeObj).total_seconds()) 
                     # calculate distance between the i-th point and i-1 th position
@@ -696,8 +696,8 @@ def  SQUISH(d,p,size,iB):
             last_height = HeightList[-1]
             last_timestamp = timeList[-1]
             
-            lastTimeObj=datetime.strptime(last_timestamp,'%Y-%m-%d %H:%M:%S.%f')
-            firstTimeObj=datetime.strptime(first_timestamp,'%Y-%m-%d %H:%M:%S.%f')
+            lastTimeObj=datetime.strptime(last_timestamp,iB.timestampReg)
+            firstTimeObj=datetime.strptime(first_timestamp,iB.timestampReg)
             timeDiff=decimal.Decimal(abs((lastTimeObj-firstTimeObj).total_seconds()))
             sedList=[]
             for i in range(0,length):
@@ -706,7 +706,7 @@ def  SQUISH(d,p,size,iB):
                 lat = LatList[i]
                 lng = LngList[i]
                 height = HeightList[i]
-                cur_timeObj=datetime.strptime(time,'%Y-%m-%d %H:%M:%S.%f')
+                cur_timeObj=datetime.strptime(time,iB.timestampReg)
                 curtimeDiff=decimal.Decimal(abs((firstTimeObj-cur_timeObj).total_seconds()))
                 # interpolate lat,lng,height
                 lati=first_lat+ (last_lat-first_lat)*float(curtimeDiff*(1/timeDiff))
@@ -731,11 +731,11 @@ def  SQUISH(d,p,size,iB):
             last_height = HeightList[-1]
             last_timestamp = timeList[-1]
             print(last_timestamp)
-            lastTimeObj=datetime.strptime(last_timestamp,'%Y-%m-%d %H:%M:%S.%f')
-            firstTimeObj=datetime.strptime(first_timestamp,'%Y-%m-%d %H:%M:%S.%f')
+            lastTimeObj=datetime.strptime(last_timestamp,iB.timestampReg)
+            firstTimeObj=datetime.strptime(first_timestamp,iB.timestampReg)
             timeDiff=decimal.Decimal(abs((firstTimeObj-lastTimeObj).total_seconds()))
             print(timeDiff)
-            cur_timeObj=datetime.strptime(time,'%Y-%m-%d %H:%M:%S.%f')
+            cur_timeObj=datetime.strptime(time,iB.timestampReg)
             curtimeDiff=decimal.Decimal(abs((firstTimeObj-cur_timeObj).total_seconds()))
             # interpolate lat,lng,height
             lati=first_lat+ (last_lat-first_lat)*float(curtimeDiff*(1/timeDiff))
@@ -764,11 +764,11 @@ def  SQUISH(d,p,size,iB):
             height = HeightList[ind]
             time = timeList[ind]
             
-            lastTimeObj=datetime.strptime(last_timestamp,'%Y-%m-%d %H:%M:%S.%f')
-            firstTimeObj=datetime.strptime(first_timestamp,'%Y-%m-%d %H:%M:%S.%f')
+            lastTimeObj=datetime.strptime(last_timestamp,iB.timestampReg)
+            firstTimeObj=datetime.strptime(first_timestamp,iB.timestampReg)
             timeDiff=decimal.Decimal(abs((firstTimeObj-lastTimeObj).total_seconds()))
             
-            cur_timeObj=datetime.strptime(time,'%Y-%m-%d %H:%M:%S.%f')
+            cur_timeObj=datetime.strptime(time,iB.timestampReg)
             curtimeDiff=decimal.Decimal(abs((firstTimeObj-cur_timeObj).total_seconds()))
             # interpolate lat,lng,height
             lati=first_lat+ (last_lat-first_lat)*float(curtimeDiff*(1/timeDiff))

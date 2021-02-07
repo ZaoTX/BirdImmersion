@@ -31,6 +31,7 @@ class infoBuffer:
             self.lngHeaderName=''
             self.heightHeaderName=''
             self.timestampHeaderName=''
+            self.timestampReg=''
       def setMissing(self,num):
             self.missingvalue=num
       def setStartTime(self,startTime):
