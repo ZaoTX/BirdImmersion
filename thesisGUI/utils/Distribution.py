@@ -25,21 +25,40 @@ def plotHorizontal(main,iB,d):
     minLats=[]
     maxLngs=[]
     minLngs=[]
+    IDremove=[]
     # for each individual
     # we find a pair of min max value for each individual's lat lng
     for i in range(0,num):
+        idName=IDList[i]
         latList= latLists[i]
-        latList = [float(i) for i in latList]
         lngList=lngLists[i]
-        lngList = [float(i) for i in lngList]
-        maxLat=max(latList)
-        minLat=min(latList)
-        maxLng=max(lngList)
-        minLng=min(lngList)
-        maxLats.append(maxLat)
-        minLats.append(minLat)
-        maxLngs.append(maxLng)
-        minLngs.append(minLng)
+        #skip the data with missing values in lat and lng
+        length=len(latList)
+        outLatList=[]
+        outLngList=[]
+        for j in range(0,length):
+            curLat=latList[j]
+            curLng=lngList[j]
+            if(curLat!=''and curLng!=''):
+                outLatList.append(float(curLat))
+                outLngList.append(float(curLng))
+
+        if(outLatList==[]):
+            #delete this ID
+            IDremove.append(idName)
+        else:
+            maxLat=max(outLatList)
+            minLat=min(outLatList)
+            maxLng=max(outLngList)
+            minLng=min(outLngList)
+            maxLats.append(maxLat)
+            minLats.append(minLat)
+            maxLngs.append(maxLng)
+            minLngs.append(minLng)
+    #remove the ID with empty value
+    for i in IDremove:
+        IDList.remove(i)
+    num = len(IDList)
     #find the largest lat,lng and the smallest lat lng as range of axis
     theMinLat=min(minLats)
     
