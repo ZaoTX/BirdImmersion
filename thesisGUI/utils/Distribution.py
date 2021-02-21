@@ -130,9 +130,10 @@ def plotTimeline(fig,main,iB,d):
     
     minTimestamps=[]
     maxTimestamps=[]
-    IDremove=[]
+    #IDremove=[]
     # for each individual
     # we find a pair of min max value for timestamp
+    count=1
     for i in range(0,num):
         latList= latLists[i]
         lngList=lngLists[i]
@@ -151,14 +152,16 @@ def plotTimeline(fig,main,iB,d):
 
         if(outTimeList!=[]):
             #plot this ID
-            timeList=pd.to_datetime(outTimeList)
+            outTimeList=pd.to_datetime(outTimeList)
         
-            minTimestamps.append(timeList[0])
-            maxTimestamps.append(timeList[-1])
-            main.scatter(timeList, [i]*len(timeList),
+            minTimestamps.append(outTimeList[0])
+            maxTimestamps.append(outTimeList[-1])
+            #get new index
+            
+            main.scatter(outTimeList, [count]*len(outTimeList),
                marker='s', label=idName)
-        else:
-            IDremove.append(idName)
+            count=count+1
+        
     maxTimestamp=max(maxTimestamps)
     minTimestamp=min(minTimestamps)
     diff = maxTimestamp-minTimestamp
