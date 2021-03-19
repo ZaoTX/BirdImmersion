@@ -14,6 +14,15 @@ class infoBuffer:
             self.startPos=''
             self.endPos=''
             self.numOfDatapoints=0
+            self.missingLat=0
+            self.missingLng=0
+            self.missingHeight=0
+            self.maxLat=0
+            self.minLat=0
+            self.maxLng=0
+            self.minLng=0
+            self.maxHeight=0
+            self.minHeight=0
             # metrics of trajectory sampling
             self.fileLoc=''
             self.compressionratio=0

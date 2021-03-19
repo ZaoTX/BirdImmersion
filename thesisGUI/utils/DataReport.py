@@ -109,10 +109,10 @@ def preAnalysis(idName,d,iB):
     #get the whole number of datapoints
     iB.setDataPoints(len(timeList))
     #get the number of rows with missing values
-    missingHeight=heightList.count('')
-    missingLat=latList.count('')
-    missingLng=lngList.count('')
-    num_Missing=max(missingHeight,missingLat,missingLng)
+    iB.missingHeight=heightList.count('')
+    iB.missingLat=latList.count('')
+    iB.missingLng=lngList.count('')
+    num_Missing=max(iB.missingHeight,iB.missingLat,iB.missingLng)
     iB.setMissing(num_Missing)
     #get start lat lng height
     #get the first non-empty value of the list
@@ -138,6 +138,7 @@ def preAnalysis(idName,d,iB):
           e_lat=Lats[-1]
           slat_id=latList.index(s_lat)
           elat_id=latList.index(e_lat)
+          
     if(len(Lngs)!=0):
           s_lng=Lngs[0]
           e_lng=Lngs[-1]
