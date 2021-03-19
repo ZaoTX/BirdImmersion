@@ -32,13 +32,14 @@ def plotHorizontal(main,iB,d):
         idName=IDList[i]
         latList= latLists[i]
         lngList=lngLists[i]
-        #skip the data with missing values in lat and lng
+        
         length=len(latList)
         outLatList=[]
         outLngList=[]
         for j in range(0,length):
             curLat=latList[j]
             curLng=lngList[j]
+            #skip the data with missing values in lat and lng
             if(curLat!=''and curLng!=''):
                 outLatList.append(float(curLat))
                 outLngList.append(float(curLng))
@@ -102,14 +103,190 @@ def plotHorizontal(main,iB,d):
         rect = mpatch.Rectangle((minLngi,minLati),width , height, linewidth=1,edgecolor=color, alpha = 0.3, facecolor=color,label=idName)
         main.add_patch(rect)
     main.legend(loc='best')
-#    cdict=dict(zip(IDList,colors))
-#    for n in IDList:
+def plotDensity(main,iB,d):
+    # find individual list
+    IDList=d.individuals
+    IDList_copy=IDList
+    # timeLists=d.TimeLists
+    #heightLists=d.heightLists
+    latLists=d.latLists
+    lngLists=d.lngLists
+    
+    # number of individuals
+    num=len(IDList)
+    
+    maxLats=[]
+    minLats=[]
+    maxLngs=[]
+    minLngs=[]
+    IDremove=[]
+    # for each individual
+    # we find a pair of min max value for each individual's lat lng
+    for i in range(0,num):
+        idName=IDList[i]
+        latList= latLists[i]
+        lngList=lngLists[i]
         
-        
+        length=len(latList)
+        outLatList=[]
+        outLngList=[]
+        for j in range(0,length):
+            curLat=latList[j]
+            curLng=lngList[j]
+            #skip the data with missing values in lat and lng
+            if(curLat!=''and curLng!=''):
+                outLatList.append(float(curLat))
+                outLngList.append(float(curLng))
 
-#        midLat=(maxLati+minLati)/2
-#        midLng=(maxLngi+minLngi)/2
-        #main.text(midLng,midLat,idName)
+        if(outLatList==[]):
+            #delete this ID
+            IDremove.append(idName)
+        else:
+            maxLat=max(outLatList)
+            minLat=min(outLatList)
+            maxLng=max(outLngList)
+            minLng=min(outLngList)
+            maxLats.append(maxLat)
+            minLats.append(minLat)
+            maxLngs.append(maxLng)
+            minLngs.append(minLng)
+    #remove the ID with empty value
+    for i in IDremove:
+        IDList.remove(i)
+    num = len(IDList)
+    #find the largest lat,lng and the smallest lat lng as range of axis
+#    theMinLat=min(minLats)
+#    theMaxLat=max(maxLats)
+#    theMinLng=min(minLngs)
+#    theMaxLng=max(maxLngs)
+#    xlim_min= theMinLng-(theMaxLng-theMinLng)*0.3
+#    if(xlim_min<-180):
+#        xlim_min=-180
+#        
+#    xlim_max= theMaxLng+(theMaxLng-theMinLng)*0.3
+#    if(xlim_max>180):
+#        xlim_max=180
+#        
+#    ylim_min= theMinLat-(theMaxLat-theMinLat)*0.3
+#    if(ylim_min<-90):
+#        ylim_min=-90
+#        
+#    ylim_max= theMaxLat+(theMaxLat-theMinLat)*0.3
+#    if(ylim_max>90):
+#        ylim_max=90
+#    # define the limitation of axis
+#    main.axis(xmin=xlim_min,xmax=xlim_max, ymin=ylim_min, ymax=ylim_max)
+   
+    for i in range(0,num):
+        #add id name:
+        idName=IDList[i]
+        #find a color to represent
+        #color = colormap(i)
+        ind=IDList_copy.index(idName)
+        latList= latLists[ind]
+        lngList=lngLists[ind]
+        #save a list for each individual and plot them
+        length=len(latList)
+        outLatList=[]
+        outLngList=[]
+        for j in range(0,length):
+            curLat=latList[j]
+            curLng=lngList[j]
+            #skip the data with missing values in lat and lng
+            if(curLat!=''and curLng!=''):
+                outLatList.append(float(curLat))
+                outLngList.append(float(curLng))
+        #plot the points
+        main.scatter(outLngList,outLatList,
+               marker='s', label=idName, s=[5]*len(outLngList))
+        
+    main.legend(loc='best')
+def plotDensity3D(main,iB,d):
+    #get Height list
+    heightLists=d.heightLists
+    # find individual list
+    IDList=d.individuals
+#    IDList_copy=IDList
+    # timeLists=d.TimeLists
+    #heightLists=d.heightLists
+    latLists=d.latLists
+    lngLists=d.lngLists
+    
+    # number of individuals
+    num=len(IDList)
+    
+    maxLats=[]
+    minLats=[]
+    maxLngs=[]
+    minLngs=[]
+    IDremove=[]
+    # for each individual
+    # we find a pair of min max value for each individual's lat lng
+    for i in range(0,num):
+        idName=IDList[i]
+        latList= latLists[i]
+        lngList=lngLists[i]
+        heightList=heightLists[i]
+        
+        length=len(latList)
+        outLatList=[]
+        outLngList=[]
+        outheightList=[]
+        for j in range(0,length):
+            curLat=latList[j]
+            curLng=lngList[j]
+            curheight=heightList[j]
+            #skip the data with missing values in lat and lng
+            if(curLat!=''and curLng!='' and curheight!=''):
+                outLatList.append(float(curLat))
+                outLngList.append(float(curLng))
+                outheightList.append(float(curheight))
+
+        if(outLatList==[]):
+            #delete this ID
+            IDremove.append(idName)
+        else:
+            #plot the points
+            main.scatter(outLngList,outLatList,outheightList,
+               marker='s', label=idName)
+            maxLat=max(outLatList)
+            minLat=min(outLatList)
+            maxLng=max(outLngList)
+            minLng=min(outLngList)
+            maxLats.append(maxLat)
+            minLats.append(minLat)
+            maxLngs.append(maxLng)
+            minLngs.append(minLng)
+    #remove the ID with empty value
+    for i in IDremove:
+        IDList.remove(i)
+    num = len(IDList)
+#    #find the largest lat,lng and the smallest lat lng as range of axis
+#    theMinLat=min(minLats)
+#    theMaxLat=max(maxLats)
+#    theMinLng=min(minLngs)
+#    theMaxLng=max(maxLngs)
+#    xlim_min= theMinLng-(theMaxLng-theMinLng)*0.3
+#    if(xlim_min<-180):
+#        xlim_min=-180
+#        
+#    xlim_max= theMaxLng+(theMaxLng-theMinLng)*0.3
+#    if(xlim_max>180):
+#        xlim_max=180
+#        
+#    ylim_min= theMinLat-(theMaxLat-theMinLat)*0.3
+#    if(ylim_min<-90):
+#        ylim_min=-90
+#        
+#    ylim_max= theMaxLat+(theMaxLat-theMinLat)*0.3
+#    if(ylim_max>90):
+#        ylim_max=90
+#    # define the limitation of axis
+#    main.axis(xmin=xlim_min,xmax=xlim_max, ymin=ylim_min, ymax=ylim_max)
+   
+    
+        
+    main.legend(loc='best')
 '''
  Assumption: for each individual it starts from first timestamp and end at the last timestamp 
 '''

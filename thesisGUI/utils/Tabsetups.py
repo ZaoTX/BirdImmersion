@@ -771,7 +771,7 @@ def updateTab8(tab):
     #from matplotlib.backend_bases import key_press_handler
     from matplotlib.figure import Figure
     import launch
-    from utils.Distribution import plotHorizontal
+    from utils.Distribution import plotHorizontal,plotDensity,plotDensity3D
     #import matplotlib.patches as mpatch
     
     fig = Figure(figsize=(5, 4))
@@ -781,7 +781,7 @@ def updateTab8(tab):
     main_plot.set_xlabel('longitude')
     main_plot.set_ylabel('latitude')
     
-    plotHorizontal(main_plot,launch.iB,launch.d)
+    plotDensity(main_plot,launch.iB,launch.d)
 
     canvas = FigureCanvasTkAgg(fig, master=tab)  # A tk.DrawingArea.
     canvas.draw()

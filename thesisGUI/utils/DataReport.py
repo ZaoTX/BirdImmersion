@@ -138,7 +138,6 @@ def preAnalysis(idName,d,iB):
           e_lat=Lats[-1]
           slat_id=latList.index(s_lat)
           elat_id=latList.index(e_lat)
-          
     if(len(Lngs)!=0):
           s_lng=Lngs[0]
           e_lng=Lngs[-1]
