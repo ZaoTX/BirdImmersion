@@ -13,7 +13,6 @@ class dataInfo:
       def __init__(self,workdir,filepath,headers,individuals):
             self.workdir=workdir
             self.filepath=filepath
-            #self.csv_file=csv.DictReader(self.filepath)
             self.headers=headers
             self.individuals=individuals
             self.originalNumOfLines=0

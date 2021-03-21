@@ -8,7 +8,7 @@ Created on Thu Sep 24 14:37:00 2020
 import tkinter as tk
 from tkinter import ttk
 import tkinter.filedialog  as fd
-from utils.loadData import setupData,setupWorkdir
+
 import timeit
 
 
@@ -18,7 +18,7 @@ import timeit
 #   their label to explain the function
 
 def setupTab1(tab):
-     
+     from utils.loadData import setupData,setupWorkdir
      ########### Select directory path ###################
      # Label for information
      tab1_TextLabel = ttk.Label(tab, text= "Please select a directory for preprocessing, the output will be saved in this directory")
@@ -345,7 +345,9 @@ def setupTab3(tab):
      
      # Label for information
      defaultReg=tk.StringVar()
-     defaultReg.set(r'%Y-%m-%d %H:%M:%S.%f')
+     defaultReg.set('%Y-%m-%d %H:%M:%S.%f')
+     import launch
+     launch.iB.timestampReg='%Y-%m-%d %H:%M:%S.%f'
      entry1=tk.Entry(tab,
            width=108)
      entry1.config(textvariable = defaultReg,state='readonly',relief='flat')
@@ -388,7 +390,7 @@ def setupTab3(tab):
                  from utils.spliting import splitingTime
                  seconds=entry3.get()
                  splitingTime(launch.d,launch.pSetups,reg,typ,seconds)
-                 launch.iB.timestampReg=reg
+                 launch.iB.timestampReg=str(reg)
                  
 #                 
            else:#split by inidividual
@@ -640,7 +642,7 @@ def updateTab6(tab,d,iB):
           averageSED=str(iB.averageSED)
           tab6_TextLabel41.config(text= averageSED)
           #tab6_TextLabel41.place(relx = 0.4, rely = 0.45)
-    tab6_TextLabel3 = ttk.Label(tab, text= "Whole Run Time")
+    tab6_TextLabel3 = ttk.Label(tab, text= "The whole run time of sampling")
     tab6_TextLabel3.place(relx = 0.1, rely = 0.15)
           
     multibox=ttk.Combobox(tab,values=choices

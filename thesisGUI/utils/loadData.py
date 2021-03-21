@@ -28,6 +28,3 @@ def setupData(filePath,d):
             tk.messagebox.showinfo("Error in loadData","Please give a csv file.")
       
             
-def shortSummary(filePath,d):    
-     
-     return
