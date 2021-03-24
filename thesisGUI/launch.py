@@ -16,5 +16,3 @@ pSetups=processingSetups()
 d=dataInfo('','',[],[])
 main=MainGUI()
 main.root.mainloop()
-
- 
