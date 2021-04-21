@@ -166,11 +166,10 @@ def PostAnalysis(idName,d,iB):
     getPostInfo(iB)
     #find orignial individual list
     IDList=d.individuals
-    timeLists = d.timeLists
-    
-#    heightLists=d.heightLists
-#    latLists=d.latLists
-#    lngLists=d.lngLists
+    timeLists=d.timeLists
+    heightLists=d.heightLists
+    latLists=d.latLists
+    lngLists=d.lngLists
     #find sampled dataset
     post_timeLists=iB.timeLists
     
@@ -181,6 +180,9 @@ def PostAnalysis(idName,d,iB):
     ind=IDList.index(idName)
     #orignial data
     timeList=timeLists[ind]
+    heightList=heightLists[ind]
+    latList=latLists[ind]
+    lngList=lngLists[ind]
     
     ind2=iB.individuals.index(idName)
     post_timeList=post_timeLists[ind2]
@@ -201,16 +203,16 @@ def PostAnalysis(idName,d,iB):
             first_lng = float(LngList[0])
             first_height = float(HeightList[0])
             first_timestamp = timeList[0]
-            print(first_timestamp)
+            #print(first_timestamp)
             last_lat = float(LatList[-1])
             last_lng = float(LngList[-1])
             last_height = float(HeightList[-1])
             last_timestamp = timeList[-1]
-            print(last_timestamp)
+            #print(last_timestamp)
             lastTimeObj=datetime.strptime(last_timestamp,'%Y-%m-%d %H:%M:%S.%f')
             firstTimeObj=datetime.strptime(first_timestamp,'%Y-%m-%d %H:%M:%S.%f')
             timeDiff=decimal.Decimal(abs((firstTimeObj-lastTimeObj).total_seconds()))
-            print(timeDiff)
+            #print(timeDiff)
             cur_timeObj=datetime.strptime(time,'%Y-%m-%d %H:%M:%S.%f')
             curtimeDiff=decimal.Decimal(abs((firstTimeObj-cur_timeObj).total_seconds()))
             # interpolate lat,lng,height
@@ -230,6 +232,76 @@ def PostAnalysis(idName,d,iB):
         SEDs.append(sed)
     averageSED= sum(SEDs)/len(SEDs)
     iB.averageSED=averageSED
+    ###########compare the orignial and sampled trjectory############
+    #prepare the 3D distance calculation
+    import math
+    def d_2points(lat1,lng1,h1,lat2,lng2,h2):
+        R = 6371000 #radius of earth
+        lng1=math.radians(float(lng1))
+        lng2=math.radians(float(lng2))
+        lat1=math.radians(float(lat1))
+        lat2=math.radians(float(lat2))
+        dlng = lng1-lng2
+        dlat = lat1 - lat2
+        
+        dh= float(h1)-float(h2) 
+        a = math.sin(dlat / 2)**2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlng / 2)**2
+
+        c = math.asin(math.sqrt(a))
+        dis_horizontal = 2 *R * c
+        dis =math.sqrt( dh**2+dis_horizontal**2)
+        return dis
+    #define the frechet algorithm
+    #input: 2 trejectories output: infimum distance of 2 points along the trajectoy
+    
+    ##helper function: c(p,q) p,q are the index of point for 2 trjectories
+    # recursive calculation to find the infimum
+    def cal(ca,i,j,lats1,lngs1,hs1,lats2,lngs2,hs2,lookupTable):
+        if lookupTable[i,j]!=-2 and lookupTable[i,j]!=float("inf"):
+            return lookupTable[i,j]
+        elif ca[i,j]>-1:
+            return ca[i,j]
+        elif i == 0 and j == 0:
+            ca[i,j] =d_2points(lats1[0],lngs1[0],hs1[0],lats2[0],lngs2[0],hs2[0])
+            
+        elif i == 0 and j > 0:
+
+            c1=cal(ca,0,j-1,lats1,lngs1,hs1,lats2,lngs2,hs2,lookupTable)
+            ca[i,j] = max(c1,d_2points(lats1[0],lngs1[0],hs1[0],lats2[j],lngs2[j],hs2[j]))
+        elif i>0 and j==0:
+
+                c1=cal(ca,i-1,0,lats1,lngs1,hs1,lats2,lngs2,hs2,lookupTable)
+                ca[i,j] = max(c1,d_2points(lats1[i],lngs1[i],hs1[i],lats2[0],lngs2[0],hs2[0]))
+        elif i>0 and j>0:
+
+                c1=cal(ca,i-1,j,lats1,lngs1,hs1,lats2,lngs2,hs2,lookupTable)
+                c2=cal(ca,i-1,j-1,lats1,lngs1,hs1,lats2,lngs2,hs2,lookupTable)
+                 
+
+                c3=cal(ca,i,j-1,lats1,lngs1,hs1,lats2,lngs2,hs2,lookupTable)
+                 
+                ca[i,j] = max(min(c1,c2,c3),d_2points(lats1[i],lngs1[i],hs1[i],lats2[j],lngs2[j],hs2[j]))
+        else:
+            ca[i,j] = float("inf")
+        lookupTable[i,j] = ca[i,j]
+        return ca[i,j]
+    import numpy as np  
+    def frechet(lats1,lngs1,hs1,lats2,lngs2,hs2):
+        p=len(latList)
+        q=len(post_latList)
+        
+        ca = np.ones((p,q))
+        ca = np.multiply(ca,-1)
+        lookupTable = np.ones((p,q))
+        lookupTable = np.multiply(lookupTable,-2)
+        return cal(ca,p-1,q-1,lats1,lngs1,hs1,lats2,lngs2,hs2,lookupTable)
+    try:
+        iB.frechetDistance=frechet(latList,lngList,heightList,post_latList,post_lngList,post_heightList)
+    except(RecursionError): 
+        print("The max Recursion depth exceeded, please split the dataset first")
+        iB.frechetDistance='This trajectoy has too many datapoints, please split that first'
+    print('PostAnalysis finished')
+    print(iB.frechetDistance)
 #store the Lists in infoBuffer
 def getPostInfo(iB):
     import csv
@@ -296,7 +368,7 @@ def getPostInfo(iB):
         heightLists[ind]=heightLists[ind]+curHeightList
         latLists[ind]=latLists[ind]+curLatList
         lngLists[ind]=lngLists[ind]+curLngList
-    #store Information in infobuffer
+    #store Information in infobuffer(sampled datapoint)
     iB.individuals=IDList
     iB.timeLists=timeLists
     iB.heightLists=heightLists

@@ -22,6 +22,7 @@ def interpolation(d,p,meth):
       #csv_file=open(filePath, encoding='utf-8')
       df = pd.read_csv(filePath)#get dataframe
       df=df.interpolate(method =meth, limit_direction ='both',limit_area='inside')
+      df=df.dropna()
       df.to_csv(outpath+'/'+meth+'_interporlation.csv',index=False)
 
 # pandas dropna(): https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.dropna.html

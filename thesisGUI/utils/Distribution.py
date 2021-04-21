@@ -343,18 +343,18 @@ def plotTimeline(fig,main,iB,d):
     minTimestamp=min(minTimestamps)
     diff = maxTimestamp-minTimestamp
     xlim_max=maxTimestamp+0.1*diff
-    xlim_min=minTimestamp-0.1*diff
-    main.axis(xmin=xlim_min,xmax=xlim_max)
-    #main.get_xaxis().set_major_locator()
-    xfmt = md.DateFormatter('%Y-%m-%d %H:%M:%S')
-    main.xaxis.set_major_formatter(xfmt)
-    fig.autofmt_xdate()
-    if(7>float(diff.days)>1):
-        main.get_xaxis().set_major_locator(md.DayLocator(interval=1))
-    elif(30>float(diff.days)>=7):
-        main.get_xaxis().set_major_locator(md.WeekdayLocator(interval=1))
-    elif(float(diff.days)>=30):
-        main.get_xaxis().set_major_locator(md.MonthLocator(interval=1))
-    else:
-        main.get_xaxis().set_major_locator(md.HourLocator(interval=1))
+#    xlim_min=minTimestamp-0.1*diff
+    main.axis(xmax=xlim_max)
+#    #main.get_xaxis().set_major_locator()
+#    xfmt = md.DateFormatter('%Y-%m-%d %H:%M:%S')
+#    main.xaxis.set_major_formatter(xfmt)
+#    fig.autofmt_xdate()
+#    if(7>float(diff.days)>1):
+#        main.get_xaxis().set_major_locator(md.DayLocator(interval=1))
+#    elif(30>float(diff.days)>=7):
+#        main.get_xaxis().set_major_locator(md.WeekdayLocator(interval=1))
+#    elif(float(diff.days)>=30):
+#        main.get_xaxis().set_major_locator(md.MonthLocator(interval=1))
+#    else:
+#        main.get_xaxis().set_major_locator(md.HourLocator(interval=1))
     main.legend(loc='best')

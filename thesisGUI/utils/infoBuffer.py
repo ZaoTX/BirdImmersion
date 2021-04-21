@@ -23,11 +23,12 @@ class infoBuffer:
             self.minLng=0
             self.maxHeight=0
             self.minHeight=0
-            # metrics of trajectory sampling
+            # metrics and information of trajectory sampling
             self.fileLoc=''
             self.compressionratio=0
             self.runtime=0
             self.averageSED=0
+            self.frechetDistance=0
             # these are only used to store information after the sampling
             self.individuals=[]
             self.timeLists=[]
