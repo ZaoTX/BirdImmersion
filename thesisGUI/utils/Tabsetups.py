@@ -641,8 +641,11 @@ def updateTab6(tab,d,iB):
           
           averageSED=str(iB.averageSED)
           tab6_TextLabel41.config(text= averageSED)
+          
           frechetDistance=str(iB.frechetDistance)
           tab6_TextLabel51.config(text= frechetDistance)
+          ILD = str(iB.ILD)
+          tab6_TextLabel61.config(text= ILD)
           #tab6_TextLabel41.place(relx = 0.4, rely = 0.45)
     tab6_TextLabel3 = ttk.Label(tab, text= "The whole run time of sampling")
     tab6_TextLabel3.place(relx = 0.1, rely = 0.15)
@@ -667,6 +670,9 @@ def updateTab6(tab,d,iB):
     
     tab6_TextLabel5 = ttk.Label(tab, text= "Frechet Distance(Similarity)")
     tab6_TextLabel5.place(relx = 0.1, rely = 0.55)
+    
+    tab6_TextLabel6 = ttk.Label(tab, text= "Information Loss Degree")
+    tab6_TextLabel6.place(relx = 0.1, rely = 0.65)
     #initialize text
     tab6_TextLabel21 = ttk.Label(tab, text= '')
     tab6_TextLabel21.place(relx = 0.4, rely = 0.35)
@@ -676,7 +682,8 @@ def updateTab6(tab,d,iB):
     tab6_TextLabel41.place(relx = 0.4, rely = 0.45)
     tab6_TextLabel51 = ttk.Label(tab, text= '')
     tab6_TextLabel51.place(relx = 0.4, rely = 0.55)
-
+    tab6_TextLabel61 = ttk.Label(tab, text= '')
+    tab6_TextLabel61.place(relx = 0.4, rely = 0.65)
     
 #give a short report about the dataset 
 #and hint the user which algorithm to use 

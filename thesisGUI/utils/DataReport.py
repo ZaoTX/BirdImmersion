@@ -193,8 +193,8 @@ def PostAnalysis(idName,d,iB):
     wholeNumber=len(timeList)
     # record compression ratio
     iB.compressionratio=(1-len(post_timeList)/wholeNumber)*100
-    # for each individual calculate their average SED
-    #calculate the SED of (lat,lng,height)
+    
+    #####################calculate the SED of (lat,lng,height)####################################
     def calculateSED(lat,lng,height,time,LatList,LngList,HeightList,timeList):
             import math
             from datetime import datetime
@@ -222,92 +222,96 @@ def PostAnalysis(idName,d,iB):
             #calculate sed value
             value = math.sqrt((lat-lati)**2+(lng-lngi)**2+(height-hi)**2)
             return value
-    SEDs=[]
-    #the List of datapoints that need to calculate
-    cur_Lats=[]
-    cur_Lngs=[]
-    cur_hs=[]
-    cur_ts=[]
-    j=0
-    post_lats=[]
-    post_lngs=[]
-    post_hs=[]
-    post_ts=[]
-    for i in range(0,len(timeList)):
-        #find the datapoint that needs to calculate the SED
-        if ((latList[i] not in post_latList)and (lngList[i] not in post_lngList) and (heightList[i] not in post_heightList)):
-            lati = float(latList[i])
-            cur_Lats.append(lati)
-            lngi = float(lngList[i])
-            cur_Lngs.append(lngi)
-            heighti = float(heightList[i])
-            cur_hs.append(heighti)
-            timei = timeList[i]
-            cur_ts.append(timei)
-        elif(len(post_lats)==0):
-            latj = float(post_latList[j])
-            post_lats.append(latj)
-            lngj = float(post_lngList[j])
-            post_lngs.append(lngj)
-            heightj = float(post_heightList[j])
-            post_hs.append(heightj)
-            timej = post_timeList[j]
-            post_ts.append(timej)
-            j=j+1
-            if(j>=len(post_latList)):
-                break
-        elif(len(cur_Lats)==0 and len(post_lats)>=1):
-            post_lats=[]
-            post_lngs=[]
-            post_hs=[]
-            post_ts=[]
-            latj = float(post_latList[j])
-            post_lats.append(latj)
-            lngj = float(post_lngList[j])
-            post_lngs.append(lngj)
-            heightj = float(post_heightList[j])
-            post_hs.append(heightj)
-            timej = post_timeList[j]
-            post_ts.append(timej)
-            j=j+1
-            if(j>=len(post_latList)):
-                break
-        else:
-            print(len(cur_Lats))
-            latj = float(post_latList[j])
-            post_lats.append(latj)
-            lngj = float(post_lngList[j])
-            post_lngs.append(lngj)
-            heightj = float(post_heightList[j])
-            post_hs.append(heightj)
-            timej = post_timeList[j]
-            post_ts.append(timej)
-            #calculate SED and initialize the lists
-            if(len(post_lats)<=1):
-                print("有问题<=1")
-            elif(len(post_lats)>2):
-                print(">2不对")
-            for k in range(0,len(cur_Lats)):
-                latk = float(cur_Lats[k])
-                lngk = float(cur_Lngs[k])
-                heightk = float(cur_hs[k])
-                timek = cur_ts[k]
-                sed=calculateSED(latk,lngk,heightk,timek,post_lats,post_lngs,post_hs,post_ts)
-                SEDs.append(sed)
-            cur_Lats=[]
-            cur_Lngs=[]
-            cur_hs=[]
-            cur_ts=[]
-            post_lats=[]
-            post_lngs=[]
-            post_hs=[]
-            post_ts=[]
-            j=j+1
-            if(j>=len(post_latList)):
-                break
-    
-    averageSED= sum(SEDs)/len(SEDs)
-    iB.averageSED=averageSED
+    def averageSEDError(latList,lngList,heightList,timeList,post_latList,post_lngList,post_heightList,post_timeList):
+        SEDs=[]
+        #the List of datapoints that need to calculate
+        cur_Lats=[]
+        cur_Lngs=[]
+        cur_hs=[]
+        cur_ts=[]
+        j=0
+        post_lats=[]
+        post_lngs=[]
+        post_hs=[]
+        post_ts=[]
+        for i in range(0,len(timeList)):
+            #find the datapoint that needs to calculate the SED
+            if ((latList[i] not in post_latList)and (lngList[i] not in post_lngList) and (heightList[i] not in post_heightList)):
+                lati = float(latList[i])
+                cur_Lats.append(lati)
+                lngi = float(lngList[i])
+                cur_Lngs.append(lngi)
+                heighti = float(heightList[i])
+                cur_hs.append(heighti)
+                timei = timeList[i]
+                cur_ts.append(timei)
+            elif(len(post_lats)==0):
+                latj = float(post_latList[j])
+                post_lats.append(latj)
+                lngj = float(post_lngList[j])
+                post_lngs.append(lngj)
+                heightj = float(post_heightList[j])
+                post_hs.append(heightj)
+                timej = post_timeList[j]
+                post_ts.append(timej)
+                j=j+1
+                if(j>=len(post_latList)):
+                    break
+            elif(len(cur_Lats)==0 and len(post_lats)>=1):
+                post_lats=[]
+                post_lngs=[]
+                post_hs=[]
+                post_ts=[]
+                latj = float(post_latList[j])
+                post_lats.append(latj)
+                lngj = float(post_lngList[j])
+                post_lngs.append(lngj)
+                heightj = float(post_heightList[j])
+                post_hs.append(heightj)
+                timej = post_timeList[j]
+                post_ts.append(timej)
+                j=j+1
+                if(j>=len(post_latList)):
+                    break
+            else:
+                print(len(cur_Lats))
+                latj = float(post_latList[j])
+                post_lats.append(latj)
+                lngj = float(post_lngList[j])
+                post_lngs.append(lngj)
+                heightj = float(post_heightList[j])
+                post_hs.append(heightj)
+                timej = post_timeList[j]
+                post_ts.append(timej)
+                #calculate SED and initialize the lists
+                if(len(post_lats)<=1):
+                    print("有问题<=1")
+                elif(len(post_lats)>2):
+                    print(">2不对")
+                for k in range(0,len(cur_Lats)):
+                    latk = float(cur_Lats[k])
+                    lngk = float(cur_Lngs[k])
+                    heightk = float(cur_hs[k])
+                    timek = cur_ts[k]
+                    sed=calculateSED(latk,lngk,heightk,timek,post_lats,post_lngs,post_hs,post_ts)
+                    SEDs.append(sed)
+                cur_Lats=[]
+                cur_Lngs=[]
+                cur_hs=[]
+                cur_ts=[]
+                post_lats=[]
+                post_lngs=[]
+                post_hs=[]
+                post_ts=[]
+                j=j+1
+                if(j>=len(post_latList)):
+                    break
+        
+        
+        return SEDs
+    SEDvaules=averageSEDError(latList,lngList,heightList,timeList,post_latList,post_lngList,post_heightList,post_timeList)
+    SED_error_avg=sum(SEDvaules)/len(SEDvaules)
+    iB.averageSED= SED_error_avg
     ###########compare the orignial and sampled trjectory############
     #prepare the 3D distance calculation
     import math
@@ -376,8 +380,14 @@ def PostAnalysis(idName,d,iB):
     except(RecursionError): 
         print("The max Recursion depth exceeded, please split the dataset first")
         iB.frechetDistance='This trajectoy has too many datapoints, please split that first'
+    print('frechet distance is: '+str(iB.frechetDistance))
+    ################compute the information loss degree based on the SED#########################
+    SED_error_min = min(SEDvaules)
+    SED_error_max = max(SEDvaules)
+    iB.ILD =(SED_error_min+SED_error_max+SED_error_avg)/3 
+    
     print('PostAnalysis finished')
-    print(iB.frechetDistance)
+    
 #store the Lists in infoBuffer
 def getPostInfo(iB):
     import csv

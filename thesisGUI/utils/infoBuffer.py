@@ -29,6 +29,7 @@ class infoBuffer:
             self.runtime=0
             self.averageSED=0
             self.frechetDistance=0
+            self.ILD=0#information loss degree
             # these are only used to store information after the sampling
             self.individuals=[]
             self.timeLists=[]
