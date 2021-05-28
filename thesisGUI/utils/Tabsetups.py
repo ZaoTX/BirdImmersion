@@ -403,6 +403,7 @@ def setupTab4(tab):
      tab3_TextLabel1 = ttk.Label(tab, text= "How to deal with missing value")
      tab3_TextLabel1.place(relx = 0.1, rely = 0.2)
      
+     
      choices=["remove the data with missing value","cubic interpolation","linear interpolation","quadratic interpolation"]
      multibox=ttk.Combobox(tab,values=choices
                            ,width=40
@@ -422,7 +423,7 @@ def setupTab4(tab):
 #     Entry.place(relx = 0.8, rely = 0.4)
      # Label for information
      tab3_TextLabel3 = ttk.Label(tab, text= "")
-     tab3_TextLabel3.place(relx = 0.1, rely = 0.5)
+     tab3_TextLabel3.place(relx = 0.1, rely = 0.4)
      
      def TextBoxUpdate(event):
          choice = multibox.get()
@@ -461,6 +462,26 @@ def setupTab4(tab):
 #           else:#remove value
 #             return
            #print('function finished')
+     tab3_TextLabel2 = ttk.Label(tab, text= "Detect outliers with DBSCAN")
+     tab3_TextLabel2.place(relx = 0.1, rely = 0.6)
+     
+     entry=ttk.Entry(tab,textvariable = tk.StringVar(),
+                 width=5)
+     tab3_TextLabel4 = ttk.Label(tab, text= "eps=")
+     tab3_TextLabel4.place(relx = 0.2, rely = 0.7)
+     entry.place(
+                 relx=0.25,rely=0.7,
+                 height=25
+                 )
+     launchBtn= ttk.Button(tab, text="launch", command = lambda: launchDBSCAN())
+     launchBtn.place(relx = 0.8, rely = 0.7)
+     def launchDBSCAN():
+         eps=float(entry.get())
+         print(eps)
+         from utils.cleanData import Clustering
+         import launch
+         outliers = Clustering(launch.d,launch.pSetups,eps)
+         print(outliers)
 def setupTab5(tab):
      tab5_TextLabel1 = ttk.Label(tab, text= "Which method do you want to sample the dataset")
      tab5_TextLabel1.place(relx = 0.1, rely = 0.2)
@@ -489,7 +510,7 @@ def setupTab5(tab):
                                     "+: Easy, works well for high temporal resolution dataset\n"+
                                           "-: Random, not taking space and time into consideration")
              entry.place(
-                 relx=0.49,rely=0.4,
+                 relx=0.53,rely=0.4,
                  height=25
                  )
              tab5_TextLabel3.config(text="I want to sample for each")
@@ -822,6 +843,7 @@ def updateTab9(tab):
     main_plot=fig.add_subplot(111)
     main_plot.set_title('Timeline Distribution of Individuals')
     main_plot.set_xlabel('Timeline')
+    main_plot.set_ylabel('Indiviudal')
     plotTimeline(fig,main_plot,launch.iB,launch.d)
 
     canvas = FigureCanvasTkAgg(fig, master=tab)  # A tk.DrawingArea.

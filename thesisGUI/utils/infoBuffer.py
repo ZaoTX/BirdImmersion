@@ -23,6 +23,8 @@ class infoBuffer:
             self.minLng=0
             self.maxHeight=0
             self.minHeight=0
+            #possible outliers
+            self.outlierLists=[]
             # metrics and information of trajectory sampling
             self.fileLoc=''
             self.compressionratio=0

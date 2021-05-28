@@ -40,9 +40,28 @@ def removeMissing(d,p):
       df = pd.read_csv(filePath)#get dataframe
       df=df.dropna()
       df.to_csv(outpath+'/'+'removeMissing.csv',index=False)
-                  
-                  
-                  
-                  
-            
-      
+# compute DBSCAN algorithm for each individual to detect the outlier              
+def Clustering(d,p,eps):
+    import numpy as np
+    from sklearn.cluster import DBSCAN
+    sizeOfoutput=0
+    totalLines=0
+    output=np.empty(0)
+    for i in range(0,len(d.timeLists)):
+        latList=d.latLists[i]
+        lngList=d.lngLists[i]
+        heightList=d.heightLists[i]
+        # stack the lists
+        position_X=np.column_stack((latList, lngList,heightList))
+        position_X = position_X.astype(np.float64)
+        clustering = DBSCAN(eps=eps, min_samples=2).fit(position_X)
+        labels = clustering.labels_
+        
+        #index of -1(outliers)
+        outlierIndex= np.where(labels==-1)[0]
+        sizeOfoutput=sizeOfoutput+len(outlierIndex)
+        outlierIndex = outlierIndex+totalLines
+        output = np.concatenate((output,outlierIndex))
+        totalLines=len(labels)
+    return output
+        

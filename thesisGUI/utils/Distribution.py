@@ -342,9 +342,10 @@ def plotTimeline(fig,main,iB,d):
     maxTimestamp=max(maxTimestamps)
     minTimestamp=min(minTimestamps)
     diff = maxTimestamp-minTimestamp
-    xlim_max=maxTimestamp+0.1*diff
-#    xlim_min=minTimestamp-0.1*diff
+    xlim_max=maxTimestamp+0.05*diff
+    xlim_min=minTimestamp-0.05*diff
     main.axis(xmax=xlim_max)
+    main.axis(xmin=xlim_min)
 #    #main.get_xaxis().set_major_locator()
 #    xfmt = md.DateFormatter('%Y-%m-%d %H:%M:%S')
 #    main.xaxis.set_major_formatter(xfmt)

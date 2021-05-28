@@ -460,4 +460,12 @@ def getPostInfo(iB):
     iB.heightLists=heightLists
     iB.latLists=latLists
     iB.lngLists=lngLists
-    
+
+            
+            
+            
+            
+            
+            
+            
+            
