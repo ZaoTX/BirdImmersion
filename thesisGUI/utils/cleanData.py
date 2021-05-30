@@ -46,7 +46,8 @@ def Clustering(d,p,eps):
     from sklearn.cluster import DBSCAN
     sizeOfoutput=0
     totalLines=0
-    output=np.empty(0)
+    outputLines=np.empty(0)
+    outputList=[]
     for i in range(0,len(d.timeLists)):
         latList=d.latLists[i]
         lngList=d.lngLists[i]
@@ -59,9 +60,12 @@ def Clustering(d,p,eps):
         
         #index of -1(outliers)
         outlierIndex= np.where(labels==-1)[0]
+        outlierIndexList=outlierIndex.tolist()
+        outputList.append(outlierIndexList)
+        
         sizeOfoutput=sizeOfoutput+len(outlierIndex)
         outlierIndex = outlierIndex+totalLines
-        output = np.concatenate((output,outlierIndex))
+        outputLines = np.concatenate((outputLines,outlierIndex))
         totalLines=len(labels)
-    return output
+    return outputLines,outputList
         

@@ -26,6 +26,7 @@ def plotHorizontal(main,iB,d):
     maxLngs=[]
     minLngs=[]
     IDremove=[]
+    
     # for each individual
     # we find a pair of min max value for each individual's lat lng
     for i in range(0,num):
@@ -111,94 +112,112 @@ def plotDensity(main,iB,d):
     #heightLists=d.heightLists
     latLists=d.latLists
     lngLists=d.lngLists
-    
+    #get outliers
+    outliers=iB.outlierLists
+    #print(outliers)
     # number of individuals
     num=len(IDList)
     
-    maxLats=[]
-    minLats=[]
-    maxLngs=[]
-    minLngs=[]
-    IDremove=[]
+#    maxLats=[]
+#    minLats=[]
+#    maxLngs=[]
+#    minLngs=[]
+#    IDremove=[]
     # for each individual
     # we find a pair of min max value for each individual's lat lng
-    for i in range(0,num):
-        idName=IDList[i]
-        latList= latLists[i]
-        lngList=lngLists[i]
-        
-        length=len(latList)
-        outLatList=[]
-        outLngList=[]
-        for j in range(0,length):
-            curLat=latList[j]
-            curLng=lngList[j]
-            #skip the data with missing values in lat and lng
-            if(curLat!=''and curLng!=''):
-                outLatList.append(float(curLat))
-                outLngList.append(float(curLng))
+#    for i in range(0,num):
+#        idName=IDList[i]
+#        latList= latLists[i]
+#        lngList=lngLists[i]
+#        
+#        length=len(latList)
+#        outLatList=[]
+#        outLngList=[]
+#        for j in range(0,length):
+#            curLat=latList[j]
+#            curLng=lngList[j]
+#            #skip the data with missing values in lat and lng
+#            if(curLat!=''and curLng!=''):
+#                outLatList.append(float(curLat))
+#                outLngList.append(float(curLng))
+#
+#        if(outLatList==[]):
+#            #delete this ID
+#            IDremove.append(idName)
+#        else:
+#            maxLat=max(outLatList)
+#            minLat=min(outLatList)
+#            maxLng=max(outLngList)
+#            minLng=min(outLngList)
+#            maxLats.append(maxLat)
+#            minLats.append(minLat)
+#            maxLngs.append(maxLng)
+#            minLngs.append(minLng)
+#    #remove the ID with empty value
+#    for i in IDremove:
+#        IDList.remove(i)
+#    num = len(IDList)
 
-        if(outLatList==[]):
-            #delete this ID
-            IDremove.append(idName)
-        else:
-            maxLat=max(outLatList)
-            minLat=min(outLatList)
-            maxLng=max(outLngList)
-            minLng=min(outLngList)
-            maxLats.append(maxLat)
-            minLats.append(minLat)
-            maxLngs.append(maxLng)
-            minLngs.append(minLng)
-    #remove the ID with empty value
-    for i in IDremove:
-        IDList.remove(i)
-    num = len(IDList)
-    #find the largest lat,lng and the smallest lat lng as range of axis
-#    theMinLat=min(minLats)
-#    theMaxLat=max(maxLats)
-#    theMinLng=min(minLngs)
-#    theMaxLng=max(maxLngs)
-#    xlim_min= theMinLng-(theMaxLng-theMinLng)*0.3
-#    if(xlim_min<-180):
-#        xlim_min=-180
-#        
-#    xlim_max= theMaxLng+(theMaxLng-theMinLng)*0.3
-#    if(xlim_max>180):
-#        xlim_max=180
-#        
-#    ylim_min= theMinLat-(theMaxLat-theMinLat)*0.3
-#    if(ylim_min<-90):
-#        ylim_min=-90
-#        
-#    ylim_max= theMaxLat+(theMaxLat-theMinLat)*0.3
-#    if(ylim_max>90):
-#        ylim_max=90
-#    # define the limitation of axis
-#    main.axis(xmin=xlim_min,xmax=xlim_max, ymin=ylim_min, ymax=ylim_max)
-   
-    for i in range(0,num):
-        #add id name:
-        idName=IDList[i]
-        #find a color to represent
-        #color = colormap(i)
-        ind=IDList_copy.index(idName)
-        latList= latLists[ind]
-        lngList=lngLists[ind]
-        #save a list for each individual and plot them
-        length=len(latList)
-        outLatList=[]
-        outLngList=[]
-        for j in range(0,length):
-            curLat=latList[j]
-            curLng=lngList[j]
-            #skip the data with missing values in lat and lng
-            if(curLat!=''and curLng!=''):
-                outLatList.append(float(curLat))
-                outLngList.append(float(curLng))
-        #plot the points
-        main.scatter(outLngList,outLatList,
-               marker='s', label=idName, s=[5]*len(outLngList))
+    if(outliers==[]):
+        for i in range(0,num):
+            #add id name:
+            idName=IDList[i]
+            #find a color to represent
+            #color = colormap(i)
+            ind=IDList_copy.index(idName)
+            latList= latLists[ind]
+            lngList=lngLists[ind]
+            #save a list for each individual and plot them
+            length=len(latList)
+            outLatList=[]
+            outLngList=[]
+            for j in range(0,length):
+                curLat=latList[j]
+                curLng=lngList[j]
+                #skip the data with missing values in lat and lng
+                if(curLat!=''and curLng!=''):
+                    outLatList.append(float(curLat))
+                    outLngList.append(float(curLng))
+            #plot the points
+            main.scatter(outLngList,outLatList,
+                   marker='s', label=idName, s=[5]*len(outLngList))
+    else:
+        o_latList=[]
+        o_lngList=[]
+        for i in range(0,num):
+            #add id name:
+            idName=IDList[i]
+            #find a color to represent
+            #color = colormap(i)
+            ind=IDList_copy.index(idName)
+            latList= latLists[ind]
+            lngList=lngLists[ind]
+            #save a list for each individual and plot them
+            length=len(latList)
+            outLatList=[]
+            outLngList=[]
+            for j in range(0,length):
+                curLat=latList[j]
+                curLng=lngList[j]
+                #skip the data with missing values in lat and lng
+                if(curLat!=''and curLng!=''):
+                    outLatList.append(float(curLat))
+                    outLngList.append(float(curLng))
+            #plot the points
+            main.scatter(outLngList,outLatList,
+                   marker='s', label=idName, s=[5]*len(outLngList))
+            #plot outliers
+            outlierIndices=outliers[i]
+            for o_id in outlierIndices:
+                o_lat=latList[o_id]
+                o_lng=lngList[o_id]
+                print(o_lat)
+                print(o_lng)
+                o_latList.append(float(o_lat))
+                o_lngList.append(float(o_lng))
+            
+        main.scatter(o_lngList,o_latList,marker='o',label='Outliers')
+                
         
     main.legend(loc='best')
 def plotDensity3D(main,iB,d):

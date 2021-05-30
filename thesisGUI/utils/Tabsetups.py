@@ -480,8 +480,11 @@ def setupTab4(tab):
          print(eps)
          from utils.cleanData import Clustering
          import launch
-         outliers = Clustering(launch.d,launch.pSetups,eps)
-         print(outliers)
+         outliersIndex,outlierLists = Clustering(launch.d,launch.pSetups,eps)
+         launch.iB.outlierLists=outlierLists
+         print('The index of the outliers are:')
+         print(outliersIndex)
+         print('Now you can refresh the 2D distirbution to see where the outliers are located')
 def setupTab5(tab):
      tab5_TextLabel1 = ttk.Label(tab, text= "Which method do you want to sample the dataset")
      tab5_TextLabel1.place(relx = 0.1, rely = 0.2)
