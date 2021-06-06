@@ -422,20 +422,20 @@ def setupTab4(tab):
 #                           )
 #     Entry.place(relx = 0.8, rely = 0.4)
      # Label for information
-     tab3_TextLabel3 = ttk.Label(tab, text= "")
-     tab3_TextLabel3.place(relx = 0.1, rely = 0.4)
-     
-     def TextBoxUpdate(event):
-         choice = multibox.get()
-         if(choice=='interpolation'):
-                 
-                 tab3_TextLabel3.config(text='(cubic) interpolation can be helpful dealing the missing value between a small interval of temporal difference')
-                 
-         elif(choice=='remove the data with missing value'): 
-                 
-                 tab3_TextLabel3.config(text='Remove missing value is easy but might lose some information make the trajectory intermittent')
-                 
-     multibox.bind("<<ComboboxSelected>>", TextBoxUpdate)
+#     tab3_TextLabel3 = ttk.Label(tab, text= "")
+#     tab3_TextLabel3.place(relx = 0.1, rely = 0.4)
+#     
+#     def TextBoxUpdate(event):
+#         choice = multibox.get()
+#         if(choice=='interpolation'):
+#                 
+#                 tab3_TextLabel3.config(text='(cubic) interpolation can be helpful dealing the missing value between a small interval of temporal difference')
+#                 
+#         elif(choice=='remove the data with missing value'): 
+#                 
+#                 tab3_TextLabel3.config(text='Remove missing value is easy but might lose some information make the trajectory intermittent')
+#                 
+#     multibox.bind("<<ComboboxSelected>>", TextBoxUpdate)
      def cleandataset():
            choice = multibox.get()
            print(choice)
@@ -463,24 +463,60 @@ def setupTab4(tab):
 #             return
            #print('function finished')
      tab3_TextLabel2 = ttk.Label(tab, text= "Detect outliers with DBSCAN")
-     tab3_TextLabel2.place(relx = 0.1, rely = 0.6)
+     tab3_TextLabel2.place(relx = 0.1, rely = 0.45)
      
      entry=ttk.Entry(tab,textvariable = tk.StringVar(),
                  width=5)
      tab3_TextLabel4 = ttk.Label(tab, text= "eps=")
-     tab3_TextLabel4.place(relx = 0.2, rely = 0.7)
+     tab3_TextLabel4.place(relx = 0.2, rely = 0.55)
      entry.place(
-                 relx=0.25,rely=0.7,
+                 relx=0.25,rely=0.55,
                  height=25
                  )
      launchBtn= ttk.Button(tab, text="launch", command = lambda: launchDBSCAN())
-     launchBtn.place(relx = 0.8, rely = 0.7)
+     launchBtn.place(relx = 0.8, rely = 0.55)
      def launchDBSCAN():
          eps=float(entry.get())
-         print(eps)
+         #print(eps)
          from utils.cleanData import Clustering
          import launch
          outliersIndex,outlierLists = Clustering(launch.d,launch.pSetups,eps)
+         launch.iB.outlierLists=outlierLists
+         print('The index of the outliers are:')
+         print(outliersIndex)
+         print('Now you can refresh the 2D distirbution to see where the outliers are located')
+     tab3_TextLabel5 = ttk.Label(tab, text= "Detect outliers with ST-DBSCAN")
+     tab3_TextLabel5.place(relx = 0.1, rely = 0.65)
+     
+     entry1=ttk.Entry(tab,textvariable = tk.StringVar(),
+                 width=5)
+     tab3_TextLabel6 = ttk.Label(tab, text= "sptial threshold eps1=")
+     tab3_TextLabel6.place(relx = 0.2, rely = 0.75)
+     entry1.place(
+                 relx=0.25,rely=0.75,
+                 height=25
+                 )
+     entry2=ttk.Entry(tab,textvariable = tk.StringVar(),
+                 width=5)
+     tab3_TextLabel7 = ttk.Label(tab, text= "temporal threshold eps2=")
+     tab3_TextLabel7.place(relx = 0.4, rely = 0.75)
+     entry2.place(
+                 relx=0.45,rely=0.75,
+                 height=25
+                 )
+     launchBtn= ttk.Button(tab, text="launch", command = lambda: launchSTDBSCAN())
+     launchBtn.place(relx = 0.8, rely = 0.75)
+     def launchSTDBSCAN():
+         eps1=float(entry1.get())
+         eps2=float(entry2.get())
+         from utils.cleanData import STDBSCAN_Clustering
+         import launch
+         reg=''
+         if launch.iB.timestampReg=='':
+             reg='%Y-%m-%d %H:%M:%S.%f'
+         else: 
+             reg =launch.iB.timestampReg
+         outliersIndex,outlierLists = STDBSCAN_Clustering(launch.d,launch.pSetups,eps1,eps2,reg)
          launch.iB.outlierLists=outlierLists
          print('The index of the outliers are:')
          print(outliersIndex)
