@@ -70,7 +70,7 @@ def Clustering(d,p,eps):
         totalLines=len(labels)
     return outputLines,outputList
 # ST DBSCAN( need an extra normalization for timestamp)
-# input: d,p, eps1: eps for timestamp, eps2: eps for location, reg: regular language for time
+# input: d,p, eps1: eps for location, eps2: eps for timestamp,  reg: regular language for time
 def STDBSCAN_Clustering(d,p,eps1,eps2,reg):
     import numpy as np
     from st_dbscan import ST_DBSCAN
